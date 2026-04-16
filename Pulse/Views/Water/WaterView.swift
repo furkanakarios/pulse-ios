@@ -28,6 +28,7 @@ struct WaterView: View {
             List {
                 Section {
                     progressSection
+                        .frame(maxWidth: .infinity)
                         .listRowBackground(Color.clear)
                         .listRowInsets(EdgeInsets())
                 }
