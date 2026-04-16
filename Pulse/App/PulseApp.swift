@@ -7,6 +7,14 @@ struct PulseApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: [])
+        .modelContainer(for: [
+            WaterEntry.self,
+            MealEntry.self,
+            ExerciseEntry.self,
+            Habit.self,
+            HabitLog.self,
+            Plan.self,
+            HealthNote.self
+        ])
     }
 }
