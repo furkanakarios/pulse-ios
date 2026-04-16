@@ -11,7 +11,9 @@
 		118FB7D768F611DCE56B5D55 /* WaterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABD647265A23C5293A38989B /* WaterView.swift */; };
 		12591291A34C66ED682F1267 /* HealthNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D25AD64D524EC1345722847 /* HealthNote.swift */; };
 		18DDF110DA6C66FE369B60CE /* MealGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39989932745593A114F9C774 /* MealGroup.swift */; };
+		1C9D8C54BF1E9359784BED5B /* AddNoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A098E1E668F3D580A3721E /* AddNoteView.swift */; };
 		268938479520BB31C84FC8C6 /* CreateMealPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE460E0CD5DF90EDC901CE4 /* CreateMealPlanView.swift */; };
+		34638D9BBB093424C294317A /* NoteDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF79E618A37525E9DF374CE4 /* NoteDetailView.swift */; };
 		3486367464537B6192F7C2AF /* PulseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE9CD05DD0A6FAA15E6014 /* PulseApp.swift */; };
 		37D3B4193853E2BAAA919D93 /* ExerciseEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F7FCAABABE275B8FC7E389F /* ExerciseEntry.swift */; };
 		3F5539D5151CE50C46549FA6 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B01CDFE4F205CF538FEFCB3 /* DashboardView.swift */; };
@@ -26,6 +28,7 @@
 		C6291F88D20624F962058F3C /* HabitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B393F9255F9FE2C64C23235D /* HabitsView.swift */; };
 		CFE5AE62879752E1F53DF71B /* HabitLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF603E1D4CD713C31F8E257 /* HabitLog.swift */; };
 		EC1885A3538327B6CABB18A9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CEC711FA7536F00870BC15 /* ContentView.swift */; };
+		EC55D300DE3811C5395F0303 /* NotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F704423043C92B1229D27E4 /* NotesView.swift */; };
 		EE0B042985BD3DB2A6E233C5 /* MealPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE33570E960801D9A4613C56 /* MealPlan.swift */; };
 		F8E87ADC36D5A3A4CF99BBF8 /* WaterEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9795E3A03EC14E2DAF73E4E0 /* WaterEntry.swift */; };
 /* End PBXBuildFile section */
@@ -37,6 +40,7 @@
 		0FD7BF650190475FD7D47634 /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habit.swift; sourceTree = "<group>"; };
 		13FEF2D2118D74C3572DF349 /* Pulse.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Pulse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		39989932745593A114F9C774 /* MealGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealGroup.swift; sourceTree = "<group>"; };
+		3F704423043C92B1229D27E4 /* NotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesView.swift; sourceTree = "<group>"; };
 		5F5BFBE409E05C0497F8E921 /* MealPlanListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlanListView.swift; sourceTree = "<group>"; };
 		5FCFC8C1E9A3B989961B020B /* Pulse.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pulse.entitlements; sourceTree = "<group>"; };
 		63A2F4729A1638CB205A1BCA /* NutritionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionView.swift; sourceTree = "<group>"; };
@@ -45,6 +49,7 @@
 		7AF603E1D4CD713C31F8E257 /* HabitLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitLog.swift; sourceTree = "<group>"; };
 		8CA7CE643BA4B8F7E0481BB1 /* Plan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plan.swift; sourceTree = "<group>"; };
 		8EE460E0CD5DF90EDC901CE4 /* CreateMealPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMealPlanView.swift; sourceTree = "<group>"; };
+		92A098E1E668F3D580A3721E /* AddNoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteView.swift; sourceTree = "<group>"; };
 		9795E3A03EC14E2DAF73E4E0 /* WaterEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterEntry.swift; sourceTree = "<group>"; };
 		9D25AD64D524EC1345722847 /* HealthNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthNote.swift; sourceTree = "<group>"; };
 		ABD647265A23C5293A38989B /* WaterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterView.swift; sourceTree = "<group>"; };
@@ -55,6 +60,7 @@
 		EC7FFBAB32D5F8DE5505202F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F04273000DCFC25413F104BB /* MealItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealItem.swift; sourceTree = "<group>"; };
 		F821D3C0E8DDC11003EBBD13 /* AddExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExerciseView.swift; sourceTree = "<group>"; };
+		FF79E618A37525E9DF374CE4 /* NoteDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -151,6 +157,7 @@
 				68F35518E0F7A113D28B7BB7 /* Dashboard */,
 				6FED8CFEBC02D95A360BDAE7 /* Exercise */,
 				16D189A38D800715650614CA /* Habits */,
+				DE384A2ED0C3E71CA342E0C0 /* Notes */,
 				AAC04C75FD47479FE69784BF /* Nutrition */,
 				04B36EE3011BF303B02CC6EF /* Water */,
 			);
@@ -165,6 +172,16 @@
 				63A2F4729A1638CB205A1BCA /* NutritionView.swift */,
 			);
 			path = Nutrition;
+			sourceTree = "<group>";
+		};
+		DE384A2ED0C3E71CA342E0C0 /* Notes */ = {
+			isa = PBXGroup;
+			children = (
+				92A098E1E668F3D580A3721E /* AddNoteView.swift */,
+				FF79E618A37525E9DF374CE4 /* NoteDetailView.swift */,
+				3F704423043C92B1229D27E4 /* NotesView.swift */,
+			);
+			path = Notes;
 			sourceTree = "<group>";
 		};
 		F7EE12501EB7201D317BF279 /* Resources */ = {
@@ -236,6 +253,7 @@
 			files = (
 				ABDF6FCD8E4D6DB01AFE95FB /* AddExerciseView.swift in Sources */,
 				52B6C06F8B468E2A3A0ACCCC /* AddHabitView.swift in Sources */,
+				1C9D8C54BF1E9359784BED5B /* AddNoteView.swift in Sources */,
 				EC1885A3538327B6CABB18A9 /* ContentView.swift in Sources */,
 				268938479520BB31C84FC8C6 /* CreateMealPlanView.swift in Sources */,
 				3F5539D5151CE50C46549FA6 /* DashboardView.swift in Sources */,
@@ -250,6 +268,8 @@
 				AFBC38BF34DC2D0D3936926E /* MealLog.swift in Sources */,
 				EE0B042985BD3DB2A6E233C5 /* MealPlan.swift in Sources */,
 				790501A163BE853B582888D3 /* MealPlanListView.swift in Sources */,
+				34638D9BBB093424C294317A /* NoteDetailView.swift in Sources */,
+				EC55D300DE3811C5395F0303 /* NotesView.swift in Sources */,
 				017019B7F63B1002A39CBC0E /* NutritionView.swift in Sources */,
 				8D1BF3F24255D07376EE9101 /* Plan.swift in Sources */,
 				3486367464537B6192F7C2AF /* PulseApp.swift in Sources */,
