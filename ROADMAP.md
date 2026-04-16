@@ -15,15 +15,15 @@
 - [x] Health notes — free text, list view
 - [x] Settings — daily goals, notification preferences
 
-## Phase 2 — Notifications
+## Phase 2 — Notifications ✅
 
 > Smart local reminders
 
-- [ ] NotificationService setup
-- [ ] Water reminder (repeating interval, configurable)
-- [ ] Habit reminder (daily time, per habit)
-- [ ] Morning summary notification
-- [ ] Permission request flow (first launch)
+- [x] NotificationService setup
+- [x] Water reminder (repeating interval, configurable)
+- [x] Habit reminder (daily time, per habit)
+- [x] Morning summary notification
+- [x] Permission request flow (first launch)
 
 ## Phase 3 — HealthKit Integration
 
