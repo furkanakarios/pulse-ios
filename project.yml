@@ -27,6 +27,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.furkanakarios.pulse
         INFOPLIST_FILE: Pulse/Resources/Info.plist
         SWIFT_VERSION: "5.9"
+        CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION: YES
     info:
       path: Pulse/Resources/Info.plist
       properties:
