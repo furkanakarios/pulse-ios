@@ -4,6 +4,7 @@ import SwiftData
 struct CreateMealPlanView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Query private var existingPlans: [MealPlan]
 
     @State private var planName = ""
     @State private var groups: [DraftGroup] = []
@@ -115,6 +116,7 @@ struct CreateMealPlanView: View {
 
     // MARK: - Save
     private func save() {
+        for existing in existingPlans { existing.isActive = false }
         let plan = MealPlan(name: planName.trimmingCharacters(in: .whitespaces))
         modelContext.insert(plan)
 
