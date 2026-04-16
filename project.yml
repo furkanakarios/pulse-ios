@@ -36,6 +36,8 @@ targets:
         CFBundleShortVersionString: "1.0.0"
         CFBundleVersion: "1"
         NSUserNotificationsUsageDescription: "Pulse, su içme hatırlatıcıları, alışkanlık bildirimleri ve sabah özeti için bildirim gönderir."
+        NSHealthShareUsageDescription: "Pulse, adım sayısı, kalori ve uyku verilerini göstermek için Apple Health'e erişmek istiyor."
+        NSHealthUpdateUsageDescription: "Pulse, egzersiz seanslarını Apple Health'e kaydetmek istiyor."
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
@@ -43,4 +45,6 @@ targets:
           UIApplicationSupportsMultipleScenes: false
     entitlements:
       path: Pulse/Resources/Pulse.entitlements
-      properties: {}
+      properties:
+        com.apple.developer.healthkit: true
+        com.apple.developer.healthkit.access: []

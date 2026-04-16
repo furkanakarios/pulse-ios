@@ -30,6 +30,7 @@
 		BC7168FA2155CA216D70BCF4 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEEEBE0FC8483B8759AC517 /* NotificationService.swift */; };
 		C6291F88D20624F962058F3C /* HabitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B393F9255F9FE2C64C23235D /* HabitsView.swift */; };
 		CFE5AE62879752E1F53DF71B /* HabitLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF603E1D4CD713C31F8E257 /* HabitLog.swift */; };
+		DC07E6DA1C9C068A6A5BD0BF /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DEC6AB7EB48CA0FC358DE75 /* HealthKitService.swift */; };
 		EC1885A3538327B6CABB18A9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CEC711FA7536F00870BC15 /* ContentView.swift */; };
 		EC55D300DE3811C5395F0303 /* NotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F704423043C92B1229D27E4 /* NotesView.swift */; };
 		EE0B042985BD3DB2A6E233C5 /* MealPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE33570E960801D9A4613C56 /* MealPlan.swift */; };
@@ -40,6 +41,7 @@
 		070C5015A57E88F404A45DA4 /* MealLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealLog.swift; sourceTree = "<group>"; };
 		0AEE9CD05DD0A6FAA15E6014 /* PulseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseApp.swift; sourceTree = "<group>"; };
 		0B01CDFE4F205CF538FEFCB3 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		0DEC6AB7EB48CA0FC358DE75 /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
 		0FD7BF650190475FD7D47634 /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habit.swift; sourceTree = "<group>"; };
 		13FEF2D2118D74C3572DF349 /* Pulse.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Pulse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		343772CBD3872C3BC23DB718 /* NotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionView.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 		DD8A68E94B2A5686C1410535 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				0DEC6AB7EB48CA0FC358DE75 /* HealthKitService.swift */,
 				EFEEEBE0FC8483B8759AC517 /* NotificationService.swift */,
 			);
 			path = Services;
@@ -295,6 +298,7 @@
 				807CEF2E58F5D4EB1922BF0D /* Habit.swift in Sources */,
 				CFE5AE62879752E1F53DF71B /* HabitLog.swift in Sources */,
 				C6291F88D20624F962058F3C /* HabitsView.swift in Sources */,
+				DC07E6DA1C9C068A6A5BD0BF /* HealthKitService.swift in Sources */,
 				12591291A34C66ED682F1267 /* HealthNote.swift in Sources */,
 				18DDF110DA6C66FE369B60CE /* MealGroup.swift in Sources */,
 				9DEBFDC7EE0C88CACB217D77 /* MealItem.swift in Sources */,
