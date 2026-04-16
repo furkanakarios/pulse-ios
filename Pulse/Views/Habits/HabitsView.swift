@@ -7,6 +7,7 @@ struct HabitsView: View {
     @Query private var habitLogs: [HabitLog]
 
     @State private var showAddHabit = false
+    @State private var reminderHabit: Habit? = nil
 
     private var activeHabits: [Habit] {
         habits.filter { !$0.isArchived }
@@ -33,7 +34,8 @@ struct HabitsView: View {
                             HabitRow(
                                 habit: habit,
                                 isCompleted: isCompleted(habit),
-                                onToggle: { toggleHabit(habit) }
+                                onToggle: { toggleHabit(habit) },
+                                onReminderTap: { reminderHabit = habit }
                             )
                         }
                         .onDelete(perform: deleteHabits)
@@ -45,15 +47,16 @@ struct HabitsView: View {
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showAddHabit = true
-                    } label: {
+                    Button { showAddHabit = true } label: {
                         Image(systemName: "plus")
                     }
                 }
             }
             .sheet(isPresented: $showAddHabit) {
                 AddHabitView()
+            }
+            .sheet(item: $reminderHabit) { habit in
+                HabitReminderSheet(habit: habit)
             }
         }
     }
@@ -145,7 +148,9 @@ struct HabitsView: View {
 
     private func deleteHabits(at offsets: IndexSet) {
         for index in offsets {
-            modelContext.delete(activeHabits[index])
+            let habit = activeHabits[index]
+            NotificationService.shared.cancelHabitReminder(habitID: habit.id.uuidString)
+            modelContext.delete(habit)
         }
     }
 }
@@ -155,6 +160,7 @@ struct HabitRow: View {
     let habit: Habit
     let isCompleted: Bool
     let onToggle: () -> Void
+    let onReminderTap: () -> Void
 
     var body: some View {
         HStack(spacing: 14) {
@@ -188,11 +194,121 @@ struct HabitRow: View {
                     }
                 }
             }
+
             Spacer()
+
+            Button(action: onReminderTap) {
+                Image(systemName: habit.reminderTime != nil ? "bell.fill" : "bell")
+                    .font(.subheadline)
+                    .foregroundStyle(habit.reminderTime != nil ? .purple : .secondary)
+            }
+            .buttonStyle(.plain)
         }
         .padding(.vertical, 2)
         .contentShape(Rectangle())
         .onTapGesture { onToggle() }
+    }
+}
+
+// MARK: - Habit Reminder Sheet
+struct HabitReminderSheet: View {
+    @Bindable var habit: Habit
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var reminderEnabled: Bool = false
+    @State private var reminderTime: Date = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: .now) ?? .now
+    @State private var showDeniedAlert = false
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    Toggle("Hatırlatıcı Aç", isOn: Binding(
+                        get: { reminderEnabled },
+                        set: { toggleReminder($0) }
+                    ))
+                    .tint(.purple)
+
+                    if reminderEnabled {
+                        DatePicker("Saat", selection: $reminderTime, displayedComponents: .hourAndMinute)
+                            .onChange(of: reminderTime) { scheduleReminder() }
+                    }
+                } header: {
+                    Text(habit.name)
+                } footer: {
+                    Text("Her gün bu saatte alışkanlığını tamamladın mı diye hatırlatır.")
+                }
+            }
+            .navigationTitle("Hatırlatıcı")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Tamam") { dismiss() }
+                        .fontWeight(.semibold)
+                }
+            }
+            .onAppear { loadCurrentState() }
+            .alert("Bildirim İzni Gerekli", isPresented: $showDeniedAlert) {
+                Button("Ayarlara Git") {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                }
+                Button("İptal", role: .cancel) { reminderEnabled = false }
+            } message: {
+                Text("Bildirimlere izin vermek için Ayarlar > Pulse > Bildirimler bölümüne gidin.")
+            }
+        }
+        .presentationDetents([.medium])
+    }
+
+    private func loadCurrentState() {
+        if let time = habit.reminderTime {
+            reminderEnabled = true
+            reminderTime = time
+        } else {
+            reminderEnabled = false
+        }
+    }
+
+    private func toggleReminder(_ enabled: Bool) {
+        if enabled {
+            Task {
+                let status = await NotificationService.shared.authorizationStatus()
+                switch status {
+                case .authorized, .provisional:
+                    reminderEnabled = true
+                    scheduleReminder()
+                case .notDetermined:
+                    let granted = await NotificationService.shared.requestAuthorization()
+                    if granted {
+                        reminderEnabled = true
+                        scheduleReminder()
+                    } else {
+                        reminderEnabled = false
+                    }
+                case .denied:
+                    showDeniedAlert = true
+                default:
+                    reminderEnabled = false
+                }
+            }
+        } else {
+            reminderEnabled = false
+            habit.reminderTime = nil
+            NotificationService.shared.cancelHabitReminder(habitID: habit.id.uuidString)
+        }
+    }
+
+    private func scheduleReminder() {
+        habit.reminderTime = reminderTime
+        let components = Calendar.current.dateComponents([.hour, .minute], from: reminderTime)
+        NotificationService.shared.scheduleHabitReminder(
+            habitID: habit.id.uuidString,
+            habitName: habit.name,
+            hour: components.hour ?? 9,
+            minute: components.minute ?? 0
+        )
     }
 }
 
