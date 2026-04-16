@@ -14,6 +14,10 @@ struct DashboardView: View {
     @AppStorage("dailyCalorieGoal") private var dailyCalorieGoal: Double = 2000
     @AppStorage("dailyExerciseGoal") private var dailyExerciseGoal: Double = 30
 
+    @State private var hkSteps: Double = 0
+    @State private var hkCalories: Double = 0
+    @State private var hkAuthorized: Bool = false
+
     private var todayWater: Double {
         waterEntries.filter { Calendar.current.isDateInToday($0.date) }
             .reduce(0) { $0 + $1.amount }
@@ -52,6 +56,9 @@ struct DashboardView: View {
                 VStack(spacing: 20) {
                     todayHeaderView
                     summaryGridView
+                    if hkAuthorized {
+                        healthKitSection
+                    }
                     if activeHabitsCount > 0 {
                         habitsProgressView
                     }
@@ -62,6 +69,7 @@ struct DashboardView: View {
             }
             .navigationTitle("Pulse")
             .navigationBarTitleDisplayMode(.large)
+            .task { await loadHealthKitData() }
         }
     }
 
@@ -170,6 +178,54 @@ struct DashboardView: View {
                 }
             }
         }
+    }
+
+    // MARK: - HealthKit Section
+    private var healthKitSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Apple Health")
+                    .font(.headline)
+                Spacer()
+                Image(systemName: "heart.fill")
+                    .foregroundStyle(.red)
+                    .font(.subheadline)
+            }
+
+            HStack(spacing: 12) {
+                DashboardCard(
+                    title: "Adım",
+                    value: hkSteps > 0 ? "\(Int(hkSteps))" : "—",
+                    icon: "figure.walk",
+                    color: .teal,
+                    subtitle: "Bugün atılan adım"
+                )
+                DashboardCard(
+                    title: "Aktif Kalori",
+                    value: hkCalories > 0 ? "\(Int(hkCalories)) kcal" : "—",
+                    icon: "flame.fill",
+                    color: .red,
+                    subtitle: "Bugün yakılan"
+                )
+            }
+        }
+    }
+
+    // MARK: - HealthKit Data
+    private func loadHealthKitData() async {
+        guard HealthKitService.shared.isAvailable else { return }
+        let status = HealthKitService.shared.authorizationStatus(for: .stepCount)
+        if status == .notDetermined {
+            await HealthKitService.shared.requestAuthorization()
+        }
+        let authStatus = HealthKitService.shared.authorizationStatus(for: .stepCount)
+        guard authStatus == .sharingAuthorized else { return }
+        hkAuthorized = true
+        async let steps = HealthKitService.shared.fetchTodaySteps()
+        async let calories = HealthKitService.shared.fetchTodayActiveCalories()
+        let (s, c) = await (steps, calories)
+        hkSteps = s
+        hkCalories = c
     }
 
     // MARK: - Habits Progress
