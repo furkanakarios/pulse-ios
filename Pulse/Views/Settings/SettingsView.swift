@@ -5,12 +5,20 @@ struct SettingsView: View {
     @AppStorage("dailyCalorieGoal") private var dailyCalorieGoal: Double = 2000
     @AppStorage("dailyExerciseGoal") private var dailyExerciseGoal: Double = 30
     @AppStorage("waterReminderEnabled") private var waterReminderEnabled: Bool = false
+    @AppStorage("waterReminderInterval") private var waterReminderInterval: Int = 60
     @AppStorage("habitReminderEnabled") private var habitReminderEnabled: Bool = false
     @AppStorage("morningSummaryEnabled") private var morningSummaryEnabled: Bool = false
 
     @State private var waterGoalInput: String = ""
     @State private var calorieGoalInput: String = ""
     @State private var exerciseGoalInput: String = ""
+    @State private var showNotificationDeniedAlert = false
+
+    let waterIntervalOptions: [(label: String, minutes: Int)] = [
+        ("30 dakikada bir", 30),
+        ("1 saatte bir", 60),
+        ("2 saatte bir", 120)
+    ]
 
     var body: some View {
         NavigationStack {
@@ -22,6 +30,18 @@ struct SettingsView: View {
             .navigationTitle("Ayarlar")
             .navigationBarTitleDisplayMode(.large)
             .onAppear { loadInputs() }
+            .alert("Bildirim İzni Gerekli", isPresented: $showNotificationDeniedAlert) {
+                Button("Ayarlara Git") {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                }
+                Button("İptal", role: .cancel) {
+                    waterReminderEnabled = false
+                }
+            } message: {
+                Text("Bildirimlere izin vermek için Ayarlar > Pulse > Bildirimler bölümüne gidin.")
+            }
         }
     }
 
@@ -41,8 +61,7 @@ struct SettingsView: View {
                             dailyWaterGoal = val
                         }
                     }
-                Text("ml")
-                    .foregroundStyle(.secondary)
+                Text("ml").foregroundStyle(.secondary)
             }
 
             HStack {
@@ -58,8 +77,7 @@ struct SettingsView: View {
                             dailyCalorieGoal = val
                         }
                     }
-                Text("kcal")
-                    .foregroundStyle(.secondary)
+                Text("kcal").foregroundStyle(.secondary)
             }
 
             HStack {
@@ -75,8 +93,7 @@ struct SettingsView: View {
                             dailyExerciseGoal = val
                         }
                     }
-                Text("dk")
-                    .foregroundStyle(.secondary)
+                Text("dk").foregroundStyle(.secondary)
             }
         } header: {
             Text("Günlük Hedefler")
@@ -88,28 +105,47 @@ struct SettingsView: View {
     // MARK: - Notifications
     private var notificationsSection: some View {
         Section {
-            Toggle(isOn: $waterReminderEnabled) {
+            // Su Hatırlatıcısı
+            Toggle(isOn: Binding(
+                get: { waterReminderEnabled },
+                set: { newValue in toggleWaterReminder(newValue) }
+            )) {
                 Label("Su Hatırlatıcısı", systemImage: "drop.fill")
                     .foregroundStyle(.blue)
             }
             .tint(.blue)
 
+            if waterReminderEnabled {
+                Picker("Hatırlatma Sıklığı", selection: $waterReminderInterval) {
+                    ForEach(waterIntervalOptions, id: \.minutes) { option in
+                        Text(option.label).tag(option.minutes)
+                    }
+                }
+                .onChange(of: waterReminderInterval) {
+                    NotificationService.shared.scheduleWaterReminder(intervalMinutes: waterReminderInterval)
+                }
+            }
+
+            // Alışkanlık Hatırlatıcısı (Step 03'te aktive edilecek)
             Toggle(isOn: $habitReminderEnabled) {
                 Label("Alışkanlık Hatırlatıcısı", systemImage: "checkmark.circle.fill")
                     .foregroundStyle(.purple)
             }
             .tint(.purple)
+            .disabled(true)
 
+            // Sabah Özeti (Step 04'te aktive edilecek)
             Toggle(isOn: $morningSummaryEnabled) {
                 Label("Sabah Özeti", systemImage: "sun.max.fill")
                     .foregroundStyle(.yellow)
             }
             .tint(.yellow)
+            .disabled(true)
+
         } header: {
             Text("Bildirimler")
         } footer: {
-            Text("Bildirim detayları Phase 2'de aktive edilecek.")
-                .foregroundStyle(.secondary)
+            Text("Alışkanlık hatırlatıcısı ve sabah özeti yakında aktive edilecek.")
         }
     }
 
@@ -119,23 +155,47 @@ struct SettingsView: View {
             HStack {
                 Label("Versiyon", systemImage: "info.circle")
                 Spacer()
-                Text("1.0.0")
-                    .foregroundStyle(.secondary)
+                Text("1.0.0").foregroundStyle(.secondary)
             }
-
             HStack {
                 Label("Geliştirici", systemImage: "person.circle")
                 Spacer()
-                Text("Furkan Akar")
-                    .foregroundStyle(.secondary)
+                Text("Furkan Akar").foregroundStyle(.secondary)
             }
-
             HStack {
                 Label("Veri Depolama", systemImage: "internaldrive")
                 Spacer()
-                Text("Yerel (SwiftData)")
-                    .foregroundStyle(.secondary)
+                Text("Yerel (SwiftData)").foregroundStyle(.secondary)
             }
+        }
+    }
+
+    // MARK: - Helpers
+    private func toggleWaterReminder(_ enabled: Bool) {
+        if enabled {
+            Task {
+                let status = await NotificationService.shared.authorizationStatus()
+                switch status {
+                case .authorized, .provisional:
+                    waterReminderEnabled = true
+                    NotificationService.shared.scheduleWaterReminder(intervalMinutes: waterReminderInterval)
+                case .notDetermined:
+                    let granted = await NotificationService.shared.requestAuthorization()
+                    if granted {
+                        waterReminderEnabled = true
+                        NotificationService.shared.scheduleWaterReminder(intervalMinutes: waterReminderInterval)
+                    } else {
+                        waterReminderEnabled = false
+                    }
+                case .denied:
+                    showNotificationDeniedAlert = true
+                default:
+                    waterReminderEnabled = false
+                }
+            }
+        } else {
+            waterReminderEnabled = false
+            NotificationService.shared.cancelWaterReminder()
         }
     }
 
