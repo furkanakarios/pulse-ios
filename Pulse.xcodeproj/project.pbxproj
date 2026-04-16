@@ -20,6 +20,7 @@
 		807CEF2E58F5D4EB1922BF0D /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD7BF650190475FD7D47634 /* Habit.swift */; };
 		8D1BF3F24255D07376EE9101 /* Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA7CE643BA4B8F7E0481BB1 /* Plan.swift */; };
 		9DEBFDC7EE0C88CACB217D77 /* MealItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04273000DCFC25413F104BB /* MealItem.swift */; };
+		ABDF6FCD8E4D6DB01AFE95FB /* AddExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F821D3C0E8DDC11003EBBD13 /* AddExerciseView.swift */; };
 		AFBC38BF34DC2D0D3936926E /* MealLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070C5015A57E88F404A45DA4 /* MealLog.swift */; };
 		C6291F88D20624F962058F3C /* HabitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B393F9255F9FE2C64C23235D /* HabitsView.swift */; };
 		CFE5AE62879752E1F53DF71B /* HabitLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF603E1D4CD713C31F8E257 /* HabitLog.swift */; };
@@ -51,6 +52,7 @@
 		BE33570E960801D9A4613C56 /* MealPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlan.swift; sourceTree = "<group>"; };
 		EC7FFBAB32D5F8DE5505202F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F04273000DCFC25413F104BB /* MealItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealItem.swift; sourceTree = "<group>"; };
+		F821D3C0E8DDC11003EBBD13 /* AddExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExerciseView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -126,6 +128,7 @@
 		6FED8CFEBC02D95A360BDAE7 /* Exercise */ = {
 			isa = PBXGroup;
 			children = (
+				F821D3C0E8DDC11003EBBD13 /* AddExerciseView.swift */,
 				BE15FAC6DC6335FFCCA56785 /* ExerciseView.swift */,
 			);
 			path = Exercise;
@@ -228,6 +231,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ABDF6FCD8E4D6DB01AFE95FB /* AddExerciseView.swift in Sources */,
 				EC1885A3538327B6CABB18A9 /* ContentView.swift in Sources */,
 				268938479520BB31C84FC8C6 /* CreateMealPlanView.swift in Sources */,
 				3F5539D5151CE50C46549FA6 /* DashboardView.swift in Sources */,
