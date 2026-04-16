@@ -9,7 +9,10 @@ struct PulseApp: App {
         }
         .modelContainer(for: [
             WaterEntry.self,
-            MealEntry.self,
+            MealPlan.self,
+            MealGroup.self,
+            MealItem.self,
+            MealLog.self,
             ExerciseEntry.self,
             Habit.self,
             HabitLog.self,
