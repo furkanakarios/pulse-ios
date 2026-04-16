@@ -26,6 +26,7 @@
 		A91C71F49B69C4660980908C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88912FFB6F0BF9680A359B85 /* SettingsView.swift */; };
 		ABDF6FCD8E4D6DB01AFE95FB /* AddExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F821D3C0E8DDC11003EBBD13 /* AddExerciseView.swift */; };
 		AFBC38BF34DC2D0D3936926E /* MealLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070C5015A57E88F404A45DA4 /* MealLog.swift */; };
+		BC7168FA2155CA216D70BCF4 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEEEBE0FC8483B8759AC517 /* NotificationService.swift */; };
 		C6291F88D20624F962058F3C /* HabitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B393F9255F9FE2C64C23235D /* HabitsView.swift */; };
 		CFE5AE62879752E1F53DF71B /* HabitLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF603E1D4CD713C31F8E257 /* HabitLog.swift */; };
 		EC1885A3538327B6CABB18A9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CEC711FA7536F00870BC15 /* ContentView.swift */; };
@@ -60,6 +61,7 @@
 		BE33570E960801D9A4613C56 /* MealPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlan.swift; sourceTree = "<group>"; };
 		D5DF4EAFB116F46CF3EC96C9 /* AddHabitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddHabitView.swift; sourceTree = "<group>"; };
 		EC7FFBAB32D5F8DE5505202F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		EFEEEBE0FC8483B8759AC517 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		F04273000DCFC25413F104BB /* MealItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealItem.swift; sourceTree = "<group>"; };
 		F821D3C0E8DDC11003EBBD13 /* AddExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExerciseView.swift; sourceTree = "<group>"; };
 		FF79E618A37525E9DF374CE4 /* NoteDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDetailView.swift; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 				38F29541A06B8A159C0EFF06 /* App */,
 				6EB33EDEBFF6F2EBBD69ADA7 /* Models */,
 				F7EE12501EB7201D317BF279 /* Resources */,
+				DD8A68E94B2A5686C1410535 /* Services */,
 				A8425254B8A66A20B4EBAA8A /* Views */,
 			);
 			path = Pulse;
@@ -185,6 +188,14 @@
 			path = Nutrition;
 			sourceTree = "<group>";
 		};
+		DD8A68E94B2A5686C1410535 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				EFEEEBE0FC8483B8759AC517 /* NotificationService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		DE384A2ED0C3E71CA342E0C0 /* Notes */ = {
 			isa = PBXGroup;
 			children = (
@@ -281,6 +292,7 @@
 				790501A163BE853B582888D3 /* MealPlanListView.swift in Sources */,
 				34638D9BBB093424C294317A /* NoteDetailView.swift in Sources */,
 				EC55D300DE3811C5395F0303 /* NotesView.swift in Sources */,
+				BC7168FA2155CA216D70BCF4 /* NotificationService.swift in Sources */,
 				017019B7F63B1002A39CBC0E /* NutritionView.swift in Sources */,
 				8D1BF3F24255D07376EE9101 /* Plan.swift in Sources */,
 				3486367464537B6192F7C2AF /* PulseApp.swift in Sources */,
