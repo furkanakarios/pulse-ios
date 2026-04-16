@@ -58,11 +58,6 @@ struct DashboardView: View {
             }
             .navigationTitle("Pulse")
             .navigationBarTitleDisplayMode(.large)
-            .navigationDestination(for: String.self) { destination in
-                if destination == "notes" {
-                    NotesView()
-                }
-            }
         }
     }
 
@@ -119,7 +114,7 @@ struct DashboardView: View {
     // MARK: - Notes Shortcut
     private var notesShortcutView: some View {
         VStack(alignment: .leading, spacing: 12) {
-            NavigationLink(value: "notes") {
+            NavigationLink(destination: NotesView()) {
                 HStack {
                     Text("Sağlık Notları")
                         .font(.headline)
@@ -144,7 +139,7 @@ struct DashboardView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             } else {
                 ForEach(notes.prefix(2)) { note in
-                    NavigationLink(value: "notes") {
+                    NavigationLink(destination: NotesView()) {
                         HStack(spacing: 10) {
                             Image(systemName: "note.text")
                                 .foregroundStyle(.teal)
