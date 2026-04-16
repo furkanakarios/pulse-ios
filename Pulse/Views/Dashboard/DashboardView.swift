@@ -214,12 +214,7 @@ struct DashboardView: View {
     // MARK: - HealthKit Data
     private func loadHealthKitData() async {
         guard HealthKitService.shared.isAvailable else { return }
-        let status = HealthKitService.shared.authorizationStatus(for: .stepCount)
-        if status == .notDetermined {
-            await HealthKitService.shared.requestAuthorization()
-        }
-        let authStatus = HealthKitService.shared.authorizationStatus(for: .stepCount)
-        guard authStatus == .sharingAuthorized else { return }
+        await HealthKitService.shared.requestAuthorization()
         hkAuthorized = true
         async let steps = HealthKitService.shared.fetchTodaySteps()
         async let calories = HealthKitService.shared.fetchTodayActiveCalories()

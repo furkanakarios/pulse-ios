@@ -38,11 +38,6 @@ final class HealthKitService {
         }
     }
 
-    func authorizationStatus(for type: HKQuantityTypeIdentifier) -> HKAuthorizationStatus {
-        guard let quantityType = HKQuantityType.quantityType(forIdentifier: type) else { return .notDetermined }
-        return store.authorizationStatus(for: quantityType)
-    }
-
     // MARK: - Steps
     func fetchTodaySteps() async -> Double {
         guard isAvailable,
