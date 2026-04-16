@@ -8,11 +8,15 @@ struct SettingsView: View {
     @AppStorage("waterReminderInterval") private var waterReminderInterval: Int = 60
     @AppStorage("habitReminderEnabled") private var habitReminderEnabled: Bool = false
     @AppStorage("morningSummaryEnabled") private var morningSummaryEnabled: Bool = false
+    @AppStorage("morningSummaryHour") private var morningSummaryHour: Int = 8
+    @AppStorage("morningSummaryMinute") private var morningSummaryMinute: Int = 0
 
     @State private var waterGoalInput: String = ""
     @State private var calorieGoalInput: String = ""
     @State private var exerciseGoalInput: String = ""
+    @State private var morningSummaryTime: Date = Calendar.current.date(bySettingHour: 8, minute: 0, second: 0, of: .now) ?? .now
     @State private var showNotificationDeniedAlert = false
+    @State private var showMorningSummaryDeniedAlert = false
 
     let waterIntervalOptions: [(label: String, minutes: Int)] = [
         ("30 dakikada bir", 30),
@@ -30,6 +34,16 @@ struct SettingsView: View {
             .navigationTitle("Ayarlar")
             .navigationBarTitleDisplayMode(.large)
             .onAppear { loadInputs() }
+            .alert("Bildirim İzni Gerekli", isPresented: $showMorningSummaryDeniedAlert) {
+                Button("Ayarlara Git") {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                }
+                Button("İptal", role: .cancel) { morningSummaryEnabled = false }
+            } message: {
+                Text("Bildirimlere izin vermek için Ayarlar > Pulse > Bildirimler bölümüne gidin.")
+            }
             .alert("Bildirim İzni Gerekli", isPresented: $showNotificationDeniedAlert) {
                 Button("Ayarlara Git") {
                     if let url = URL(string: UIApplication.openSettingsURLString) {
@@ -138,18 +152,25 @@ struct SettingsView: View {
             }
             .tint(.purple)
 
-            // Sabah Özeti (Step 04'te aktive edilecek)
-            Toggle(isOn: $morningSummaryEnabled) {
+            // Sabah Özeti
+            Toggle(isOn: Binding(
+                get: { morningSummaryEnabled },
+                set: { toggleMorningSummary($0) }
+            )) {
                 Label("Sabah Özeti", systemImage: "sun.max.fill")
-                    .foregroundStyle(.yellow)
+                    .foregroundStyle(.orange)
             }
-            .tint(.yellow)
-            .disabled(true)
+            .tint(.orange)
+
+            if morningSummaryEnabled {
+                DatePicker("Saat", selection: $morningSummaryTime, displayedComponents: .hourAndMinute)
+                    .onChange(of: morningSummaryTime) { scheduleMorningSummary() }
+            }
 
         } header: {
             Text("Bildirimler")
         } footer: {
-            Text("Sabah özeti yakında aktive edilecek.")
+            Text("Sabah özeti her sabah günlük hedeflerini hatırlatır.")
         }
     }
 
@@ -207,6 +228,49 @@ struct SettingsView: View {
         waterGoalInput = String(Int(dailyWaterGoal))
         calorieGoalInput = String(Int(dailyCalorieGoal))
         exerciseGoalInput = String(Int(dailyExerciseGoal))
+        morningSummaryTime = Calendar.current.date(
+            bySettingHour: morningSummaryHour,
+            minute: morningSummaryMinute,
+            second: 0,
+            of: .now
+        ) ?? .now
+    }
+
+    private func toggleMorningSummary(_ enabled: Bool) {
+        if enabled {
+            Task {
+                let status = await NotificationService.shared.authorizationStatus()
+                switch status {
+                case .authorized, .provisional:
+                    morningSummaryEnabled = true
+                    scheduleMorningSummary()
+                case .notDetermined:
+                    let granted = await NotificationService.shared.requestAuthorization()
+                    if granted {
+                        morningSummaryEnabled = true
+                        scheduleMorningSummary()
+                    } else {
+                        morningSummaryEnabled = false
+                    }
+                case .denied:
+                    showMorningSummaryDeniedAlert = true
+                default:
+                    morningSummaryEnabled = false
+                }
+            }
+        } else {
+            morningSummaryEnabled = false
+            NotificationService.shared.cancelMorningSummary()
+        }
+    }
+
+    private func scheduleMorningSummary() {
+        let components = Calendar.current.dateComponents([.hour, .minute], from: morningSummaryTime)
+        let hour = components.hour ?? 8
+        let minute = components.minute ?? 0
+        morningSummaryHour = hour
+        morningSummaryMinute = minute
+        NotificationService.shared.scheduleMorningSummary(hour: hour, minute: minute)
     }
 }
 
