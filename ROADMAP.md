@@ -1,19 +1,19 @@
 # Pulse — Roadmap
 
-## Phase 1 — Foundation (MVP)
+## Phase 1 — Foundation (MVP) ✅
 
 > Core tracking features, local data, basic UI
 
-- [ ] Xcode project setup (SwiftUI, SwiftData, iOS 17+)
-- [ ] SwiftData models: WaterEntry, MealEntry, ExerciseEntry, Habit, HabitLog, Plan, HealthNote
-- [ ] Tab navigation structure
-- [ ] Dashboard screen (daily summary)
-- [ ] Water tracking — log intake, daily goal progress
-- [ ] Nutrition log — add/view meals by day
-- [ ] Exercise log — add/view sessions by day
-- [ ] Habit tracker — daily checklist + streak counter
-- [ ] Health notes — free text, list view
-- [ ] Settings — daily goals, notification preferences
+- [x] Xcode project setup (SwiftUI, SwiftData, iOS 17+)
+- [x] SwiftData models: WaterEntry, MealPlan, MealGroup, MealItem, MealLog, ExerciseEntry, Habit, HabitLog, Plan, HealthNote
+- [x] Tab navigation structure
+- [x] Dashboard screen (daily summary)
+- [x] Water tracking — log intake, daily goal progress
+- [x] Nutrition log — program bazlı, çoklu program, öğün grupları, günlük tamamlama
+- [x] Exercise log — add/view sessions by day
+- [x] Habit tracker — daily checklist + streak counter
+- [x] Health notes — free text, list view
+- [x] Settings — daily goals, notification preferences
 
 ## Phase 2 — Notifications
 
