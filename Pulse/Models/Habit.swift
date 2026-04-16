@@ -9,6 +9,7 @@ final class Habit {
     var colorHex: String
     var createdAt: Date
     var isArchived: Bool
+    var reminderTime: Date? // nil = bildirim kapalı
 
     @Relationship(deleteRule: .cascade)
     var logs: [HabitLog]
@@ -20,6 +21,7 @@ final class Habit {
         self.colorHex = colorHex
         self.createdAt = createdAt
         self.isArchived = false
+        self.reminderTime = nil
         self.logs = []
     }
 

@@ -126,13 +126,17 @@ struct SettingsView: View {
                 }
             }
 
-            // Alışkanlık Hatırlatıcısı (Step 03'te aktive edilecek)
+            // Alışkanlık Hatırlatıcısı
             Toggle(isOn: $habitReminderEnabled) {
-                Label("Alışkanlık Hatırlatıcısı", systemImage: "checkmark.circle.fill")
-                    .foregroundStyle(.purple)
+                VStack(alignment: .leading, spacing: 2) {
+                    Label("Alışkanlık Hatırlatıcısı", systemImage: "checkmark.circle.fill")
+                        .foregroundStyle(.purple)
+                    Text("Her alışkanlık için Alışkanlıklar ekranından saat ayarlayın.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
             .tint(.purple)
-            .disabled(true)
 
             // Sabah Özeti (Step 04'te aktive edilecek)
             Toggle(isOn: $morningSummaryEnabled) {
@@ -145,7 +149,7 @@ struct SettingsView: View {
         } header: {
             Text("Bildirimler")
         } footer: {
-            Text("Alışkanlık hatırlatıcısı ve sabah özeti yakında aktive edilecek.")
+            Text("Sabah özeti yakında aktive edilecek.")
         }
     }
 
