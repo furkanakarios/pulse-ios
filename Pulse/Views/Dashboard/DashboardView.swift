@@ -3,7 +3,8 @@ import SwiftData
 
 struct DashboardView: View {
     @Query private var waterEntries: [WaterEntry]
-    @Query private var mealEntries: [MealEntry]
+    @Query private var mealPlans: [MealPlan]
+    @Query private var mealLogs: [MealLog]
     @Query private var exerciseEntries: [ExerciseEntry]
     @Query private var habits: [Habit]
     @Query private var habitLogs: [HabitLog]
@@ -13,9 +14,16 @@ struct DashboardView: View {
             .reduce(0) { $0 + $1.amount }
     }
 
-    private var todayCalories: Double {
-        mealEntries.filter { Calendar.current.isDateInToday($0.date) }
-            .reduce(0) { $0 + $1.calories }
+    private var activePlan: MealPlan? {
+        mealPlans.first { $0.isActive }
+    }
+
+    private var todayCompletedMeals: Int {
+        mealLogs.filter { Calendar.current.isDateInToday($0.date) && $0.isCompleted }.count
+    }
+
+    private var totalMeals: Int {
+        activePlan?.groups.count ?? 0
     }
 
     private var todayExerciseMinutes: Int {
@@ -78,11 +86,11 @@ struct DashboardView: View {
                 subtitle: "Günlük hedef: 2500 ml"
             )
             DashboardCard(
-                title: "Kalori",
-                value: String(format: "%.0f kcal", todayCalories),
+                title: "Beslenme",
+                value: "\(todayCompletedMeals)/\(totalMeals)",
                 icon: "fork.knife",
                 color: .orange,
-                subtitle: "Günlük hedef: 2000 kcal"
+                subtitle: totalMeals == 0 ? "Program eklenmedi" : "Öğün tamamlandı"
             )
             DashboardCard(
                 title: "Egzersiz",
@@ -180,7 +188,7 @@ struct DashboardCard: View {
 #Preview {
     DashboardView()
         .modelContainer(for: [
-            WaterEntry.self, MealEntry.self, ExerciseEntry.self,
-            Habit.self, HabitLog.self, Plan.self, HealthNote.self
+            WaterEntry.self, MealPlan.self, MealGroup.self, MealItem.self, MealLog.self,
+            ExerciseEntry.self, Habit.self, HabitLog.self, Plan.self, HealthNote.self
         ], inMemory: true)
 }
