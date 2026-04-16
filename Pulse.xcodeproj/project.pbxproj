@@ -22,10 +22,12 @@
 		790501A163BE853B582888D3 /* MealPlanListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5BFBE409E05C0497F8E921 /* MealPlanListView.swift */; };
 		807CEF2E58F5D4EB1922BF0D /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD7BF650190475FD7D47634 /* Habit.swift */; };
 		8D1BF3F24255D07376EE9101 /* Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA7CE643BA4B8F7E0481BB1 /* Plan.swift */; };
+		9C364F5A29AB260D4CF5533A /* NotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343772CBD3872C3BC23DB718 /* NotificationPermissionView.swift */; };
 		9DEBFDC7EE0C88CACB217D77 /* MealItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04273000DCFC25413F104BB /* MealItem.swift */; };
 		A91C71F49B69C4660980908C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88912FFB6F0BF9680A359B85 /* SettingsView.swift */; };
 		ABDF6FCD8E4D6DB01AFE95FB /* AddExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F821D3C0E8DDC11003EBBD13 /* AddExerciseView.swift */; };
 		AFBC38BF34DC2D0D3936926E /* MealLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070C5015A57E88F404A45DA4 /* MealLog.swift */; };
+		BC7168FA2155CA216D70BCF4 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEEEBE0FC8483B8759AC517 /* NotificationService.swift */; };
 		C6291F88D20624F962058F3C /* HabitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B393F9255F9FE2C64C23235D /* HabitsView.swift */; };
 		CFE5AE62879752E1F53DF71B /* HabitLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF603E1D4CD713C31F8E257 /* HabitLog.swift */; };
 		EC1885A3538327B6CABB18A9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CEC711FA7536F00870BC15 /* ContentView.swift */; };
@@ -40,6 +42,7 @@
 		0B01CDFE4F205CF538FEFCB3 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		0FD7BF650190475FD7D47634 /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habit.swift; sourceTree = "<group>"; };
 		13FEF2D2118D74C3572DF349 /* Pulse.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Pulse.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		343772CBD3872C3BC23DB718 /* NotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionView.swift; sourceTree = "<group>"; };
 		39989932745593A114F9C774 /* MealGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealGroup.swift; sourceTree = "<group>"; };
 		3F704423043C92B1229D27E4 /* NotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesView.swift; sourceTree = "<group>"; };
 		5F5BFBE409E05C0497F8E921 /* MealPlanListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlanListView.swift; sourceTree = "<group>"; };
@@ -60,6 +63,7 @@
 		BE33570E960801D9A4613C56 /* MealPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlan.swift; sourceTree = "<group>"; };
 		D5DF4EAFB116F46CF3EC96C9 /* AddHabitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddHabitView.swift; sourceTree = "<group>"; };
 		EC7FFBAB32D5F8DE5505202F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		EFEEEBE0FC8483B8759AC517 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		F04273000DCFC25413F104BB /* MealItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealItem.swift; sourceTree = "<group>"; };
 		F821D3C0E8DDC11003EBBD13 /* AddExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExerciseView.swift; sourceTree = "<group>"; };
 		FF79E618A37525E9DF374CE4 /* NoteDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDetailView.swift; sourceTree = "<group>"; };
@@ -80,6 +84,7 @@
 				38F29541A06B8A159C0EFF06 /* App */,
 				6EB33EDEBFF6F2EBBD69ADA7 /* Models */,
 				F7EE12501EB7201D317BF279 /* Resources */,
+				DD8A68E94B2A5686C1410535 /* Services */,
 				A8425254B8A66A20B4EBAA8A /* Views */,
 			);
 			path = Pulse;
@@ -117,6 +122,14 @@
 				0AEE9CD05DD0A6FAA15E6014 /* PulseApp.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		4A7BA79564A62B6C6501E42E /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				343772CBD3872C3BC23DB718 /* NotificationPermissionView.swift */,
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		68F35518E0F7A113D28B7BB7 /* Dashboard */ = {
@@ -169,6 +182,7 @@
 				16D189A38D800715650614CA /* Habits */,
 				DE384A2ED0C3E71CA342E0C0 /* Notes */,
 				AAC04C75FD47479FE69784BF /* Nutrition */,
+				4A7BA79564A62B6C6501E42E /* Onboarding */,
 				360681D51E41043CB027262D /* Settings */,
 				04B36EE3011BF303B02CC6EF /* Water */,
 			);
@@ -183,6 +197,14 @@
 				63A2F4729A1638CB205A1BCA /* NutritionView.swift */,
 			);
 			path = Nutrition;
+			sourceTree = "<group>";
+		};
+		DD8A68E94B2A5686C1410535 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				EFEEEBE0FC8483B8759AC517 /* NotificationService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		DE384A2ED0C3E71CA342E0C0 /* Notes */ = {
@@ -281,6 +303,8 @@
 				790501A163BE853B582888D3 /* MealPlanListView.swift in Sources */,
 				34638D9BBB093424C294317A /* NoteDetailView.swift in Sources */,
 				EC55D300DE3811C5395F0303 /* NotesView.swift in Sources */,
+				9C364F5A29AB260D4CF5533A /* NotificationPermissionView.swift in Sources */,
+				BC7168FA2155CA216D70BCF4 /* NotificationService.swift in Sources */,
 				017019B7F63B1002A39CBC0E /* NutritionView.swift in Sources */,
 				8D1BF3F24255D07376EE9101 /* Plan.swift in Sources */,
 				3486367464537B6192F7C2AF /* PulseApp.swift in Sources */,
