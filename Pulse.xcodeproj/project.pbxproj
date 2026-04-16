@@ -22,6 +22,7 @@
 		790501A163BE853B582888D3 /* MealPlanListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5BFBE409E05C0497F8E921 /* MealPlanListView.swift */; };
 		807CEF2E58F5D4EB1922BF0D /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD7BF650190475FD7D47634 /* Habit.swift */; };
 		8D1BF3F24255D07376EE9101 /* Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA7CE643BA4B8F7E0481BB1 /* Plan.swift */; };
+		9C364F5A29AB260D4CF5533A /* NotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343772CBD3872C3BC23DB718 /* NotificationPermissionView.swift */; };
 		9DEBFDC7EE0C88CACB217D77 /* MealItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04273000DCFC25413F104BB /* MealItem.swift */; };
 		A91C71F49B69C4660980908C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88912FFB6F0BF9680A359B85 /* SettingsView.swift */; };
 		ABDF6FCD8E4D6DB01AFE95FB /* AddExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F821D3C0E8DDC11003EBBD13 /* AddExerciseView.swift */; };
@@ -40,7 +41,8 @@
 		0AEE9CD05DD0A6FAA15E6014 /* PulseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseApp.swift; sourceTree = "<group>"; };
 		0B01CDFE4F205CF538FEFCB3 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		0FD7BF650190475FD7D47634 /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habit.swift; sourceTree = "<group>"; };
-		13FEF2D2118D74C3572DF349 /* Pulse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pulse.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13FEF2D2118D74C3572DF349 /* Pulse.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Pulse.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		343772CBD3872C3BC23DB718 /* NotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionView.swift; sourceTree = "<group>"; };
 		39989932745593A114F9C774 /* MealGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealGroup.swift; sourceTree = "<group>"; };
 		3F704423043C92B1229D27E4 /* NotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesView.swift; sourceTree = "<group>"; };
 		5F5BFBE409E05C0497F8E921 /* MealPlanListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlanListView.swift; sourceTree = "<group>"; };
@@ -122,6 +124,14 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		4A7BA79564A62B6C6501E42E /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				343772CBD3872C3BC23DB718 /* NotificationPermissionView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		68F35518E0F7A113D28B7BB7 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
@@ -172,6 +182,7 @@
 				16D189A38D800715650614CA /* Habits */,
 				DE384A2ED0C3E71CA342E0C0 /* Notes */,
 				AAC04C75FD47479FE69784BF /* Nutrition */,
+				4A7BA79564A62B6C6501E42E /* Onboarding */,
 				360681D51E41043CB027262D /* Settings */,
 				04B36EE3011BF303B02CC6EF /* Water */,
 			);
@@ -243,6 +254,11 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					CF79B1BAD3D70F54153FE0B3 = {
+						DevelopmentTeam = "";
+					};
+				};
 			};
 			buildConfigurationList = AEADBFB0BC46A63478A94A51 /* Build configuration list for PBXProject "Pulse" */;
 			developmentRegion = en;
@@ -287,6 +303,7 @@
 				790501A163BE853B582888D3 /* MealPlanListView.swift in Sources */,
 				34638D9BBB093424C294317A /* NoteDetailView.swift in Sources */,
 				EC55D300DE3811C5395F0303 /* NotesView.swift in Sources */,
+				9C364F5A29AB260D4CF5533A /* NotificationPermissionView.swift in Sources */,
 				BC7168FA2155CA216D70BCF4 /* NotificationService.swift in Sources */,
 				017019B7F63B1002A39CBC0E /* NutritionView.swift in Sources */,
 				8D1BF3F24255D07376EE9101 /* Plan.swift in Sources */,
@@ -367,7 +384,6 @@
 				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
 				CODE_SIGN_ENTITLEMENTS = Pulse/Resources/Pulse.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 86DFRNMKL7;
 				INFOPLIST_FILE = Pulse/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -388,7 +404,6 @@
 				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
 				CODE_SIGN_ENTITLEMENTS = Pulse/Resources/Pulse.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 86DFRNMKL7;
 				INFOPLIST_FILE = Pulse/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
