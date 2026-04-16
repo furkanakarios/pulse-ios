@@ -27,6 +27,11 @@ struct ContentView: View {
                 .tabItem {
                     Label("Alışkanlıklar", systemImage: "checkmark.circle.fill")
                 }
+
+            SettingsView()
+                .tabItem {
+                    Label("Ayarlar", systemImage: "gearshape.fill")
+                }
         }
     }
 }

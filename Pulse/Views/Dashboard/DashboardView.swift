@@ -10,6 +10,10 @@ struct DashboardView: View {
     @Query private var habitLogs: [HabitLog]
     @Query(sort: \HealthNote.date, order: .reverse) private var notes: [HealthNote]
 
+    @AppStorage("dailyWaterGoal") private var dailyWaterGoal: Double = 2500
+    @AppStorage("dailyCalorieGoal") private var dailyCalorieGoal: Double = 2000
+    @AppStorage("dailyExerciseGoal") private var dailyExerciseGoal: Double = 30
+
     private var todayWater: Double {
         waterEntries.filter { Calendar.current.isDateInToday($0.date) }
             .reduce(0) { $0 + $1.amount }
@@ -85,7 +89,7 @@ struct DashboardView: View {
                 value: String(format: "%.0f ml", todayWater),
                 icon: "drop.fill",
                 color: .blue,
-                subtitle: "Günlük hedef: 2500 ml"
+                subtitle: "Hedef: \(Int(dailyWaterGoal)) ml"
             )
             DashboardCard(
                 title: "Beslenme",
@@ -99,7 +103,7 @@ struct DashboardView: View {
                 value: "\(todayExerciseMinutes) dk",
                 icon: "figure.run",
                 color: .green,
-                subtitle: "Günlük hedef: 30 dk"
+                subtitle: "Hedef: \(Int(dailyExerciseGoal)) dk"
             )
             DashboardCard(
                 title: "Alışkanlıklar",

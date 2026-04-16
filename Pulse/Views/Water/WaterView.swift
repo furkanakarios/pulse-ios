@@ -9,7 +9,7 @@ struct WaterView: View {
     @State private var showCustomEntry = false
     @State private var customAmount: String = ""
 
-    let dailyGoal: Double = 2500
+    @AppStorage("dailyWaterGoal") private var dailyGoal: Double = 2500
 
     private var todayEntries: [WaterEntry] {
         allEntries.filter { Calendar.current.isDateInToday($0.date) }
