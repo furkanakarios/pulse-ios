@@ -53,6 +53,7 @@
 - [ ] Launch screen
 - [ ] Onboarding flow
 - [ ] Widget (water/habit quick glance)
+- [ ] iCloud sync (SwiftData + CloudKit entitlement)
 - [ ] iPad support (optional)
 - [ ] App Store metadata, screenshots
 - [ ] TestFlight beta
