@@ -8,6 +8,7 @@ struct DashboardView: View {
     @Query private var exerciseEntries: [ExerciseEntry]
     @Query private var habits: [Habit]
     @Query private var habitLogs: [HabitLog]
+    @Query(sort: \HealthNote.date, order: .reverse) private var notes: [HealthNote]
 
     private var todayWater: Double {
         waterEntries.filter { Calendar.current.isDateInToday($0.date) }
@@ -50,6 +51,7 @@ struct DashboardView: View {
                     if activeHabitsCount > 0 {
                         habitsProgressView
                     }
+                    notesShortcutView
                 }
                 .padding(.horizontal)
                 .padding(.bottom)
@@ -106,6 +108,63 @@ struct DashboardView: View {
                 color: .purple,
                 subtitle: "Bugün tamamlanan"
             )
+        }
+    }
+
+    // MARK: - Notes Shortcut
+    private var notesShortcutView: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            NavigationLink(destination: NotesView()) {
+                HStack {
+                    Text("Sağlık Notları")
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                    Spacer()
+                    Text("\(notes.count) not")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            if notes.isEmpty {
+                Text("Henüz not eklenmedi.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .padding(12)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(.secondarySystemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            } else {
+                ForEach(notes.prefix(2)) { note in
+                    NavigationLink(destination: NotesView()) {
+                        HStack(spacing: 10) {
+                            Image(systemName: "note.text")
+                                .foregroundStyle(.teal)
+                                .frame(width: 28)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(note.title)
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                    .foregroundStyle(.primary)
+                                    .lineLimit(1)
+                                Text(note.source)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Text(note.date.formatted(date: .abbreviated, time: .omitted))
+                                .font(.caption2)
+                                .foregroundStyle(.tertiary)
+                        }
+                        .padding(12)
+                        .background(Color(.secondarySystemBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                    }
+                }
+            }
         }
     }
 
@@ -191,4 +250,5 @@ struct DashboardCard: View {
             WaterEntry.self, MealPlan.self, MealGroup.self, MealItem.self, MealLog.self,
             ExerciseEntry.self, Habit.self, HabitLog.self, Plan.self, HealthNote.self
         ], inMemory: true)
+
 }
