@@ -25,17 +25,29 @@ struct WaterView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 24) {
+            List {
+                Section {
                     progressSection
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(EdgeInsets())
+                }
+
+                Section {
                     quickAddSection
-                    if !todayEntries.isEmpty {
-                        todayLogSection
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(EdgeInsets())
+                }
+
+                if !todayEntries.isEmpty {
+                    Section("Bugünkü Kayıtlar") {
+                        ForEach(todayEntries) { entry in
+                            waterEntryRow(entry)
+                        }
+                        .onDelete(perform: deleteEntries)
                     }
                 }
-                .padding(.horizontal)
-                .padding(.bottom)
             }
+            .listStyle(.plain)
             .navigationTitle("Su")
             .navigationBarTitleDisplayMode(.large)
             .sheet(isPresented: $showCustomEntry) {
@@ -49,16 +61,17 @@ struct WaterView: View {
         VStack(spacing: 16) {
             ZStack {
                 Circle()
-                    .stroke(Color.blue.opacity(0.15), lineWidth: 16)
+                    .stroke((progress >= 1.0 ? Color.green : Color.blue).opacity(0.15), lineWidth: 16)
                 Circle()
                     .trim(from: 0, to: progress)
-                    .stroke(Color.blue, style: StrokeStyle(lineWidth: 16, lineCap: .round))
+                    .stroke(progress >= 1.0 ? Color.green : Color.blue, style: StrokeStyle(lineWidth: 16, lineCap: .round))
                     .rotationEffect(.degrees(-90))
                     .animation(.easeOut(duration: 0.5), value: progress)
                 VStack(spacing: 4) {
                     Text(String(format: "%.0f", todayTotal))
                         .font(.system(size: 40, weight: .bold, design: .rounded))
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(progress >= 1.0 ? .green : .blue)
+                        .animation(.easeOut(duration: 0.3), value: progress >= 1.0)
                     Text("ml")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
@@ -125,35 +138,25 @@ struct WaterView: View {
         }
     }
 
-    // MARK: - Today Log
-    private var todayLogSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Bugünkü Kayıtlar")
-                .font(.headline)
+    // MARK: - Entry Row
+    private func waterEntryRow(_ entry: WaterEntry) -> some View {
+        HStack {
+            Image(systemName: "drop.fill")
+                .foregroundStyle(.blue)
+                .frame(width: 28)
+            Text(String(format: "%.0f ml", entry.amount))
+                .font(.subheadline)
+            Spacer()
+            Text(entry.date, format: .dateTime.hour().minute())
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
 
-            ForEach(todayEntries) { entry in
-                HStack {
-                    Image(systemName: "drop.fill")
-                        .foregroundStyle(.blue)
-                        .frame(width: 32)
-                    Text(String(format: "%.0f ml", entry.amount))
-                        .font(.subheadline)
-                    Spacer()
-                    Text(entry.date, format: .dateTime.hour().minute())
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                .padding(12)
-                .background(Color(.secondarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                    Button(role: .destructive) {
-                        modelContext.delete(entry)
-                    } label: {
-                        Label("Sil", systemImage: "trash")
-                    }
-                }
-            }
+    // MARK: - Actions
+    private func deleteEntries(at offsets: IndexSet) {
+        for index in offsets {
+            modelContext.delete(todayEntries[index])
         }
     }
 
@@ -199,7 +202,6 @@ struct WaterView: View {
         .presentationDetents([.medium])
     }
 
-    // MARK: - Actions
     private func addWater(amount: Double) {
         let entry = WaterEntry(amount: amount)
         modelContext.insert(entry)
