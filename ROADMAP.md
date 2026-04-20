@@ -25,16 +25,16 @@
 - [x] Morning summary notification
 - [x] Permission request flow (first launch)
 
-## Phase 3 — HealthKit Integration
+## Phase 3 — HealthKit Integration ✅
 
 > Read from and write to Apple Health
 
-- [ ] HealthKitService setup
-- [ ] Request permissions (steps, calories, workouts, sleep)
-- [ ] Display step count on Dashboard
-- [ ] Display active calories on Dashboard
-- [ ] Optionally write exercise sessions to HealthKit
-- [ ] Sleep data view
+- [x] HealthKitService setup
+- [x] Request permissions (steps, calories, workouts, sleep)
+- [x] Display step count on Dashboard
+- [x] Display active calories on Dashboard
+- [x] Optionally write exercise sessions to HealthKit
+- [x] Sleep data view
 
 ## Phase 4 — Plans & Roadmap
 
