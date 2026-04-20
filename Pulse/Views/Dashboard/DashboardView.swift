@@ -67,6 +67,7 @@ struct DashboardView: View {
                     if activeHabitsCount > 0 {
                         habitsProgressView
                     }
+                    weeklyShortcutView
                     plansShortcutView
                     notesShortcutView
                 }
@@ -126,6 +127,33 @@ struct DashboardView: View {
                 color: .purple,
                 subtitle: "Bugün tamamlanan"
             )
+        }
+    }
+
+    // MARK: - Weekly Shortcut
+    private var weeklyShortcutView: some View {
+        NavigationLink(destination: WeeklyView()) {
+            HStack(spacing: 14) {
+                Image(systemName: "calendar.day.timeline.left")
+                    .font(.title2)
+                    .foregroundStyle(.blue)
+                    .frame(width: 40)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Haftalık Görünüm")
+                        .font(.subheadline).fontWeight(.medium)
+                        .foregroundStyle(.primary)
+                    Text("Bu haftanın özetini gör")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding()
+            .background(Color(.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 16))
         }
     }
 
