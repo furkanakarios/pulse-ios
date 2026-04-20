@@ -444,7 +444,7 @@ struct DashboardCard: View {
     DashboardView()
         .modelContainer(for: [
             WaterEntry.self, MealPlan.self, MealGroup.self, MealItem.self, MealLog.self,
-            ExerciseEntry.self, Habit.self, HabitLog.self, Plan.self, HealthNote.self
+            ExerciseEntry.self, Habit.self, HabitLog.self, Plan.self, PlanItem.self, HealthNote.self
         ], inMemory: true)
 
 }

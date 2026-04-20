@@ -160,7 +160,16 @@ struct PlanRow: View {
                         .foregroundStyle(.secondary)
                 }
 
-                if !plan.notes.isEmpty {
+                if !plan.items.isEmpty {
+                    HStack(spacing: 6) {
+                        ProgressView(value: plan.itemProgress)
+                            .tint(.green)
+                            .frame(maxWidth: 80)
+                        Text("\(plan.completedItemsCount)/\(plan.items.count) görev")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                } else if !plan.notes.isEmpty {
                     Text(plan.notes)
                         .font(.caption)
                         .foregroundStyle(.secondary)

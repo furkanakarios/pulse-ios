@@ -31,6 +31,7 @@ struct PulseApp: App {
             Habit.self,
             HabitLog.self,
             Plan.self,
+            PlanItem.self,
             HealthNote.self
         ])
     }

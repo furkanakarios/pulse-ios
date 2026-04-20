@@ -9,6 +9,8 @@ struct PlanDetailView: View {
     @State private var isEditing = false
     @State private var editTitle = ""
     @State private var editNotes = ""
+    @State private var newItemText = ""
+    @State private var showAddItem = false
 
     var daysRemaining: Int {
         max(0, Calendar.current.dateComponents([.day], from: .now, to: plan.endDate).day ?? 0)
@@ -20,18 +22,18 @@ struct PlanDetailView: View {
         return max(0, min(elapsed / total, 1.0))
     }
 
+    private var sortedItems: [PlanItem] {
+        plan.items.sorted { $0.sortOrder < $1.sortOrder }
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                // Header card
                 headerCard
-
-                // Progress
                 if !plan.isCompleted {
                     progressCard
                 }
-
-                // Notes
+                itemsCard
                 if !plan.notes.isEmpty || isEditing {
                     notesCard
                 }
@@ -58,7 +60,10 @@ struct PlanDetailView: View {
                         Button {
                             plan.isCompleted.toggle()
                         } label: {
-                            Label(plan.isCompleted ? "Aktife Al" : "Tamamlandı İşaretle", systemImage: plan.isCompleted ? "arrow.uturn.left" : "checkmark.circle")
+                            Label(
+                                plan.isCompleted ? "Aktife Al" : "Tamamlandı İşaretle",
+                                systemImage: plan.isCompleted ? "arrow.uturn.left" : "checkmark.circle"
+                            )
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
@@ -107,7 +112,7 @@ struct PlanDetailView: View {
     private var progressCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("İlerleme")
+                Text("Zaman İlerlemesi")
                     .font(.headline)
                 Spacer()
                 Text("\(daysRemaining) gün kaldı")
@@ -116,13 +121,112 @@ struct PlanDetailView: View {
             }
             ProgressView(value: progress)
                 .tint(.blue)
-            Text(String(format: "%%%.0f tamamlandı", progress * 100))
+            Text(String(format: "%%%0.f tamamlandı", progress * 100))
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
         .padding()
         .background(Color(.secondarySystemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+
+    // MARK: - Items Card
+    private var itemsCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Görevler")
+                    .font(.headline)
+                Spacer()
+                if !plan.items.isEmpty {
+                    Text("\(plan.completedItemsCount)/\(plan.items.count)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Button {
+                    showAddItem = true
+                } label: {
+                    Image(systemName: "plus.circle.fill")
+                        .foregroundStyle(.blue)
+                        .font(.title3)
+                }
+            }
+
+            if !plan.items.isEmpty {
+                ProgressView(value: plan.itemProgress)
+                    .tint(.green)
+            }
+
+            if plan.items.isEmpty && !showAddItem {
+                Text("Henüz görev eklenmedi.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.vertical, 8)
+            } else {
+                ForEach(sortedItems) { item in
+                    itemRow(item)
+                }
+                .onDelete { offsets in
+                    for i in offsets { modelContext.delete(sortedItems[i]) }
+                }
+            }
+
+            if showAddItem {
+                addItemField
+            }
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+
+    private func itemRow(_ item: PlanItem) -> some View {
+        HStack(spacing: 12) {
+            Button {
+                item.isCompleted.toggle()
+            } label: {
+                Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
+                    .font(.title3)
+                    .foregroundStyle(item.isCompleted ? .green : .secondary)
+            }
+            .buttonStyle(.plain)
+
+            Text(item.title)
+                .font(.subheadline)
+                .strikethrough(item.isCompleted, color: .secondary)
+                .foregroundStyle(item.isCompleted ? .secondary : .primary)
+
+            Spacer()
+        }
+        .padding(.vertical, 4)
+    }
+
+    private var addItemField: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "circle")
+                .font(.title3)
+                .foregroundStyle(.secondary)
+
+            TextField("Yeni görev...", text: $newItemText)
+                .font(.subheadline)
+                .onSubmit { saveNewItem() }
+
+            if !newItemText.trimmingCharacters(in: .whitespaces).isEmpty {
+                Button("Ekle") { saveNewItem() }
+                    .font(.caption).fontWeight(.semibold)
+                    .foregroundStyle(.blue)
+            }
+
+            Button {
+                showAddItem = false
+                newItemText = ""
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.vertical, 4)
     }
 
     // MARK: - Notes Card
@@ -158,5 +262,14 @@ struct PlanDetailView: View {
         editTitle = plan.title
         editNotes = plan.notes
         isEditing = true
+    }
+
+    private func saveNewItem() {
+        let text = newItemText.trimmingCharacters(in: .whitespaces)
+        guard !text.isEmpty else { return }
+        let item = PlanItem(title: text, sortOrder: plan.items.count)
+        modelContext.insert(item)
+        plan.items.append(item)
+        newItemText = ""
     }
 }
