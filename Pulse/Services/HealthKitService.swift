@@ -150,6 +150,44 @@ final class HealthKitService {
         }
     }
 
+    // MARK: - Sleep for specific date
+    func fetchSleepForDate(_ date: Date) async -> SleepData? {
+        guard isAvailable,
+              let sleepType = HKObjectType.categoryType(forIdentifier: .sleepAnalysis) else { return nil }
+
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: date)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay, options: .strictStartDate)
+
+        return await withCheckedContinuation { continuation in
+            let query = HKSampleQuery(
+                sampleType: sleepType,
+                predicate: predicate,
+                limit: HKObjectQueryNoLimit,
+                sortDescriptors: nil
+            ) { _, samples, _ in
+                guard let samples = samples as? [HKCategorySample], !samples.isEmpty else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+                let asleepSamples = samples.filter {
+                    $0.value == HKCategoryValueSleepAnalysis.asleepUnspecified.rawValue ||
+                    $0.value == HKCategoryValueSleepAnalysis.asleepCore.rawValue ||
+                    $0.value == HKCategoryValueSleepAnalysis.asleepDeep.rawValue ||
+                    $0.value == HKCategoryValueSleepAnalysis.asleepREM.rawValue
+                }
+                let totalSeconds = asleepSamples.reduce(0.0) { $0 + $1.endDate.timeIntervalSince($1.startDate) }
+                continuation.resume(returning: SleepData(
+                    totalHours: totalSeconds / 3600,
+                    startDate: asleepSamples.map { $0.startDate }.min(),
+                    endDate: asleepSamples.map { $0.endDate }.max()
+                ))
+            }
+            self.store.execute(query)
+        }
+    }
+
     // MARK: - Write Workout
     func saveWorkout(activityType: HKWorkoutActivityType, start: Date, end: Date, calories: Double) async -> Bool {
         guard isAvailable else { return false }
