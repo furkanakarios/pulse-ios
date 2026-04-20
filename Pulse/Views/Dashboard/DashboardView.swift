@@ -14,6 +14,11 @@ struct DashboardView: View {
     @AppStorage("dailyCalorieGoal") private var dailyCalorieGoal: Double = 2000
     @AppStorage("dailyExerciseGoal") private var dailyExerciseGoal: Double = 30
 
+    @State private var hkSteps: Double = 0
+    @State private var hkCalories: Double = 0
+    @State private var hkAuthorized: Bool = false
+    @State private var sleepData: SleepData? = nil
+
     private var todayWater: Double {
         waterEntries.filter { Calendar.current.isDateInToday($0.date) }
             .reduce(0) { $0 + $1.amount }
@@ -52,6 +57,12 @@ struct DashboardView: View {
                 VStack(spacing: 20) {
                     todayHeaderView
                     summaryGridView
+                    if hkAuthorized {
+                        healthKitSection
+                        NavigationLink(destination: SleepView()) {
+                            sleepCard
+                        }
+                    }
                     if activeHabitsCount > 0 {
                         habitsProgressView
                     }
@@ -62,6 +73,7 @@ struct DashboardView: View {
             }
             .navigationTitle("Pulse")
             .navigationBarTitleDisplayMode(.large)
+            .task { await loadHealthKitData() }
         }
     }
 
@@ -170,6 +182,75 @@ struct DashboardView: View {
                 }
             }
         }
+    }
+
+    // MARK: - Sleep Card
+    private var sleepCard: some View {
+        HStack(spacing: 14) {
+            Image(systemName: "moon.stars.fill")
+                .font(.title2)
+                .foregroundStyle(.indigo)
+                .frame(width: 40)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Uyku")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Text(sleepData?.formattedDuration ?? "Veri yok")
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+            }
+            Spacer()
+            Image(systemName: "chevron.right")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+
+    // MARK: - HealthKit Section
+    private var healthKitSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Apple Health")
+                    .font(.headline)
+                Spacer()
+                Image(systemName: "heart.fill")
+                    .foregroundStyle(.red)
+                    .font(.subheadline)
+            }
+
+            HStack(spacing: 12) {
+                DashboardCard(
+                    title: "Adım",
+                    value: hkSteps > 0 ? "\(Int(hkSteps))" : "—",
+                    icon: "figure.walk",
+                    color: .teal,
+                    subtitle: "Bugün atılan adım"
+                )
+                DashboardCard(
+                    title: "Aktif Kalori",
+                    value: hkCalories > 0 ? "\(Int(hkCalories)) kcal" : "—",
+                    icon: "flame.fill",
+                    color: .red,
+                    subtitle: "Bugün yakılan"
+                )
+            }
+        }
+    }
+
+    // MARK: - HealthKit Data
+    private func loadHealthKitData() async {
+        guard HealthKitService.shared.isAvailable else { return }
+        await HealthKitService.shared.requestAuthorization()
+        hkAuthorized = true
+        async let steps = HealthKitService.shared.fetchTodaySteps()
+        async let calories = HealthKitService.shared.fetchTodayActiveCalories()
+        let (s, c) = await (steps, calories)
+        hkSteps = s
+        hkCalories = c
+        sleepData = await HealthKitService.shared.fetchLastNightSleep()
     }
 
     // MARK: - Habits Progress

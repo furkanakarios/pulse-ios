@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import HealthKit
 
 struct AddExerciseView: View {
     @Environment(\.modelContext) private var modelContext
@@ -10,6 +11,8 @@ struct AddExerciseView: View {
     @State private var calories = ""
     @State private var notes = ""
     @State private var date = Date.now
+    @State private var saveToHealthKit = false
+    @State private var isSaving = false
 
     let suggestions = [
         "Koşu", "Yürüyüş", "Bisiklet", "Yüzme",
@@ -71,6 +74,18 @@ struct AddExerciseView: View {
                     TextField("Notlar...", text: $notes, axis: .vertical)
                         .lineLimit(3...5)
                 }
+
+                if HealthKitService.shared.isAvailable {
+                    Section {
+                        Toggle(isOn: $saveToHealthKit) {
+                            Label("Apple Health'e Kaydet", systemImage: "heart.fill")
+                                .foregroundStyle(.red)
+                        }
+                        .tint(.red)
+                    } footer: {
+                        Text("Antrenman Apple Health uygulamasına da kaydedilir.")
+                    }
+                }
             }
             .navigationTitle("Egzersiz Ekle")
             .navigationBarTitleDisplayMode(.inline)
@@ -79,9 +94,11 @@ struct AddExerciseView: View {
                     Button("İptal") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Kaydet") { save() }
-                        .fontWeight(.semibold)
-                        .disabled(!isValid)
+                    Button("Kaydet") {
+                        Task { await save() }
+                    }
+                    .fontWeight(.semibold)
+                    .disabled(!isValid || isSaving)
                 }
             }
         }
@@ -92,16 +109,47 @@ struct AddExerciseView: View {
         (Int(duration) ?? 0) > 0
     }
 
-    private func save() {
+    private func save() async {
+        isSaving = true
+        let durationMinutes = Int(duration) ?? 0
+        let cal = Double(calories) ?? 0
+
         let entry = ExerciseEntry(
             activityType: activityType.trimmingCharacters(in: .whitespaces),
-            duration: Int(duration) ?? 0,
-            calories: Double(calories) ?? 0,
+            duration: durationMinutes,
+            calories: cal,
             notes: notes.trimmingCharacters(in: .whitespaces),
             date: date
         )
         modelContext.insert(entry)
+
+        if saveToHealthKit {
+            await HealthKitService.shared.requestAuthorization()
+            let endDate = Calendar.current.date(byAdding: .minute, value: durationMinutes, to: date) ?? date
+            _ = await HealthKitService.shared.saveWorkout(
+                activityType: hkWorkoutType(for: activityType),
+                start: date,
+                end: endDate,
+                calories: cal
+            )
+        }
+
+        isSaving = false
         dismiss()
+    }
+
+    private func hkWorkoutType(for name: String) -> HKWorkoutActivityType {
+        switch name.lowercased() {
+        case let t where t.contains("koş") || t.contains("run"): return .running
+        case let t where t.contains("yürü") || t.contains("walk"): return .walking
+        case let t where t.contains("bisiklet") || t.contains("cycl"): return .cycling
+        case let t where t.contains("yüz") || t.contains("swim"): return .swimming
+        case let t where t.contains("yoga"): return .yoga
+        case let t where t.contains("ağırlık") || t.contains("weight"): return .traditionalStrengthTraining
+        case let t where t.contains("hiit"): return .highIntensityIntervalTraining
+        case let t where t.contains("pilates"): return .pilates
+        default: return .other
+        }
     }
 }
 

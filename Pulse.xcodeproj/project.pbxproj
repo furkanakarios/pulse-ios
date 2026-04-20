@@ -19,6 +19,7 @@
 		3F5539D5151CE50C46549FA6 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B01CDFE4F205CF538FEFCB3 /* DashboardView.swift */; };
 		4FABAC52380AEADF5F70391F /* ExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE15FAC6DC6335FFCCA56785 /* ExerciseView.swift */; };
 		52B6C06F8B468E2A3A0ACCCC /* AddHabitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DF4EAFB116F46CF3EC96C9 /* AddHabitView.swift */; };
+		5352F7A35CD669F5244C6713 /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA1C2E189323E164548D266 /* SleepView.swift */; };
 		790501A163BE853B582888D3 /* MealPlanListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5BFBE409E05C0497F8E921 /* MealPlanListView.swift */; };
 		807CEF2E58F5D4EB1922BF0D /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD7BF650190475FD7D47634 /* Habit.swift */; };
 		8D1BF3F24255D07376EE9101 /* Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA7CE643BA4B8F7E0481BB1 /* Plan.swift */; };
@@ -30,6 +31,7 @@
 		BC7168FA2155CA216D70BCF4 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEEEBE0FC8483B8759AC517 /* NotificationService.swift */; };
 		C6291F88D20624F962058F3C /* HabitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B393F9255F9FE2C64C23235D /* HabitsView.swift */; };
 		CFE5AE62879752E1F53DF71B /* HabitLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF603E1D4CD713C31F8E257 /* HabitLog.swift */; };
+		DC07E6DA1C9C068A6A5BD0BF /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DEC6AB7EB48CA0FC358DE75 /* HealthKitService.swift */; };
 		EC1885A3538327B6CABB18A9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CEC711FA7536F00870BC15 /* ContentView.swift */; };
 		EC55D300DE3811C5395F0303 /* NotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F704423043C92B1229D27E4 /* NotesView.swift */; };
 		EE0B042985BD3DB2A6E233C5 /* MealPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE33570E960801D9A4613C56 /* MealPlan.swift */; };
@@ -40,6 +42,7 @@
 		070C5015A57E88F404A45DA4 /* MealLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealLog.swift; sourceTree = "<group>"; };
 		0AEE9CD05DD0A6FAA15E6014 /* PulseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseApp.swift; sourceTree = "<group>"; };
 		0B01CDFE4F205CF538FEFCB3 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		0DEC6AB7EB48CA0FC358DE75 /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
 		0FD7BF650190475FD7D47634 /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habit.swift; sourceTree = "<group>"; };
 		13FEF2D2118D74C3572DF349 /* Pulse.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Pulse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		343772CBD3872C3BC23DB718 /* NotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionView.swift; sourceTree = "<group>"; };
@@ -56,6 +59,7 @@
 		8EE460E0CD5DF90EDC901CE4 /* CreateMealPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMealPlanView.swift; sourceTree = "<group>"; };
 		92A098E1E668F3D580A3721E /* AddNoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteView.swift; sourceTree = "<group>"; };
 		9795E3A03EC14E2DAF73E4E0 /* WaterEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterEntry.swift; sourceTree = "<group>"; };
+		9BA1C2E189323E164548D266 /* SleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
 		9D25AD64D524EC1345722847 /* HealthNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthNote.swift; sourceTree = "<group>"; };
 		ABD647265A23C5293A38989B /* WaterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterView.swift; sourceTree = "<group>"; };
 		B393F9255F9FE2C64C23235D /* HabitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsView.swift; sourceTree = "<group>"; };
@@ -184,6 +188,7 @@
 				AAC04C75FD47479FE69784BF /* Nutrition */,
 				4A7BA79564A62B6C6501E42E /* Onboarding */,
 				360681D51E41043CB027262D /* Settings */,
+				D1FC0A01B86E7CCCB36F6847 /* Sleep */,
 				04B36EE3011BF303B02CC6EF /* Water */,
 			);
 			path = Views;
@@ -199,9 +204,18 @@
 			path = Nutrition;
 			sourceTree = "<group>";
 		};
+		D1FC0A01B86E7CCCB36F6847 /* Sleep */ = {
+			isa = PBXGroup;
+			children = (
+				9BA1C2E189323E164548D266 /* SleepView.swift */,
+			);
+			path = Sleep;
+			sourceTree = "<group>";
+		};
 		DD8A68E94B2A5686C1410535 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				0DEC6AB7EB48CA0FC358DE75 /* HealthKitService.swift */,
 				EFEEEBE0FC8483B8759AC517 /* NotificationService.swift */,
 			);
 			path = Services;
@@ -295,6 +309,7 @@
 				807CEF2E58F5D4EB1922BF0D /* Habit.swift in Sources */,
 				CFE5AE62879752E1F53DF71B /* HabitLog.swift in Sources */,
 				C6291F88D20624F962058F3C /* HabitsView.swift in Sources */,
+				DC07E6DA1C9C068A6A5BD0BF /* HealthKitService.swift in Sources */,
 				12591291A34C66ED682F1267 /* HealthNote.swift in Sources */,
 				18DDF110DA6C66FE369B60CE /* MealGroup.swift in Sources */,
 				9DEBFDC7EE0C88CACB217D77 /* MealItem.swift in Sources */,
@@ -309,6 +324,7 @@
 				8D1BF3F24255D07376EE9101 /* Plan.swift in Sources */,
 				3486367464537B6192F7C2AF /* PulseApp.swift in Sources */,
 				A91C71F49B69C4660980908C /* SettingsView.swift in Sources */,
+				5352F7A35CD669F5244C6713 /* SleepView.swift in Sources */,
 				F8E87ADC36D5A3A4CF99BBF8 /* WaterEntry.swift in Sources */,
 				118FB7D768F611DCE56B5D55 /* WaterView.swift in Sources */,
 			);
