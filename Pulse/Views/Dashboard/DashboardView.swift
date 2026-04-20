@@ -9,6 +9,7 @@ struct DashboardView: View {
     @Query private var habits: [Habit]
     @Query private var habitLogs: [HabitLog]
     @Query(sort: \HealthNote.date, order: .reverse) private var notes: [HealthNote]
+    @Query(sort: \Plan.startDate, order: .reverse) private var plans: [Plan]
 
     @AppStorage("dailyWaterGoal") private var dailyWaterGoal: Double = 2500
     @AppStorage("dailyCalorieGoal") private var dailyCalorieGoal: Double = 2000
@@ -66,6 +67,9 @@ struct DashboardView: View {
                     if activeHabitsCount > 0 {
                         habitsProgressView
                     }
+                    weeklyShortcutView
+                    monthlyShortcutView
+                    plansShortcutView
                     notesShortcutView
                 }
                 .padding(.horizontal)
@@ -124,6 +128,113 @@ struct DashboardView: View {
                 color: .purple,
                 subtitle: "Bugün tamamlanan"
             )
+        }
+    }
+
+    // MARK: - Weekly Shortcut
+    private var weeklyShortcutView: some View {
+        NavigationLink(destination: WeeklyView()) {
+            HStack(spacing: 14) {
+                Image(systemName: "calendar.day.timeline.left")
+                    .font(.title2)
+                    .foregroundStyle(.blue)
+                    .frame(width: 40)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Haftalık Görünüm")
+                        .font(.subheadline).fontWeight(.medium)
+                        .foregroundStyle(.primary)
+                    Text("Bu haftanın özetini gör")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding()
+            .background(Color(.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+        }
+    }
+
+    // MARK: - Monthly Shortcut
+    private var monthlyShortcutView: some View {
+        NavigationLink(destination: MonthlyView()) {
+            HStack(spacing: 14) {
+                Image(systemName: "calendar")
+                    .font(.title2)
+                    .foregroundStyle(.purple)
+                    .frame(width: 40)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Aylık Görünüm")
+                        .font(.subheadline).fontWeight(.medium)
+                        .foregroundStyle(.primary)
+                    Text("Takvim ve plan zaman çizelgesi")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding()
+            .background(Color(.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+        }
+    }
+
+    // MARK: - Plans Shortcut
+    private var plansShortcutView: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            NavigationLink(destination: PlansView()) {
+                HStack {
+                    Text("Planlar")
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                    Spacer()
+                    let activePlans = plans.filter { !$0.isCompleted }.count
+                    Text("\(activePlans) aktif")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            if plans.filter({ !$0.isCompleted }).isEmpty {
+                Text("Aktif plan yok.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .padding(12)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(.secondarySystemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            } else {
+                ForEach(plans.filter({ !$0.isCompleted }).prefix(2)) { plan in
+                    NavigationLink(destination: PlanDetailView(plan: plan)) {
+                        HStack(spacing: 10) {
+                            Image(systemName: plan.planType == "Haftalık" ? "calendar.badge.clock" : "calendar")
+                                .foregroundStyle(plan.planType == "Haftalık" ? .blue : .purple)
+                                .frame(width: 28)
+                            Text(plan.title)
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                                .foregroundStyle(.primary)
+                                .lineLimit(1)
+                            Spacer()
+                            Text("\(max(0, Calendar.current.dateComponents([.day], from: .now, to: plan.endDate).day ?? 0)) gün")
+                                .font(.caption2)
+                                .foregroundStyle(.tertiary)
+                        }
+                        .padding(12)
+                        .background(Color(.secondarySystemBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                    }
+                }
+            }
         }
     }
 
@@ -333,7 +444,7 @@ struct DashboardCard: View {
     DashboardView()
         .modelContainer(for: [
             WaterEntry.self, MealPlan.self, MealGroup.self, MealItem.self, MealLog.self,
-            ExerciseEntry.self, Habit.self, HabitLog.self, Plan.self, HealthNote.self
+            ExerciseEntry.self, Habit.self, HabitLog.self, Plan.self, PlanItem.self, HealthNote.self
         ], inMemory: true)
 
 }
