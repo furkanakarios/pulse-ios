@@ -68,6 +68,7 @@ struct DashboardView: View {
                         habitsProgressView
                     }
                     weeklyShortcutView
+                    monthlyShortcutView
                     plansShortcutView
                     notesShortcutView
                 }
@@ -143,6 +144,33 @@ struct DashboardView: View {
                         .font(.subheadline).fontWeight(.medium)
                         .foregroundStyle(.primary)
                     Text("Bu haftanın özetini gör")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding()
+            .background(Color(.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+        }
+    }
+
+    // MARK: - Monthly Shortcut
+    private var monthlyShortcutView: some View {
+        NavigationLink(destination: MonthlyView()) {
+            HStack(spacing: 14) {
+                Image(systemName: "calendar")
+                    .font(.title2)
+                    .foregroundStyle(.purple)
+                    .frame(width: 40)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Aylık Görünüm")
+                        .font(.subheadline).fontWeight(.medium)
+                        .foregroundStyle(.primary)
+                    Text("Takvim ve plan zaman çizelgesi")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
