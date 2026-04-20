@@ -10,6 +10,13 @@ final class Plan {
     var endDate: Date
     var isCompleted: Bool
     var planType: String // "Haftalık", "Aylık"
+    @Relationship(deleteRule: .cascade, inverse: \PlanItem.plan)
+    var items: [PlanItem] = []
+
+    var completedItemsCount: Int { items.filter { $0.isCompleted }.count }
+    var itemProgress: Double {
+        items.isEmpty ? 0 : Double(completedItemsCount) / Double(items.count)
+    }
 
     init(title: String, notes: String = "", startDate: Date = .now, endDate: Date, planType: String = "Haftalık") {
         self.id = UUID()
