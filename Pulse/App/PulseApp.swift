@@ -20,7 +20,7 @@ struct PulseApp: App {
                         .transition(.opacity)
                         .zIndex(1)
                         .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                                 withAnimation(.easeOut(duration: 0.35)) {
                                     showLaunch = false
                                 }

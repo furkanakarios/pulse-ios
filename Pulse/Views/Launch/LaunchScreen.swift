@@ -28,8 +28,8 @@ struct LaunchScreen: View {
                     .opacity(opacity)
 
                 Text("PULSE")
-                    .font(PulseFont.wordmark)
-                    .tracking(4)
+                    .font(.system(size: 17, weight: .heavy, design: .default))
+                    .tracking(5)
                     .foregroundStyle(Color.pulseAccent)
                     .opacity(wordmarkOpacity)
             }
