@@ -3,14 +3,13 @@ import SwiftData
 
 @Model
 final class HealthNote {
-    var id: UUID
-    var title: String
-    var content: String
-    var source: String // "Doktor", "Diyetisyen", "Kişisel" vb.
-    var date: Date
+    var id: UUID = UUID()
+    var title: String = ""
+    var content: String = ""
+    var source: String = "Kişisel"
+    var date: Date = Date.now
 
     init(title: String, content: String, source: String = "Kişisel", date: Date = .now) {
-        self.id = UUID()
         self.title = title
         self.content = content
         self.source = source

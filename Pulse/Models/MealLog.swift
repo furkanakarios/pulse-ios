@@ -3,14 +3,13 @@ import SwiftData
 
 @Model
 final class MealLog {
-    var id: UUID
-    var date: Date
-    var isCompleted: Bool
+    var id: UUID = UUID()
+    var date: Date = Date.now
+    var isCompleted: Bool = false
 
     var group: MealGroup?
 
     init(date: Date = .now, isCompleted: Bool = false) {
-        self.id = UUID()
         self.date = date
         self.isCompleted = isCompleted
     }

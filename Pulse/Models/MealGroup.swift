@@ -3,26 +3,23 @@ import SwiftData
 
 @Model
 final class MealGroup {
-    var id: UUID
-    var name: String
-    var scheduledTime: Date?
-    var order: Int
+    var id: UUID = UUID()
+    var name: String = ""
+    var scheduledTime: Date? = nil
+    var order: Int = 0
 
     var plan: MealPlan?
 
     @Relationship(deleteRule: .cascade)
-    var items: [MealItem]
+    var items: [MealItem] = []
 
     @Relationship(deleteRule: .cascade)
-    var logs: [MealLog]
+    var logs: [MealLog] = []
 
     init(name: String, scheduledTime: Date? = nil, order: Int = 0) {
-        self.id = UUID()
         self.name = name
         self.scheduledTime = scheduledTime
         self.order = order
-        self.items = []
-        self.logs = []
     }
 
     var sortedItems: [MealItem] {
