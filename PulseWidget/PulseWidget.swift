@@ -68,30 +68,32 @@ private struct SmallView: View {
     private var progress: Double { min(entry.waterMl / max(entry.waterGoalMl, 1), 1.0) }
 
     var body: some View {
-        VStack(spacing: 8) {
-            ZStack {
-                Circle()
-                    .stroke(wRingBg, lineWidth: 9)
-                Circle()
-                    .trim(from: 0, to: progress)
-                    .stroke(wAccent, style: StrokeStyle(lineWidth: 9, lineCap: .round))
-                    .rotationEffect(.degrees(-90))
-                VStack(spacing: 1) {
-                    Text("\(Int(entry.waterMl))")
-                        .font(.system(size: 17, weight: .heavy))
-                        .foregroundStyle(wAccent)
-                    Text("ml")
-                        .font(.system(size: 10, weight: .semibold))
-                        .foregroundStyle(.secondary)
+        ZStack {
+            VStack(spacing: 8) {
+                ZStack {
+                    Circle()
+                        .stroke(wRingBg, lineWidth: 9)
+                    Circle()
+                        .trim(from: 0, to: progress)
+                        .stroke(Color.white, style: StrokeStyle(lineWidth: 9, lineCap: .round))
+                        .rotationEffect(.degrees(-90))
+                    VStack(spacing: 1) {
+                        Text("\(Int(entry.waterMl))")
+                            .font(.system(size: 17, weight: .heavy))
+                            .foregroundStyle(.white)
+                        Text("ml")
+                            .font(.system(size: 10, weight: .semibold))
+                            .foregroundStyle(.white.opacity(0.8))
+                    }
                 }
-            }
-            .frame(width: 86, height: 86)
+                .frame(width: 82, height: 82)
 
-            Text("Su Hedefi")
-                .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(.secondary)
+                Text("Su Hedefi")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.85))
+            }
         }
-        .containerBackground(wBg, for: .widget)
+        .containerBackground(wAccent, for: .widget)
     }
 }
 
@@ -108,26 +110,26 @@ private struct MediumView: View {
                 HStack(spacing: 5) {
                     Image(systemName: "drop.fill")
                         .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(wAccent)
+                        .foregroundStyle(.white)
                     Text("SU")
                         .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(wAccent)
+                        .foregroundStyle(.white)
                 }
 
                 ZStack {
                     Circle()
-                        .stroke(wRingBg, lineWidth: 8)
+                        .stroke(Color.white.opacity(0.3), lineWidth: 8)
                     Circle()
                         .trim(from: 0, to: waterProgress)
-                        .stroke(wAccent, style: StrokeStyle(lineWidth: 8, lineCap: .round))
+                        .stroke(Color.white, style: StrokeStyle(lineWidth: 8, lineCap: .round))
                         .rotationEffect(.degrees(-90))
                     VStack(spacing: 0) {
                         Text("\(Int(entry.waterMl))")
                             .font(.system(size: 15, weight: .heavy))
-                            .foregroundStyle(wAccent)
+                            .foregroundStyle(.white)
                         Text("/ \(Int(entry.waterGoalMl))")
                             .font(.system(size: 9, weight: .medium))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.white.opacity(0.75))
                     }
                 }
                 .frame(width: 72, height: 72)
@@ -135,7 +137,7 @@ private struct MediumView: View {
             .frame(maxWidth: .infinity)
 
             Rectangle()
-                .fill(Color.black.opacity(0.07))
+                .fill(Color.white.opacity(0.3))
                 .frame(width: 1)
                 .padding(.vertical, 8)
 
@@ -144,19 +146,19 @@ private struct MediumView: View {
                 HStack(spacing: 5) {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(wAccent)
+                        .foregroundStyle(.white)
                     Text("ALIŞKANLIKLAR")
                         .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(wAccent)
+                        .foregroundStyle(.white)
                 }
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text("\(entry.completedHabits)/\(entry.totalHabits)")
                         .font(.system(size: 34, weight: .heavy))
-                        .foregroundStyle(entry.completedHabits == entry.totalHabits && entry.totalHabits > 0 ? wAccent : .primary)
+                        .foregroundStyle(.white)
                     Text("tamamlandı")
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.white.opacity(0.75))
                 }
                 Spacer()
             }
@@ -164,7 +166,7 @@ private struct MediumView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-        .containerBackground(wBg, for: .widget)
+        .containerBackground(wAccent, for: .widget)
     }
 }
 
