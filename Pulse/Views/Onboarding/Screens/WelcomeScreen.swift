@@ -22,13 +22,13 @@ struct WelcomeScreen: View {
                     .font(PulseFont.wordmark)
                     .tracking(4)
                     .foregroundStyle(Color.pulseAccent)
-                Text("Your heart,\ndecoded daily.")
+                Text("Your daily health,\nmade simple.")
                     .font(PulseFont.title(40))
                     .foregroundStyle(Color.pulseText)
                     .multilineTextAlignment(.center)
                     .lineSpacing(2)
                     .tracking(-1)
-                Text("Simple insights from your Apple Watch.\nNo dashboards. No noise.")
+                Text("Track water, meals, movement & habits —\nall private, all on your device.")
                     .font(PulseFont.body(15))
                     .foregroundStyle(Color.pulseTextSecondary)
                     .multilineTextAlignment(.center)
@@ -42,11 +42,7 @@ struct WelcomeScreen: View {
             Spacer()
 
             VStack(spacing: 8) {
-                PulsePrimaryButton(title: "Get started", action: onContinue)
-                Text("Takes less than a minute")
-                    .font(PulseFont.caption(12))
-                    .foregroundStyle(Color.pulseTextSecondary)
-                    .padding(.top, 4)
+                PulsePrimaryButton(title: "Get Started", systemImage: "arrow.right", action: onContinue)
             }
             .padding(.horizontal, PulseMetrics.horizontalPadding)
             .padding(.bottom, PulseMetrics.footerBottomPadding)

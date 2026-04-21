@@ -11,12 +11,10 @@ struct HealthKitScreen: View {
 
     @State private var appeared = false
 
-    private let metrics = [
-        "Heart rate",
-        "Heart rate variability",
-        "Resting heart rate",
-        "Sleep analysis",
-        "Workouts"
+    private let metrics: [(String, String)] = [
+        ("figure.walk", "Steps & distance"),
+        ("flame.fill",  "Active calories"),
+        ("figure.run",  "Workouts")
     ]
 
     var body: some View {
@@ -46,31 +44,52 @@ struct HealthKitScreen: View {
                 }
 
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Connect Apple Health")
+                    Text("Sync with Apple Health")
                         .font(PulseFont.titleMedium())
                         .tracking(-1)
                         .lineSpacing(2)
                         .foregroundStyle(Color.pulseText)
-                    Text("Pulse reads these metrics to build your daily summary. Nothing leaves your device.")
+                    Text("Pull your steps, calories & workouts automatically. You stay in control of what syncs.")
                         .font(PulseFont.body(15))
                         .foregroundStyle(Color.pulseTextSecondary)
                 }
 
-                VStack(spacing: 10) {
-                    ForEach(metrics, id: \.self) { m in
-                        HStack(spacing: 12) {
-                            Image(systemName: "checkmark")
-                                .font(.system(size: 13, weight: .bold))
+                VStack(spacing: 0) {
+                    ForEach(metrics, id: \.1) { icon, label in
+                        HStack(spacing: 14) {
+                            Image(systemName: icon)
+                                .font(.system(size: 15, weight: .medium))
                                 .foregroundStyle(Color.pulseAccent)
-                                .frame(width: 20, height: 20)
-                                .background(Color.pulseAccentSoft)
-                                .clipShape(Circle())
-                            Text(m)
+                                .frame(width: 24)
+                            Text(label)
                                 .font(.system(size: 15, weight: .medium))
                                 .foregroundStyle(Color.pulseText)
                             Spacer()
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundStyle(Color.pulseAccent)
+                                .font(.system(size: 18))
+                        }
+                        .padding(.vertical, 14)
+                        .padding(.horizontal, 16)
+                        .background(Color.pulseSurface)
+                        if label != metrics.last?.1 {
+                            Divider().padding(.leading, 54)
                         }
                     }
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .stroke(Color.black.opacity(0.06), lineWidth: 1)
+                )
+
+                HStack(spacing: 6) {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color.pulseTextSecondary)
+                    Text("Nothing leaves your device. Ever.")
+                        .font(PulseFont.caption(13))
+                        .foregroundStyle(Color.pulseTextSecondary)
                 }
             }
             .padding(.horizontal, PulseMetrics.horizontalPadding)
@@ -83,7 +102,7 @@ struct HealthKitScreen: View {
 
             VStack(spacing: 4) {
                 PulsePrimaryButton(title: "Connect Apple Health", action: onConnect)
-                PulseSecondaryButton(title: "Not now", action: onSkip)
+                PulseSecondaryButton(title: "Maybe later", action: onSkip)
             }
             .padding(.horizontal, PulseMetrics.horizontalPadding)
             .padding(.bottom, PulseMetrics.footerBottomPadding - 8)

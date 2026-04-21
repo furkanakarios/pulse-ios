@@ -8,10 +8,10 @@ struct FeaturesScreen: View {
     @State private var appeared = false
 
     private let features: [(String, String, String)] = [
-        ("waveform.path.ecg", "Heart rhythm insights", "Spot trends in your resting heart rate, HRV and recovery."),
-        ("bed.double.fill",   "Sleep-aware",           "See how last night's sleep shapes today's readiness."),
-        ("figure.run",        "Built for real life",   "A single morning check-in. No dashboards to decode."),
-        ("lock.shield.fill",  "Private by default",    "Your data stays on your device. We never sell it.")
+        ("drop.fill",         "Hydration",      "Set a daily goal and hit it with gentle nudges."),
+        ("fork.knife",        "Nutrition Log",  "Quick, no-calorie-math meal entries. Just show up."),
+        ("figure.run",        "Movement",       "Log workouts in seconds. Streaks keep you honest."),
+        ("checkmark.circle.fill", "Daily Habits", "Build the small routines that compound every day.")
     ]
 
     var body: some View {
@@ -31,11 +31,17 @@ struct FeaturesScreen: View {
             .padding(.top, 4)
 
             VStack(alignment: .leading, spacing: 10) {
-                Text("What you get")
-                    .font(PulseFont.titleMedium())
-                    .tracking(-1)
-                    .foregroundStyle(Color.pulseText)
-                Text("Four simple things, done well.")
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("Everything you need,")
+                        .font(PulseFont.titleMedium())
+                        .tracking(-1)
+                        .foregroundStyle(Color.pulseText)
+                    Text("nothing you don't.")
+                        .font(PulseFont.titleMedium())
+                        .tracking(-1)
+                        .foregroundStyle(Color.pulseAccent)
+                }
+                Text("Four core trackers. All offline. No accounts, no clutter.")
                     .font(PulseFont.body(15))
                     .foregroundStyle(Color.pulseTextSecondary)
             }
