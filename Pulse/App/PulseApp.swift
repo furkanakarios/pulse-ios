@@ -6,6 +6,33 @@ struct PulseApp: App {
     @AppStorage("hasOnboarded") private var hasOnboarded = false
     @State private var showLaunch = true
 
+    let container: ModelContainer = {
+        let schema = Schema([
+            WaterEntry.self,
+            MealPlan.self,
+            MealGroup.self,
+            MealItem.self,
+            MealLog.self,
+            ExerciseEntry.self,
+            Habit.self,
+            HabitLog.self,
+            Plan.self,
+            PlanItem.self,
+            HealthNote.self
+        ])
+        let config = ModelConfiguration(
+            schema: schema,
+            cloudKitDatabase: .private("iCloud.com.furkanakarios.pulse")
+        )
+        do {
+            return try ModelContainer(for: schema, configurations: [config])
+        } catch {
+            // CloudKit henüz aktif değilse local olarak düş
+            let localConfig = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
+            return try! ModelContainer(for: schema, configurations: [localConfig])
+        }
+    }()
+
     var body: some Scene {
         WindowGroup {
             ZStack {
@@ -29,18 +56,6 @@ struct PulseApp: App {
                 }
             }
         }
-        .modelContainer(for: [
-            WaterEntry.self,
-            MealPlan.self,
-            MealGroup.self,
-            MealItem.self,
-            MealLog.self,
-            ExerciseEntry.self,
-            Habit.self,
-            HabitLog.self,
-            Plan.self,
-            PlanItem.self,
-            HealthNote.self
-        ])
+        .modelContainer(container)
     }
 }

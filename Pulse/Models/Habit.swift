@@ -3,26 +3,22 @@ import SwiftData
 
 @Model
 final class Habit {
-    var id: UUID
-    var name: String
-    var icon: String // SF Symbol adı
-    var colorHex: String
-    var createdAt: Date
-    var isArchived: Bool
-    var reminderTime: Date? // nil = bildirim kapalı
+    var id: UUID = UUID()
+    var name: String = ""
+    var icon: String = "checkmark.circle"
+    var colorHex: String = "#007AFF"
+    var createdAt: Date = Date.now
+    var isArchived: Bool = false
+    var reminderTime: Date? = nil
 
     @Relationship(deleteRule: .cascade)
-    var logs: [HabitLog]
+    var logs: [HabitLog] = []
 
     init(name: String, icon: String = "checkmark.circle", colorHex: String = "#007AFF", createdAt: Date = .now) {
-        self.id = UUID()
         self.name = name
         self.icon = icon
         self.colorHex = colorHex
         self.createdAt = createdAt
-        self.isArchived = false
-        self.reminderTime = nil
-        self.logs = []
     }
 
     var streak: Int {
