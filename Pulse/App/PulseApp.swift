@@ -4,13 +4,29 @@ import SwiftData
 @main
 struct PulseApp: App {
     @AppStorage("hasOnboarded") private var hasOnboarded = false
+    @State private var showLaunch = true
 
     var body: some Scene {
         WindowGroup {
-            if hasOnboarded {
-                ContentView()
-            } else {
-                OnboardingFlow(onFinish: { hasOnboarded = true })
+            ZStack {
+                if hasOnboarded {
+                    ContentView()
+                } else {
+                    OnboardingFlow(onFinish: { hasOnboarded = true })
+                }
+
+                if showLaunch {
+                    LaunchScreen()
+                        .transition(.opacity)
+                        .zIndex(1)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+                                withAnimation(.easeOut(duration: 0.35)) {
+                                    showLaunch = false
+                                }
+                            }
+                        }
+                }
             }
         }
         .modelContainer(for: [

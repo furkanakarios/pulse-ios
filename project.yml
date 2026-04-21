@@ -28,6 +28,8 @@ targets:
         INFOPLIST_FILE: Pulse/Resources/Info.plist
         SWIFT_VERSION: "5.9"
         CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
     info:
       path: Pulse/Resources/Info.plist
       properties:
@@ -38,7 +40,6 @@ targets:
         NSUserNotificationsUsageDescription: "Pulse, su içme hatırlatıcıları, alışkanlık bildirimleri ve sabah özeti için bildirim gönderir."
         NSHealthShareUsageDescription: "Pulse, adım sayısı, kalori ve uyku verilerini göstermek için Apple Health'e erişmek istiyor."
         NSHealthUpdateUsageDescription: "Pulse, egzersiz seanslarını Apple Health'e kaydetmek istiyor."
-        UILaunchScreen: {}
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         UIApplicationSceneManifest:
