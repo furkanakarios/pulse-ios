@@ -40,7 +40,7 @@ struct NotificationsScreen: View {
 
             // Centered header
             VStack(spacing: 16) {
-                PulseChip(icon: "bell.fill", chipSize: 72)
+                BellChip()
 
                 VStack(spacing: 10) {
                     Text("Stay on track,\neffortlessly.")
@@ -128,5 +128,45 @@ struct NotificationsScreen: View {
                 .stroke(Color.black.opacity(0.07), lineWidth: 1)
         )
         .shadow(color: Color.black.opacity(0.04), radius: 8, x: 0, y: 2)
+    }
+}
+
+private struct BellChip: View {
+    @State private var angle: Double = 0
+    @State private var running = false
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .fill(Color.pulseAccent)
+                .frame(width: 72, height: 72)
+            Image(systemName: "bell.fill")
+                .font(.system(size: 30, weight: .semibold))
+                .foregroundStyle(.white)
+                .rotationEffect(.degrees(angle), anchor: .top)
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                running = true
+                ring()
+            }
+        }
+        .onDisappear { running = false }
+    }
+
+    private func ring() {
+        guard running else { return }
+        withAnimation(.easeInOut(duration: 0.08)) { angle = 18 }
+        after(0.08) { withAnimation(.easeInOut(duration: 0.08)) { angle = -18 } }
+        after(0.16) { withAnimation(.easeInOut(duration: 0.08)) { angle = 14 } }
+        after(0.24) { withAnimation(.easeInOut(duration: 0.08)) { angle = -14 } }
+        after(0.32) { withAnimation(.easeInOut(duration: 0.08)) { angle = 8 } }
+        after(0.40) { withAnimation(.easeInOut(duration: 0.08)) { angle = -8 } }
+        after(0.48) { withAnimation(.easeInOut(duration: 0.1)) { angle = 0 } }
+        after(2.2) { ring() }
+    }
+
+    private func after(_ s: Double, _ action: @escaping () -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + s, execute: action)
     }
 }
