@@ -10,7 +10,7 @@ struct WelcomeScreen: View {
         VStack(spacing: 0) {
             Spacer(minLength: 40)
 
-            PulseHero(size: 240)
+            PulseHero(size: 190)
                 .scaleEffect(appeared ? 1 : 0.9)
                 .opacity(appeared ? 1 : 0)
                 .animation(PulseAnimation.springy.delay(0.05), value: appeared)
@@ -50,7 +50,22 @@ struct WelcomeScreen: View {
             .animation(PulseAnimation.enterFade.delay(0.3), value: appeared)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.pulseBackground)
+        .background(
+            ZStack {
+                Color.pulseBackground
+                RadialGradient(
+                    colors: [
+                        Color.pulseAccentSoft.opacity(0.75),
+                        Color.pulseHeroGradientMiddle.opacity(0.6),
+                        Color.clear
+                    ],
+                    center: .init(x: 0.5, y: 0.05),
+                    startRadius: 0,
+                    endRadius: 420
+                )
+            }
+            .ignoresSafeArea()
+        )
         .onAppear { appeared = true }
     }
 }

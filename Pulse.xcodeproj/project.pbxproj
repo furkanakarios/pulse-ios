@@ -22,6 +22,7 @@
 		3486367464537B6192F7C2AF /* PulseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE9CD05DD0A6FAA15E6014 /* PulseApp.swift */; };
 		37D3B4193853E2BAAA919D93 /* ExerciseEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F7FCAABABE275B8FC7E389F /* ExerciseEntry.swift */; };
 		3F5539D5151CE50C46549FA6 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B01CDFE4F205CF538FEFCB3 /* DashboardView.swift */; };
+		4DECCF4DB9B1B54677015AB0 /* PulseChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFF8125AA3BCB3240593117 /* PulseChip.swift */; };
 		4FABAC52380AEADF5F70391F /* ExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE15FAC6DC6335FFCCA56785 /* ExerciseView.swift */; };
 		52B6C06F8B468E2A3A0ACCCC /* AddHabitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DF4EAFB116F46CF3EC96C9 /* AddHabitView.swift */; };
 		5352F7A35CD669F5244C6713 /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA1C2E189323E164548D266 /* SleepView.swift */; };
@@ -97,6 +98,7 @@
 		B393F9255F9FE2C64C23235D /* HabitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsView.swift; sourceTree = "<group>"; };
 		BE15FAC6DC6335FFCCA56785 /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
 		BE33570E960801D9A4613C56 /* MealPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlan.swift; sourceTree = "<group>"; };
+		CAFF8125AA3BCB3240593117 /* PulseChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseChip.swift; sourceTree = "<group>"; };
 		D455931A8DF45307E05B7B96 /* FeaturesScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturesScreen.swift; sourceTree = "<group>"; };
 		D5DF4EAFB116F46CF3EC96C9 /* AddHabitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddHabitView.swift; sourceTree = "<group>"; };
 		EC7FFBAB32D5F8DE5505202F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 		2E9D80FFC32E080650DA262A /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				CAFF8125AA3BCB3240593117 /* PulseChip.swift */,
 				220A8FD92A6572048B580BD8 /* PulseHero.swift */,
 				7B97E6A65C71DC8A51C0E0F8 /* PulsePrimaryButton.swift */,
 				0B9F108B0D839BD930BFB766 /* PulseProgress.swift */,
@@ -423,6 +426,7 @@
 				095ABAD5B6C256C8D25B4150 /* PlanItem.swift in Sources */,
 				5902188FCE763EA5DC5E661A /* PlansView.swift in Sources */,
 				3486367464537B6192F7C2AF /* PulseApp.swift in Sources */,
+				4DECCF4DB9B1B54677015AB0 /* PulseChip.swift in Sources */,
 				66373AE395AD159351D690DD /* PulseHero.swift in Sources */,
 				B1848747059BB61739B81C05 /* PulsePrimaryButton.swift in Sources */,
 				B4AE53A3F35BAE0047393DAA /* PulseProgress.swift in Sources */,

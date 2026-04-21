@@ -51,22 +51,26 @@ struct FeaturesScreen: View {
             .offset(y: appeared ? 0 : 12)
             .animation(PulseAnimation.enterFade, value: appeared)
 
-            VStack(alignment: .leading, spacing: 20) {
+            Spacer(minLength: 28)
+
+            VStack(alignment: .leading, spacing: 0) {
                 ForEach(Array(features.enumerated()), id: \.offset) { idx, f in
                     FeatureRow(icon: f.0, title: f.1, subtitle: f.2)
                         .opacity(appeared ? 1 : 0)
                         .offset(y: appeared ? 0 : 16)
                         .animation(PulseAnimation.enterFade.delay(0.1 + Double(idx) * 0.08), value: appeared)
+                    if idx < features.count - 1 {
+                        Spacer(minLength: 0)
+                    }
                 }
             }
             .padding(.horizontal, PulseMetrics.horizontalPadding)
-            .padding(.top, 28)
-
-            Spacer(minLength: 0)
+            .frame(maxHeight: .infinity)
 
             PulsePrimaryButton(title: "Continue", action: onContinue)
                 .padding(.horizontal, PulseMetrics.horizontalPadding)
                 .padding(.bottom, PulseMetrics.footerBottomPadding)
+                .padding(.top, 24)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.pulseBackground)

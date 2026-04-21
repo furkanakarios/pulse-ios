@@ -32,16 +32,9 @@ struct HealthKitScreen: View {
             .padding(.horizontal, 8)
             .padding(.top, 4)
 
-            VStack(alignment: .leading, spacing: 24) {
-                // Heart icon chip
-                ZStack {
-                    RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        .fill(Color.pulseAccentSoft)
-                        .frame(width: 64, height: 64)
-                    Image(systemName: "heart.text.square.fill")
-                        .font(.system(size: 30, weight: .semibold))
-                        .foregroundStyle(Color.pulseAccent)
-                }
+            VStack(alignment: .leading, spacing: 20) {
+                PulseChip(icon: "heart.text.square.fill", chipSize: 72)
+                    .padding(.leading, -PulseMetrics.horizontalPadding * 0.3)
 
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Sync with Apple Health")
