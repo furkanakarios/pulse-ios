@@ -42,11 +42,11 @@ struct ReadyScreen: View {
             Spacer(minLength: 32)
 
             VStack(spacing: 12) {
-                Text("You're all set.")
+                Text("You're all set!")
                     .font(PulseFont.title(36))
                     .tracking(-1)
                     .foregroundStyle(Color.pulseText)
-                Text("Your first summary will be ready tomorrow morning.")
+                Text("Your first day starts now. Log a glass of water and we're off.")
                     .font(PulseFont.body(15))
                     .foregroundStyle(Color.pulseTextSecondary)
                     .multilineTextAlignment(.center)
@@ -58,7 +58,7 @@ struct ReadyScreen: View {
 
             Spacer()
 
-            PulsePrimaryButton(title: "Open Pulse", systemImage: "arrow.right", action: onFinish)
+            PulsePrimaryButton(title: "Let's go", systemImage: "arrow.right", action: onFinish)
                 .padding(.horizontal, PulseMetrics.horizontalPadding)
                 .padding(.bottom, PulseMetrics.footerBottomPadding)
         }
