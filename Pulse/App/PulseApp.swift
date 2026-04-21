@@ -20,8 +20,16 @@ struct PulseApp: App {
             PlanItem.self,
             HealthNote.self
         ])
-        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
-        return try! ModelContainer(for: schema, configurations: [config])
+        let config = ModelConfiguration(
+            schema: schema,
+            cloudKitDatabase: .private("iCloud.com.furkanakarios.pulse")
+        )
+        do {
+            return try ModelContainer(for: schema, configurations: [config])
+        } catch {
+            let localConfig = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
+            return try! ModelContainer(for: schema, configurations: [localConfig])
+        }
     }()
 
     var body: some Scene {
