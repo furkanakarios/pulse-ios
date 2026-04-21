@@ -93,8 +93,8 @@ private struct SmallView: View {
         }
         .overlay(
             ContainerRelativeShape()
-                .inset(by: 1)
-                .stroke(wAccent, lineWidth: 3)
+                .inset(by: 2)
+                .stroke(wAccent, lineWidth: 8)
         )
         .containerBackground(wBg, for: .widget)
     }
@@ -171,8 +171,8 @@ private struct MediumView: View {
         .padding(.vertical, 14)
         .overlay(
             ContainerRelativeShape()
-                .inset(by: 1)
-                .stroke(wAccent, lineWidth: 3)
+                .inset(by: 2)
+                .stroke(wAccent, lineWidth: 8)
         )
         .containerBackground(wBg, for: .widget)
     }
