@@ -9,7 +9,6 @@ struct NotificationsScreen: View {
     var onBack: () -> Void
 
     @State private var appeared = false
-    @State private var bellShake = false
 
     private struct MockNotification {
         let title: String
@@ -24,7 +23,8 @@ struct NotificationsScreen: View {
     ]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(spacing: 0) {
+            // Back button — left aligned
             HStack {
                 Button(action: onBack) {
                     Image(systemName: "chevron.left")
@@ -38,46 +38,42 @@ struct NotificationsScreen: View {
             .padding(.horizontal, 8)
             .padding(.top, 4)
 
-            VStack(alignment: .leading, spacing: 20) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        .fill(Color.pulseAccentSoft)
-                        .frame(width: 64, height: 64)
-                    Image(systemName: "bell.fill")
-                        .font(.system(size: 28, weight: .semibold))
-                        .foregroundStyle(Color.pulseAccent)
-                        .rotationEffect(.degrees(bellShake ? -10 : 10))
-                        .animation(.easeInOut(duration: 0.12).repeatCount(6, autoreverses: true), value: bellShake)
-                }
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { bellShake = true }
-                }
+            // Centered header
+            VStack(spacing: 16) {
+                PulseChip(icon: "bell.fill", chipSize: 72)
 
-                VStack(alignment: .leading, spacing: 10) {
+                VStack(spacing: 10) {
                     Text("Stay on track,\neffortlessly.")
                         .font(PulseFont.titleMedium())
                         .tracking(-1)
                         .lineSpacing(2)
                         .foregroundStyle(Color.pulseText)
-                    Text("A quick ping when it's water time, habit time, or a new day begins.")
+                        .multilineTextAlignment(.center)
+                    Text("A quick ping when it's water time,\nhabit time, or a new day begins.")
                         .font(PulseFont.body(15))
                         .foregroundStyle(Color.pulseTextSecondary)
-                }
-
-                VStack(spacing: 10) {
-                    ForEach(Array(notifications.enumerated()), id: \.offset) { idx, n in
-                        mockNotificationCard(n)
-                            .opacity(appeared ? 1 : 0)
-                            .offset(y: appeared ? 0 : 12)
-                            .animation(PulseAnimation.enterFade.delay(0.15 + Double(idx) * 0.08), value: appeared)
-                    }
+                        .multilineTextAlignment(.center)
                 }
             }
+            .frame(maxWidth: .infinity)
             .padding(.horizontal, PulseMetrics.horizontalPadding)
-            .padding(.top, 8)
+            .padding(.top, 4)
             .opacity(appeared ? 1 : 0)
             .offset(y: appeared ? 0 : 12)
             .animation(PulseAnimation.enterFade, value: appeared)
+
+            Spacer(minLength: 20)
+
+            // Notification cards
+            VStack(spacing: 10) {
+                ForEach(Array(notifications.enumerated()), id: \.offset) { idx, n in
+                    notificationCard(n)
+                        .opacity(appeared ? 1 : 0)
+                        .offset(y: appeared ? 0 : 12)
+                        .animation(PulseAnimation.enterFade.delay(0.15 + Double(idx) * 0.09), value: appeared)
+                }
+            }
+            .padding(.horizontal, PulseMetrics.horizontalPadding)
 
             Spacer(minLength: 0)
 
@@ -93,18 +89,20 @@ struct NotificationsScreen: View {
         .onAppear { appeared = true }
     }
 
-    private func mockNotificationCard(_ n: MockNotification) -> some View {
+    private func notificationCard(_ n: MockNotification) -> some View {
         HStack(alignment: .top, spacing: 10) {
+            // App icon
             ZStack {
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .fill(Color.pulseAccentSoft)
-                    .frame(width: 36, height: 36)
-                Image(systemName: "bolt.heart.fill")
-                    .font(.system(size: 16))
-                    .foregroundStyle(Color.pulseAccent)
+                RoundedRectangle(cornerRadius: 9, style: .continuous)
+                    .fill(Color.pulseAccent)
+                    .frame(width: 38, height: 38)
+                Image(systemName: "heart.fill")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(.white)
             }
-            VStack(alignment: .leading, spacing: 2) {
-                HStack {
+
+            VStack(alignment: .leading, spacing: 3) {
+                HStack(alignment: .firstTextBaseline) {
                     Text("Pulse")
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundStyle(Color.pulseText)
@@ -119,16 +117,16 @@ struct NotificationsScreen: View {
                 Text(n.body)
                     .font(.system(size: 13))
                     .foregroundStyle(Color.pulseTextSecondary)
-                    .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
             }
         }
-        .padding(12)
+        .padding(14)
         .background(Color.pulseSurface)
-        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .stroke(Color.black.opacity(0.06), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color.black.opacity(0.07), lineWidth: 1)
         )
+        .shadow(color: Color.black.opacity(0.04), radius: 8, x: 0, y: 2)
     }
 }
