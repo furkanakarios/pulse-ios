@@ -45,6 +45,10 @@ targets:
           - UIInterfaceOrientationPortrait
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
+    dependencies:
+      - target: PulseWidget
+        embed: true
+        codeSign: true
     entitlements:
       path: Pulse/Resources/Pulse.entitlements
       properties:
@@ -54,3 +58,27 @@ targets:
           - CloudKit
         com.apple.developer.icloud-containers:
           - iCloud.com.furkanakarios.pulse
+        com.apple.security.application-groups:
+          - group.com.furkanakarios.pulse
+
+  PulseWidget:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: PulseWidget
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.furkanakarios.pulse.widget
+        SWIFT_VERSION: "5.9"
+        CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION: YES
+    info:
+      path: PulseWidget/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: PulseWidget/PulseWidget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.furkanakarios.pulse
