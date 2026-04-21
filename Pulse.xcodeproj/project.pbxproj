@@ -95,7 +95,7 @@
 		0B9F108B0D839BD930BFB766 /* PulseProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseProgress.swift; sourceTree = "<group>"; };
 		0DEC6AB7EB48CA0FC358DE75 /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
 		0FD7BF650190475FD7D47634 /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habit.swift; sourceTree = "<group>"; };
-		13FEF2D2118D74C3572DF349 /* Pulse.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Pulse.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13FEF2D2118D74C3572DF349 /* Pulse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pulse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17A98DE298898B902752A68C /* PlansView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlansView.swift; sourceTree = "<group>"; };
 		220A8FD92A6572048B580BD8 /* PulseHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseHero.swift; sourceTree = "<group>"; };
 		2280555B60AEDB2A2894F212 /* ReadyScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadyScreen.swift; sourceTree = "<group>"; };
@@ -129,7 +129,7 @@
 		9BA1C2E189323E164548D266 /* SleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
 		9D25AD64D524EC1345722847 /* HealthNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthNote.swift; sourceTree = "<group>"; };
 		A0C5A42F4440F17E16F9B087 /* PlanItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanItem.swift; sourceTree = "<group>"; };
-		AA7985208FEB4FC2224BE44C /* PulseWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = PulseWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA7985208FEB4FC2224BE44C /* PulseWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PulseWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABD647265A23C5293A38989B /* WaterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterView.swift; sourceTree = "<group>"; };
 		B393F9255F9FE2C64C23235D /* HabitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsView.swift; sourceTree = "<group>"; };
 		BE15FAC6DC6335FFCCA56785 /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
@@ -443,11 +443,9 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					350F53C6FB511791EF6B2C22 = {
-						DevelopmentTeam = "$(DEVELOPMENT_TEAM)";
 						ProvisioningStyle = Automatic;
 					};
 					CF79B1BAD3D70F54153FE0B3 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -565,7 +563,7 @@
 				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
 				CODE_SIGN_ENTITLEMENTS = PulseWidget/PulseWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "$(DEVELOPMENT_TEAM)";
+				DEVELOPMENT_TEAM = 86DFRNMKL7;
 				INFOPLIST_FILE = PulseWidget/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -649,6 +647,7 @@
 				CODE_SIGN_ENTITLEMENTS = Pulse/Resources/Pulse.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 86DFRNMKL7;
 				INFOPLIST_FILE = Pulse/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -668,7 +667,7 @@
 				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
 				CODE_SIGN_ENTITLEMENTS = PulseWidget/PulseWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "$(DEVELOPMENT_TEAM)";
+				DEVELOPMENT_TEAM = 86DFRNMKL7;
 				INFOPLIST_FILE = PulseWidget/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -692,6 +691,7 @@
 				CODE_SIGN_ENTITLEMENTS = Pulse/Resources/Pulse.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 86DFRNMKL7;
 				INFOPLIST_FILE = Pulse/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
