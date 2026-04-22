@@ -197,11 +197,34 @@ struct WeeklyView: View {
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
-    // MARK: - Weekly Chart
+    // MARK: - Weekly Charts (paged)
     private var weeklyChartView: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text("Grafikler").font(.headline)
+                Spacer()
+                Image(systemName: "hand.draw").font(.caption).foregroundStyle(.secondary)
+                Text("Kaydır").font(.caption).foregroundStyle(.secondary)
+            }
+
+            TabView {
+                weekWaterChart
+                    .padding(.bottom, 28)
+                weekExerciseChart
+                    .padding(.bottom, 28)
+            }
+            .tabViewStyle(.page(indexDisplayMode: .always))
+            .frame(height: 290)
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+
+    private var weekWaterChart: some View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 3) {
-                Text("Su Grafiği").font(.headline)
+                Text("Su Grafiği").font(.subheadline).fontWeight(.semibold)
                 Text("Günlük su tüketimi").font(.caption).foregroundStyle(.secondary)
             }
 
@@ -218,35 +241,26 @@ struct WeeklyView: View {
                     )
                     .cornerRadius(8)
                 }
-
                 RuleMark(y: .value("Hedef", dailyWaterGoal))
                     .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [6, 4]))
                     .foregroundStyle(Color.orange.opacity(0.8))
                     .annotation(position: .top, alignment: .trailing) {
-                        Text("Hedef")
-                            .font(.system(size: 9, weight: .medium))
-                            .foregroundStyle(.orange)
-                            .padding(.horizontal, 4)
+                        Text("Hedef").font(.system(size: 9, weight: .medium)).foregroundStyle(.orange).padding(.horizontal, 4)
                     }
             }
-            .frame(height: 200)
+            .frame(height: 160)
             .chartYAxis {
                 AxisMarks(position: .leading, values: .automatic(desiredCount: 4)) { value in
                     AxisGridLine().foregroundStyle(Color.secondary.opacity(0.15))
                     AxisValueLabel {
                         if let ml = value.as(Double.self) {
                             Text(ml >= 1000 ? String(format: "%.1fL", ml / 1000) : "\(Int(ml))")
-                                .font(.system(size: 9))
-                                .foregroundStyle(.secondary)
+                                .font(.system(size: 9)).foregroundStyle(.secondary)
                         }
                     }
                 }
             }
-            .chartXAxis {
-                AxisMarks { _ in
-                    AxisValueLabel().font(.system(size: 10))
-                }
-            }
+            .chartXAxis { AxisMarks { _ in AxisValueLabel().font(.system(size: 10)) } }
 
             HStack(spacing: 16) {
                 legendDot(color: Color(red: 0.07, green: 0.55, blue: 0.75), label: "Su tüketimi")
@@ -254,9 +268,54 @@ struct WeeklyView: View {
                 legendDot(color: .orange, label: "Günlük hedef", dashed: true)
             }
         }
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+
+    private var weekExerciseChart: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Egzersiz Grafiği").font(.subheadline).fontWeight(.semibold)
+                Text("Günlük egzersiz süresi").font(.caption).foregroundStyle(.secondary)
+            }
+
+            Chart {
+                ForEach(weekChartData) { item in
+                    BarMark(
+                        x: .value("Gün", item.label),
+                        y: .value("Süre (dk)", item.exercise)
+                    )
+                    .foregroundStyle(
+                        Double(item.exercise) >= dailyExerciseGoal
+                        ? LinearGradient(colors: [.green, .mint], startPoint: .bottom, endPoint: .top)
+                        : LinearGradient(colors: [Color(red: 0.18, green: 0.65, blue: 0.35), Color(red: 0.35, green: 0.82, blue: 0.50)], startPoint: .bottom, endPoint: .top)
+                    )
+                    .cornerRadius(8)
+                }
+                RuleMark(y: .value("Hedef", dailyExerciseGoal))
+                    .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [6, 4]))
+                    .foregroundStyle(Color.orange.opacity(0.8))
+                    .annotation(position: .top, alignment: .trailing) {
+                        Text("Hedef").font(.system(size: 9, weight: .medium)).foregroundStyle(.orange).padding(.horizontal, 4)
+                    }
+            }
+            .frame(height: 160)
+            .chartYAxis {
+                AxisMarks(position: .leading, values: .automatic(desiredCount: 4)) { value in
+                    AxisGridLine().foregroundStyle(Color.secondary.opacity(0.15))
+                    AxisValueLabel {
+                        if let dk = value.as(Int.self) {
+                            Text("\(dk) dk").font(.system(size: 9)).foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+            .chartXAxis { AxisMarks { _ in AxisValueLabel().font(.system(size: 10)) } }
+
+            HStack(spacing: 16) {
+                legendDot(color: Color(red: 0.18, green: 0.65, blue: 0.35), label: "Egzersiz süresi")
+                legendDot(color: .green, label: "Hedef tamamlandı")
+                legendDot(color: .orange, label: "Günlük hedef", dashed: true)
+            }
+        }
     }
 
     private func legendDot(color: Color, label: String, dashed: Bool = false) -> some View {

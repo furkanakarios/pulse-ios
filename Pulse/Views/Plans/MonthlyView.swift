@@ -58,6 +58,7 @@ struct MonthlyView: View {
         let id: Date
         let day: Int
         let water: Double
+        let exercise: Int
     }
 
     private var monthChartData: [MonthDayData] {
@@ -65,7 +66,8 @@ struct MonthlyView: View {
         let pastDays = monthDays.compactMap { $0 }.filter { !($0 > Date.now && !cal.isDateInToday($0)) }
         return pastDays.map { day in
             let water = waterEntries.filter { cal.isDate($0.date, inSameDayAs: day) }.reduce(0) { $0 + $1.amount }
-            return MonthDayData(id: day, day: cal.component(.day, from: day), water: water)
+            let exercise = exerciseEntries.filter { cal.isDate($0.date, inSameDayAs: day) }.reduce(0) { $0 + $1.duration }
+            return MonthDayData(id: day, day: cal.component(.day, from: day), water: water, exercise: exercise)
         }
     }
 
@@ -383,57 +385,59 @@ struct MonthlyView: View {
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
-    // MARK: - Monthly Chart
+    // MARK: - Monthly Charts (paged)
     private var monthlyChartView: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text("Grafikler").font(.headline)
+                Spacer()
+                Image(systemName: "hand.draw").font(.caption).foregroundStyle(.secondary)
+                Text("Kaydır").font(.caption).foregroundStyle(.secondary)
+            }
+
+            TabView {
+                monthWaterChart
+                    .padding(.bottom, 28)
+                monthExerciseChart
+                    .padding(.bottom, 28)
+            }
+            .tabViewStyle(.page(indexDisplayMode: .always))
+            .frame(height: 310)
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+
+    private var monthWaterChart: some View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 3) {
-                Text("Su Grafiği").font(.headline)
+                Text("Su Grafiği").font(.subheadline).fontWeight(.semibold)
                 Text("Aylık su tüketimi").font(.caption).foregroundStyle(.secondary)
             }
 
             Chart {
                 ForEach(monthChartData) { item in
-                    AreaMark(
-                        x: .value("Gün", item.day),
-                        y: .value("Su (ml)", item.water)
-                    )
-                    .foregroundStyle(
-                        LinearGradient(
+                    AreaMark(x: .value("Gün", item.day), y: .value("Su (ml)", item.water))
+                        .foregroundStyle(LinearGradient(
                             colors: [Color(red: 0.07, green: 0.55, blue: 0.75).opacity(0.35), Color(red: 0.07, green: 0.55, blue: 0.75).opacity(0.05)],
-                            startPoint: .top, endPoint: .bottom
-                        )
-                    )
-                    .interpolationMethod(.catmullRom)
-
-                    LineMark(
-                        x: .value("Gün", item.day),
-                        y: .value("Su (ml)", item.water)
-                    )
-                    .foregroundStyle(
-                        LinearGradient(
+                            startPoint: .top, endPoint: .bottom))
+                        .interpolationMethod(.catmullRom)
+                    LineMark(x: .value("Gün", item.day), y: .value("Su (ml)", item.water))
+                        .foregroundStyle(LinearGradient(
                             colors: [Color(red: 0.07, green: 0.55, blue: 0.75), Color(red: 0.2, green: 0.75, blue: 0.9)],
-                            startPoint: .leading, endPoint: .trailing
-                        )
-                    )
-                    .lineStyle(StrokeStyle(lineWidth: 2.5))
-                    .interpolationMethod(.catmullRom)
-
-                    PointMark(
-                        x: .value("Gün", item.day),
-                        y: .value("Su (ml)", item.water)
-                    )
-                    .foregroundStyle(item.water >= dailyWaterGoal ? Color.green : Color(red: 0.07, green: 0.55, blue: 0.75))
-                    .symbolSize(item.water >= dailyWaterGoal ? 40 : 20)
+                            startPoint: .leading, endPoint: .trailing))
+                        .lineStyle(StrokeStyle(lineWidth: 2.5))
+                        .interpolationMethod(.catmullRom)
+                    PointMark(x: .value("Gün", item.day), y: .value("Su (ml)", item.water))
+                        .foregroundStyle(item.water >= dailyWaterGoal ? Color.green : Color(red: 0.07, green: 0.55, blue: 0.75))
+                        .symbolSize(item.water >= dailyWaterGoal ? 40 : 20)
                 }
-
                 RuleMark(y: .value("Hedef", dailyWaterGoal))
                     .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [6, 4]))
                     .foregroundStyle(Color.orange.opacity(0.8))
                     .annotation(position: .top, alignment: .trailing) {
-                        Text("Hedef")
-                            .font(.system(size: 9, weight: .medium))
-                            .foregroundStyle(.orange)
-                            .padding(.horizontal, 4)
+                        Text("Hedef").font(.system(size: 9, weight: .medium)).foregroundStyle(.orange).padding(.horizontal, 4)
                     }
             }
             .frame(height: 200)
@@ -443,8 +447,7 @@ struct MonthlyView: View {
                     AxisValueLabel {
                         if let ml = value.as(Double.self) {
                             Text(ml >= 1000 ? String(format: "%.1fL", ml / 1000) : "\(Int(ml))")
-                                .font(.system(size: 9))
-                                .foregroundStyle(.secondary)
+                                .font(.system(size: 9)).foregroundStyle(.secondary)
                         }
                     }
                 }
@@ -454,9 +457,7 @@ struct MonthlyView: View {
                     AxisGridLine().foregroundStyle(Color.secondary.opacity(0.1))
                     AxisValueLabel {
                         if let day = value.as(Int.self) {
-                            Text("\(day)")
-                                .font(.system(size: 9))
-                                .foregroundStyle(.secondary)
+                            Text("\(day)").font(.system(size: 9)).foregroundStyle(.secondary)
                         }
                     }
                 }
@@ -468,9 +469,67 @@ struct MonthlyView: View {
                 legendDot(color: .orange, label: "Günlük hedef", dashed: true)
             }
         }
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+
+    private var monthExerciseChart: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Egzersiz Grafiği").font(.subheadline).fontWeight(.semibold)
+                Text("Aylık egzersiz süresi").font(.caption).foregroundStyle(.secondary)
+            }
+
+            Chart {
+                ForEach(monthChartData) { item in
+                    AreaMark(x: .value("Gün", item.day), y: .value("Süre (dk)", item.exercise))
+                        .foregroundStyle(LinearGradient(
+                            colors: [Color(red: 0.18, green: 0.65, blue: 0.35).opacity(0.35), Color(red: 0.18, green: 0.65, blue: 0.35).opacity(0.05)],
+                            startPoint: .top, endPoint: .bottom))
+                        .interpolationMethod(.catmullRom)
+                    LineMark(x: .value("Gün", item.day), y: .value("Süre (dk)", item.exercise))
+                        .foregroundStyle(LinearGradient(
+                            colors: [Color(red: 0.18, green: 0.65, blue: 0.35), Color(red: 0.35, green: 0.82, blue: 0.50)],
+                            startPoint: .leading, endPoint: .trailing))
+                        .lineStyle(StrokeStyle(lineWidth: 2.5))
+                        .interpolationMethod(.catmullRom)
+                    PointMark(x: .value("Gün", item.day), y: .value("Süre (dk)", item.exercise))
+                        .foregroundStyle(Double(item.exercise) >= dailyExerciseGoal ? Color.green : Color(red: 0.18, green: 0.65, blue: 0.35))
+                        .symbolSize(Double(item.exercise) >= dailyExerciseGoal ? 40 : 20)
+                }
+                RuleMark(y: .value("Hedef", dailyExerciseGoal))
+                    .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [6, 4]))
+                    .foregroundStyle(Color.orange.opacity(0.8))
+                    .annotation(position: .top, alignment: .trailing) {
+                        Text("Hedef").font(.system(size: 9, weight: .medium)).foregroundStyle(.orange).padding(.horizontal, 4)
+                    }
+            }
+            .frame(height: 200)
+            .chartYAxis {
+                AxisMarks(position: .leading, values: .automatic(desiredCount: 4)) { value in
+                    AxisGridLine().foregroundStyle(Color.secondary.opacity(0.15))
+                    AxisValueLabel {
+                        if let dk = value.as(Double.self) {
+                            Text("\(Int(dk)) dk").font(.system(size: 9)).foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+            .chartXAxis {
+                AxisMarks(values: .stride(by: 5)) { value in
+                    AxisGridLine().foregroundStyle(Color.secondary.opacity(0.1))
+                    AxisValueLabel {
+                        if let day = value.as(Int.self) {
+                            Text("\(day)").font(.system(size: 9)).foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+
+            HStack(spacing: 16) {
+                legendDot(color: Color(red: 0.18, green: 0.65, blue: 0.35), label: "Egzersiz süresi")
+                legendDot(color: .green, label: "Hedef tamamlandı")
+                legendDot(color: .orange, label: "Günlük hedef", dashed: true)
+            }
+        }
     }
 
     private func legendDot(color: Color, label: String, dashed: Bool = false) -> some View {
