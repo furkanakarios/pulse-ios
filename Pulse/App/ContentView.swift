@@ -30,7 +30,7 @@ struct ContentView: View {
     var body: some View {
         TabView {
             DashboardView()
-                .tabItem { Label("Dashboard", systemImage: "house.fill") }
+                .tabItem { Label("Ana Sayfa", systemImage: "house.fill") }
 
             WaterView()
                 .tabItem { Label("Su", systemImage: "drop.fill") }
@@ -44,8 +44,8 @@ struct ContentView: View {
             HabitsView()
                 .tabItem { Label("Alışkanlıklar", systemImage: "checkmark.circle.fill") }
 
-            SettingsView()
-                .tabItem { Label("Ayarlar", systemImage: "gearshape.fill") }
+            MoreView()
+                .tabItem { Label("Daha Fazla", systemImage: "ellipsis.circle.fill") }
         }
         .onChange(of: allWaterEntries) { _, _ in syncWidget() }
         .onChange(of: habitLogs) { _, _ in syncWidget() }

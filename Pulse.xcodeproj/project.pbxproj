@@ -29,6 +29,7 @@
 		52B6C06F8B468E2A3A0ACCCC /* AddHabitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DF4EAFB116F46CF3EC96C9 /* AddHabitView.swift */; };
 		5352F7A35CD669F5244C6713 /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA1C2E189323E164548D266 /* SleepView.swift */; };
 		5902188FCE763EA5DC5E661A /* PlansView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A98DE298898B902752A68C /* PlansView.swift */; };
+		5AA010127FD1A0042B3DF493 /* MoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8FCFA45CA89C847023E78B1 /* MoreView.swift */; };
 		616B1E15A99B07B4D65A228F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 82CA4B8BDC045C16F231C4E3 /* Assets.xcassets */; };
 		66373AE395AD159351D690DD /* PulseHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220A8FD92A6572048B580BD8 /* PulseHero.swift */; };
 		790501A163BE853B582888D3 /* MealPlanListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5BFBE409E05C0497F8E921 /* MealPlanListView.swift */; };
@@ -95,7 +96,7 @@
 		0B9F108B0D839BD930BFB766 /* PulseProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseProgress.swift; sourceTree = "<group>"; };
 		0DEC6AB7EB48CA0FC358DE75 /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
 		0FD7BF650190475FD7D47634 /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habit.swift; sourceTree = "<group>"; };
-		13FEF2D2118D74C3572DF349 /* Pulse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pulse.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13FEF2D2118D74C3572DF349 /* Pulse.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Pulse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17A98DE298898B902752A68C /* PlansView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlansView.swift; sourceTree = "<group>"; };
 		220A8FD92A6572048B580BD8 /* PulseHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseHero.swift; sourceTree = "<group>"; };
 		2280555B60AEDB2A2894F212 /* ReadyScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadyScreen.swift; sourceTree = "<group>"; };
@@ -129,9 +130,10 @@
 		9BA1C2E189323E164548D266 /* SleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
 		9D25AD64D524EC1345722847 /* HealthNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthNote.swift; sourceTree = "<group>"; };
 		A0C5A42F4440F17E16F9B087 /* PlanItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanItem.swift; sourceTree = "<group>"; };
-		AA7985208FEB4FC2224BE44C /* PulseWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PulseWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA7985208FEB4FC2224BE44C /* PulseWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = PulseWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABD647265A23C5293A38989B /* WaterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterView.swift; sourceTree = "<group>"; };
 		B393F9255F9FE2C64C23235D /* HabitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsView.swift; sourceTree = "<group>"; };
+		B8FCFA45CA89C847023E78B1 /* MoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreView.swift; sourceTree = "<group>"; };
 		BE15FAC6DC6335FFCCA56785 /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
 		BE33570E960801D9A4613C56 /* MealPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlan.swift; sourceTree = "<group>"; };
 		CAFF8125AA3BCB3240593117 /* PulseChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseChip.swift; sourceTree = "<group>"; };
@@ -304,6 +306,14 @@
 			path = Launch;
 			sourceTree = "<group>";
 		};
+		A17D714BC76E737322FD82A5 /* More */ = {
+			isa = PBXGroup;
+			children = (
+				B8FCFA45CA89C847023E78B1 /* MoreView.swift */,
+			);
+			path = More;
+			sourceTree = "<group>";
+		};
 		A8425254B8A66A20B4EBAA8A /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -311,6 +321,7 @@
 				6FED8CFEBC02D95A360BDAE7 /* Exercise */,
 				16D189A38D800715650614CA /* Habits */,
 				9B2174F5A4229E680AD6BDC5 /* Launch */,
+				A17D714BC76E737322FD82A5 /* More */,
 				DE384A2ED0C3E71CA342E0C0 /* Notes */,
 				AAC04C75FD47479FE69784BF /* Nutrition */,
 				4A7BA79564A62B6C6501E42E /* Onboarding */,
@@ -443,9 +454,11 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					350F53C6FB511791EF6B2C22 = {
+						DevelopmentTeam = "$(DEVELOPMENT_TEAM)";
 						ProvisioningStyle = Automatic;
 					};
 					CF79B1BAD3D70F54153FE0B3 = {
+						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -517,6 +530,7 @@
 				EE0B042985BD3DB2A6E233C5 /* MealPlan.swift in Sources */,
 				790501A163BE853B582888D3 /* MealPlanListView.swift in Sources */,
 				9042F0D400CE8434B84DBD12 /* MonthlyView.swift in Sources */,
+				5AA010127FD1A0042B3DF493 /* MoreView.swift in Sources */,
 				34638D9BBB093424C294317A /* NoteDetailView.swift in Sources */,
 				EC55D300DE3811C5395F0303 /* NotesView.swift in Sources */,
 				9C364F5A29AB260D4CF5533A /* NotificationPermissionView.swift in Sources */,
@@ -563,7 +577,7 @@
 				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
 				CODE_SIGN_ENTITLEMENTS = PulseWidget/PulseWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 86DFRNMKL7;
+				DEVELOPMENT_TEAM = "$(DEVELOPMENT_TEAM)";
 				INFOPLIST_FILE = PulseWidget/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -647,7 +661,6 @@
 				CODE_SIGN_ENTITLEMENTS = Pulse/Resources/Pulse.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 86DFRNMKL7;
 				INFOPLIST_FILE = Pulse/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -667,7 +680,7 @@
 				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
 				CODE_SIGN_ENTITLEMENTS = PulseWidget/PulseWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 86DFRNMKL7;
+				DEVELOPMENT_TEAM = "$(DEVELOPMENT_TEAM)";
 				INFOPLIST_FILE = PulseWidget/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -691,7 +704,6 @@
 				CODE_SIGN_ENTITLEMENTS = Pulse/Resources/Pulse.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 86DFRNMKL7;
 				INFOPLIST_FILE = Pulse/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
