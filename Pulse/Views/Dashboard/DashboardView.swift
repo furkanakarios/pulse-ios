@@ -84,11 +84,18 @@ struct DashboardView: View {
         }
     }
 
+    private static let turkishDateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "tr_TR")
+        f.dateFormat = "EEEE, d MMMM"
+        return f
+    }()
+
     // MARK: - Today Header
     private var todayHeaderView: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(Date.now, format: .dateTime.weekday(.wide).day().month(.wide).locale(Locale(identifier: "tr_TR")))
+                Text(Self.turkishDateFormatter.string(from: Date.now))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 Text("Günlük Özet")

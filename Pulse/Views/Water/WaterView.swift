@@ -1,6 +1,9 @@
 import SwiftUI
 import SwiftData
 
+private let waterAccent = Color(red: 0.07, green: 0.62, blue: 0.70)
+private let waterSoft   = Color(red: 0.88, green: 0.97, blue: 0.98)
+
 struct WaterView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(filter: #Predicate<WaterEntry> { _ in true }, sort: \WaterEntry.date, order: .reverse)
@@ -53,13 +56,13 @@ struct WaterView: View {
             ZStack {
                 Circle()
                     .stroke(
-                        isGoalReached ? Color.green.opacity(0.15) : Color.pulseAccent.opacity(0.12),
+                        isGoalReached ? Color.green.opacity(0.15) : waterSoft,
                         lineWidth: 18
                     )
                 Circle()
                     .trim(from: 0, to: progress)
                     .stroke(
-                        isGoalReached ? Color.green : Color.pulseAccent,
+                        isGoalReached ? Color.green : waterAccent,
                         style: StrokeStyle(lineWidth: 18, lineCap: .round)
                     )
                     .rotationEffect(.degrees(-90))
@@ -68,7 +71,7 @@ struct WaterView: View {
                 VStack(spacing: 4) {
                     Text(String(format: "%.0f", todayTotal))
                         .font(.system(size: 44, weight: .heavy, design: .rounded))
-                        .foregroundStyle(isGoalReached ? .green : Color.pulseAccent)
+                        .foregroundStyle(isGoalReached ? .green : waterAccent)
                         .contentTransition(.numericText())
                         .animation(.easeOut(duration: 0.3), value: todayTotal)
                     Text("ml")
@@ -77,7 +80,7 @@ struct WaterView: View {
                 }
             }
             .frame(width: 190, height: 190)
-            .shadow(color: (isGoalReached ? Color.green : Color.pulseAccent).opacity(0.18), radius: 20, x: 0, y: 8)
+            .shadow(color: (isGoalReached ? Color.green : waterAccent).opacity(0.18), radius: 20, x: 0, y: 8)
             .padding(.top, 8)
 
             HStack(spacing: 24) {
@@ -97,7 +100,7 @@ struct WaterView: View {
         VStack(spacing: 3) {
             Text(value)
                 .font(.system(size: 16, weight: .bold, design: .rounded))
-                .foregroundStyle(highlight ? .green : Color.pulseAccent)
+                .foregroundStyle(highlight ? .green : waterAccent)
             Text(label)
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -126,11 +129,11 @@ struct WaterView: View {
                         VStack(spacing: 6) {
                             ZStack {
                                 Circle()
-                                    .fill(Color.pulseAccentSoft)
+                                    .fill(waterSoft)
                                     .frame(width: 40, height: 40)
                                 Image(systemName: "drop.fill")
                                     .font(.system(size: 16, weight: .semibold))
-                                    .foregroundStyle(Color.pulseAccent)
+                                    .foregroundStyle(waterAccent)
                             }
                             Text("\(Int(amount))")
                                 .font(.system(size: 15, weight: .bold, design: .rounded))
@@ -156,10 +159,10 @@ struct WaterView: View {
                     Text("Özel Miktar Gir")
                         .font(.system(size: 15, weight: .semibold))
                 }
-                .foregroundStyle(Color.pulseAccent)
+                .foregroundStyle(waterAccent)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
-                .background(Color.pulseAccentSoft)
+                .background(waterSoft)
                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
             }
             .buttonStyle(.plain)
@@ -176,48 +179,45 @@ struct WaterView: View {
             Text("Bugünkü Kayıtlar")
                 .font(.system(size: 17, weight: .bold))
                 .foregroundStyle(.primary)
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
 
-            VStack(spacing: 1) {
+            List {
                 ForEach(todayEntries) { entry in
-                    waterEntryRow(entry)
+                    HStack(spacing: 12) {
+                        ZStack {
+                            Circle()
+                                .fill(waterSoft)
+                                .frame(width: 36, height: 36)
+                            Image(systemName: "drop.fill")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundStyle(waterAccent)
+                        }
+                        Text(String(format: "%.0f ml", entry.amount))
+                            .font(.system(size: 15, weight: .semibold))
+                        Spacer()
+                        Text(entry.date, format: .dateTime.hour().minute())
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.vertical, 4)
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            modelContext.delete(entry)
+                        } label: {
+                            Label("Sil", systemImage: "trash")
+                        }
+                    }
                 }
             }
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .listStyle(.plain)
+            .scrollDisabled(true)
+            .frame(height: CGFloat(todayEntries.count) * 62)
+            .padding(.bottom, 8)
         }
-        .padding(20)
         .background(Color(.systemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
         .shadow(color: Color.black.opacity(0.05), radius: 12, x: 0, y: 4)
-    }
-
-    private func waterEntryRow(_ entry: WaterEntry) -> some View {
-        HStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(Color.pulseAccentSoft)
-                    .frame(width: 36, height: 36)
-                Image(systemName: "drop.fill")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.pulseAccent)
-            }
-            Text(String(format: "%.0f ml", entry.amount))
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundStyle(.primary)
-            Spacer()
-            Text(entry.date, format: .dateTime.hour().minute())
-                .font(.caption)
-                .foregroundStyle(.secondary)
-        }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 12)
-        .background(Color(.secondarySystemBackground))
-        .swipeActions(edge: .trailing) {
-            Button(role: .destructive) {
-                modelContext.delete(entry)
-            } label: {
-                Label("Sil", systemImage: "trash")
-            }
-        }
     }
 
     // MARK: - Custom Entry Sheet
@@ -229,7 +229,7 @@ struct WaterView: View {
                         .keyboardType(.numberPad)
                         .font(.system(size: 56, weight: .heavy, design: .rounded))
                         .multilineTextAlignment(.center)
-                        .foregroundStyle(Color.pulseAccent)
+                        .foregroundStyle(waterAccent)
                     Text("ml")
                         .font(.title2)
                         .foregroundStyle(.secondary)
