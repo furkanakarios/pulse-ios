@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import Charts
 
 struct MonthlyView: View {
     @Query private var waterEntries: [WaterEntry]
@@ -16,16 +17,27 @@ struct MonthlyView: View {
     }()
     @State private var selectedDay: Date? = nil
 
+    private static let monthFormatter: DateFormatter = {
+        let f = DateFormatter(); f.locale = Locale(identifier: "tr_TR"); f.dateFormat = "MMMM yyyy"; return f
+    }()
+
+    private static let dayDetailFormatter: DateFormatter = {
+        let f = DateFormatter(); f.locale = Locale(identifier: "tr_TR"); f.dateFormat = "EEEE, d MMMM"; return f
+    }()
+
+    private static let dayNumberFormatter: DateFormatter = {
+        let f = DateFormatter(); f.locale = Locale(identifier: "tr_TR"); f.dateFormat = "d"; return f
+    }()
+
     private var monthDays: [Date?] {
         let cal = Calendar.current
         let startOfMonth = displayedMonth
         let range = cal.range(of: .day, in: .month, for: startOfMonth)!
-        let firstWeekday = (cal.component(.weekday, from: startOfMonth) + 5) % 7 // Mon=0
+        let firstWeekday = (cal.component(.weekday, from: startOfMonth) + 5) % 7
         var days: [Date?] = Array(repeating: nil, count: firstWeekday)
         for d in range {
             days.append(cal.date(byAdding: .day, value: d - 1, to: startOfMonth))
         }
-        // pad to complete last row
         while days.count % 7 != 0 { days.append(nil) }
         return days
     }
@@ -41,6 +53,22 @@ struct MonthlyView: View {
         return plans.filter { $0.startDate < end && $0.endDate >= start }
     }
 
+    // MARK: - Chart Data
+    private struct MonthDayData: Identifiable {
+        let id: Date
+        let day: Int
+        let water: Double
+    }
+
+    private var monthChartData: [MonthDayData] {
+        let cal = Calendar.current
+        let pastDays = monthDays.compactMap { $0 }.filter { !($0 > Date.now && !cal.isDateInToday($0)) }
+        return pastDays.map { day in
+            let water = waterEntries.filter { cal.isDate($0.date, inSameDayAs: day) }.reduce(0) { $0 + $1.amount }
+            return MonthDayData(id: day, day: cal.component(.day, from: day), water: water)
+        }
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -53,6 +81,7 @@ struct MonthlyView: View {
                     plansTimelineView
                 }
                 monthStatsView
+                monthlyChartView
             }
             .padding(.horizontal)
             .padding(.bottom)
@@ -75,7 +104,7 @@ struct MonthlyView: View {
 
             Spacer()
 
-            Text(displayedMonth.formatted(.dateTime.year().month(.wide)))
+            Text(Self.monthFormatter.string(from: displayedMonth))
                 .font(.headline)
                 .fontWeight(.semibold)
 
@@ -187,7 +216,7 @@ struct MonthlyView: View {
 
         return VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text(date.formatted(.dateTime.weekday(.wide).day().month()))
+                Text(Self.dayDetailFormatter.string(from: date))
                     .font(.headline)
                 Spacer()
                 if cal.isDateInToday(date) {
@@ -352,6 +381,107 @@ struct MonthlyView: View {
         .padding(10)
         .background(Color(.tertiarySystemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+
+    // MARK: - Monthly Chart
+    private var monthlyChartView: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Su Grafiği").font(.headline)
+                Text("Aylık su tüketimi").font(.caption).foregroundStyle(.secondary)
+            }
+
+            Chart {
+                ForEach(monthChartData) { item in
+                    AreaMark(
+                        x: .value("Gün", item.day),
+                        y: .value("Su (ml)", item.water)
+                    )
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Color(red: 0.07, green: 0.55, blue: 0.75).opacity(0.35), Color(red: 0.07, green: 0.55, blue: 0.75).opacity(0.05)],
+                            startPoint: .top, endPoint: .bottom
+                        )
+                    )
+                    .interpolationMethod(.catmullRom)
+
+                    LineMark(
+                        x: .value("Gün", item.day),
+                        y: .value("Su (ml)", item.water)
+                    )
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Color(red: 0.07, green: 0.55, blue: 0.75), Color(red: 0.2, green: 0.75, blue: 0.9)],
+                            startPoint: .leading, endPoint: .trailing
+                        )
+                    )
+                    .lineStyle(StrokeStyle(lineWidth: 2.5))
+                    .interpolationMethod(.catmullRom)
+
+                    PointMark(
+                        x: .value("Gün", item.day),
+                        y: .value("Su (ml)", item.water)
+                    )
+                    .foregroundStyle(item.water >= dailyWaterGoal ? Color.green : Color(red: 0.07, green: 0.55, blue: 0.75))
+                    .symbolSize(item.water >= dailyWaterGoal ? 40 : 20)
+                }
+
+                RuleMark(y: .value("Hedef", dailyWaterGoal))
+                    .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [6, 4]))
+                    .foregroundStyle(Color.orange.opacity(0.8))
+                    .annotation(position: .top, alignment: .trailing) {
+                        Text("Hedef")
+                            .font(.system(size: 9, weight: .medium))
+                            .foregroundStyle(.orange)
+                            .padding(.horizontal, 4)
+                    }
+            }
+            .frame(height: 200)
+            .chartYAxis {
+                AxisMarks(position: .leading, values: .automatic(desiredCount: 4)) { value in
+                    AxisGridLine().foregroundStyle(Color.secondary.opacity(0.15))
+                    AxisValueLabel {
+                        if let ml = value.as(Double.self) {
+                            Text(ml >= 1000 ? String(format: "%.1fL", ml / 1000) : "\(Int(ml))")
+                                .font(.system(size: 9))
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+            .chartXAxis {
+                AxisMarks(values: .stride(by: 5)) { value in
+                    AxisGridLine().foregroundStyle(Color.secondary.opacity(0.1))
+                    AxisValueLabel {
+                        if let day = value.as(Int.self) {
+                            Text("\(day)")
+                                .font(.system(size: 9))
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+
+            HStack(spacing: 16) {
+                legendDot(color: Color(red: 0.07, green: 0.55, blue: 0.75), label: "Su tüketimi")
+                legendDot(color: .green, label: "Hedef tamamlandı")
+                legendDot(color: .orange, label: "Günlük hedef", dashed: true)
+            }
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+
+    private func legendDot(color: Color, label: String, dashed: Bool = false) -> some View {
+        HStack(spacing: 5) {
+            if dashed {
+                Rectangle().fill(color).frame(width: 12, height: 2)
+            } else {
+                Circle().fill(color).frame(width: 8, height: 8)
+            }
+            Text(label).font(.system(size: 10)).foregroundStyle(.secondary)
+        }
     }
 
     // MARK: - Helpers
