@@ -5,6 +5,9 @@ struct MoreView: View {
         NavigationStack {
             List {
                 Section {
+                    NavigationLink(destination: HabitsView()) {
+                        Label("Alışkanlıklar", systemImage: "checkmark.circle.fill")
+                    }
                     NavigationLink(destination: PlansView()) {
                         Label("Planlar", systemImage: "list.bullet.clipboard")
                     }

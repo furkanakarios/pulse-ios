@@ -41,9 +41,6 @@ struct ContentView: View {
             ExerciseView()
                 .tabItem { Label("Egzersiz", systemImage: "figure.run") }
 
-            HabitsView()
-                .tabItem { Label("Alışkanlıklar", systemImage: "checkmark.circle.fill") }
-
             MoreView()
                 .tabItem { Label("Daha Fazla", systemImage: "ellipsis.circle.fill") }
         }

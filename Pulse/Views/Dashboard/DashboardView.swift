@@ -88,7 +88,7 @@ struct DashboardView: View {
     private var todayHeaderView: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(Date.now, format: .dateTime.weekday(.wide).day().month(.wide))
+                Text(Date.now, format: .dateTime.weekday(.wide).day().month(.wide).locale(Locale(identifier: "tr_TR")))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 Text("Günlük Özet")
