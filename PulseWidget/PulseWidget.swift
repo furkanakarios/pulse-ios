@@ -85,12 +85,17 @@ private struct SmallView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            .frame(width: 86, height: 86)
+            .frame(width: 82, height: 82)
 
             Text("Su Hedefi")
                 .font(.system(size: 11, weight: .semibold))
                 .foregroundStyle(.secondary)
         }
+        .overlay(
+            ContainerRelativeShape()
+                .inset(by: 1.5)
+                .stroke(wAccent, lineWidth: 3)
+        )
         .containerBackground(wBg, for: .widget)
     }
 }
@@ -164,6 +169,11 @@ private struct MediumView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
+        .overlay(
+            ContainerRelativeShape()
+                .inset(by: 1.5)
+                .stroke(wAccent, lineWidth: 3)
+        )
         .containerBackground(wBg, for: .widget)
     }
 }
