@@ -37,6 +37,7 @@
 		80E4FC20B1EE981660151DBA /* PulseWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4E7A7781EC8B1FA863F151 /* PulseWidget.swift */; };
 		850A36F4556C10E96F301DBC /* LaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75362AB49DC9471FC6B8F94E /* LaunchScreen.swift */; };
 		87079A693499CCE2C137B7D8 /* HealthKitScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F48B54ABAB1EC653B7617C2 /* HealthKitScreen.swift */; };
+		875903922E748159774A4FEE /* NutritionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FE6E6C4F3EBC2B830380F18 /* NutritionService.swift */; };
 		8D1BF3F24255D07376EE9101 /* Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA7CE643BA4B8F7E0481BB1 /* Plan.swift */; };
 		9042F0D400CE8434B84DBD12 /* MonthlyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6D5DA17FE55E56A7489BB4 /* MonthlyView.swift */; };
 		92584E99C7D803C8E467C7C2 /* FeaturesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D455931A8DF45307E05B7B96 /* FeaturesScreen.swift */; };
@@ -115,6 +116,7 @@
 		63A2F4729A1638CB205A1BCA /* NutritionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionView.swift; sourceTree = "<group>"; };
 		63CEC711FA7536F00870BC15 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		6F7FCAABABE275B8FC7E389F /* ExerciseEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseEntry.swift; sourceTree = "<group>"; };
+		6FE6E6C4F3EBC2B830380F18 /* NutritionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionService.swift; sourceTree = "<group>"; };
 		75362AB49DC9471FC6B8F94E /* LaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreen.swift; sourceTree = "<group>"; };
 		764F50B26BFDE95373D7189D /* PlanDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanDetailView.swift; sourceTree = "<group>"; };
 		7815A8398AD4E34260EBFDBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -368,6 +370,7 @@
 			children = (
 				0DEC6AB7EB48CA0FC358DE75 /* HealthKitService.swift */,
 				EFEEEBE0FC8483B8759AC517 /* NotificationService.swift */,
+				6FE6E6C4F3EBC2B830380F18 /* NutritionService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -536,6 +539,7 @@
 				9C364F5A29AB260D4CF5533A /* NotificationPermissionView.swift in Sources */,
 				BC7168FA2155CA216D70BCF4 /* NotificationService.swift in Sources */,
 				FB161B7D64A034AA7EE1A700 /* NotificationsScreen.swift in Sources */,
+				875903922E748159774A4FEE /* NutritionService.swift in Sources */,
 				017019B7F63B1002A39CBC0E /* NutritionView.swift in Sources */,
 				9D9AA040C073DF7270AF422D /* OnboardingFlow.swift in Sources */,
 				8D1BF3F24255D07376EE9101 /* Plan.swift in Sources */,

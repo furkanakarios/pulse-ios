@@ -33,11 +33,11 @@ struct FeaturesScreen: View {
             VStack(alignment: .leading, spacing: 10) {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("Everything you need,")
-                        .font(PulseFont.titleMedium())
+                        .font(.system(size: 36, weight: .heavy))
                         .tracking(-1)
                         .foregroundStyle(Color.pulseText)
                     Text("nothing you don't.")
-                        .font(PulseFont.titleMedium())
+                        .font(.system(size: 36, weight: .heavy))
                         .tracking(-1)
                         .foregroundStyle(Color.pulseAccent)
                 }
@@ -51,26 +51,22 @@ struct FeaturesScreen: View {
             .offset(y: appeared ? 0 : 12)
             .animation(PulseAnimation.enterFade, value: appeared)
 
-            Spacer(minLength: 28)
-
-            VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 22) {
                 ForEach(Array(features.enumerated()), id: \.offset) { idx, f in
                     FeatureRow(icon: f.0, title: f.1, subtitle: f.2)
                         .opacity(appeared ? 1 : 0)
                         .offset(y: appeared ? 0 : 16)
                         .animation(PulseAnimation.enterFade.delay(0.1 + Double(idx) * 0.08), value: appeared)
-                    if idx < features.count - 1 {
-                        Spacer(minLength: 0)
-                    }
                 }
             }
             .padding(.horizontal, PulseMetrics.horizontalPadding)
-            .frame(maxHeight: .infinity)
+            .padding(.top, 32)
+
+            Spacer(minLength: 40)
 
             PulsePrimaryButton(title: "Continue", action: onContinue)
                 .padding(.horizontal, PulseMetrics.horizontalPadding)
                 .padding(.bottom, PulseMetrics.footerBottomPadding)
-                .padding(.top, 24)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.pulseBackground)
