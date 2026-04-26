@@ -40,7 +40,8 @@ struct SettingsView: View {
     let waterIntervalOptions: [(label: String, minutes: Int)] = [
         ("30 dakikada bir", 30),
         ("1 saatte bir", 60),
-        ("2 saatte bir", 120)
+        ("2 saatte bir", 120),
+        ("4 saatte bir", 240)
     ]
 
     let activityOptions: [(label: String, sublabel: String, key: String, multiplier: Double)] = [
