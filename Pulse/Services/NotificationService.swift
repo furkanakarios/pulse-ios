@@ -31,32 +31,32 @@ final class NotificationService {
     }
 
     // MARK: - Water Reminder
-    /// intervalMinutes: kaç dakikada bir hatırlatsın (örn. 60)
-    /// startHour / endHour: sadece bu saatler arasında (örn. 8-22)
     func scheduleWaterReminder(intervalMinutes: Int, startHour: Int = 8, endHour: Int = 22) {
         let center = UNUserNotificationCenter.current()
-        center.removePendingNotificationRequests(withIdentifiers: [Identifier.waterReminder])
+        center.getPendingNotificationRequests { requests in
+            let waterIDs = requests.map { $0.identifier }.filter { $0.hasPrefix(Identifier.waterReminder) }
+            center.removePendingNotificationRequests(withIdentifiers: waterIDs)
+        }
 
         let content = UNMutableNotificationContent()
         content.title = "Su içme vakti! 💧"
         content.body = "Günlük su hedefine ulaşmak için bir bardak su içmeyi unutma."
         content.sound = .default
 
-        // Her saat başı için ayrı bildirim oluştur (8-22 arası)
-        var identifiers: [String] = []
-        for hour in startHour..<endHour {
-            let remainder = hour % (intervalMinutes / 60 == 0 ? 1 : intervalMinutes / 60)
-            guard remainder == 0 || intervalMinutes < 60 else { continue }
-
+        // startHour:00'dan intervalMinutes adımlarla endHour:00'a kadar tüm saatleri oluştur
+        // Örn: 30dk → 08:00, 08:30, 09:00, ... | 60dk → 08:00, 09:00, ... | 120dk → 08:00, 10:00, ...
+        var currentMinutes = startHour * 60
+        let endMinutes = endHour * 60
+        while currentMinutes < endMinutes {
+            let hour = currentMinutes / 60
+            let minute = currentMinutes % 60
             var components = DateComponents()
             components.hour = hour
-            components.minute = 0
-
+            components.minute = minute
             let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
-            let id = "\(Identifier.waterReminder).\(hour)"
-            let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-            center.add(request)
-            identifiers.append(id)
+            let id = "\(Identifier.waterReminder).\(hour).\(minute)"
+            center.add(UNNotificationRequest(identifier: id, content: content, trigger: trigger))
+            currentMinutes += intervalMinutes
         }
     }
 
