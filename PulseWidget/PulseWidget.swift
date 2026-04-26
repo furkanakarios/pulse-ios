@@ -68,28 +68,33 @@ private struct SmallView: View {
     private var progress: Double { min(entry.waterMl / max(entry.waterGoalMl, 1), 1.0) }
 
     var body: some View {
-        VStack(spacing: 8) {
-            ZStack {
-                Circle()
-                    .stroke(wRingBg, lineWidth: 9)
-                Circle()
-                    .trim(from: 0, to: progress)
-                    .stroke(wAccent, style: StrokeStyle(lineWidth: 9, lineCap: .round))
-                    .rotationEffect(.degrees(-90))
-                VStack(spacing: 1) {
-                    Text("\(Int(entry.waterMl))")
-                        .font(.system(size: 17, weight: .heavy))
-                        .foregroundStyle(wAccent)
-                    Text("ml")
-                        .font(.system(size: 10, weight: .semibold))
-                        .foregroundStyle(.secondary)
+        GeometryReader { geo in
+            let size = min(geo.size.width, geo.size.height) * 0.72
+            VStack(spacing: 6) {
+                ZStack {
+                    Circle().stroke(wRingBg, lineWidth: 10)
+                    Circle()
+                        .trim(from: 0, to: progress)
+                        .stroke(wAccent, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                        .rotationEffect(.degrees(-90))
+                    VStack(spacing: 1) {
+                        Text("\(Int(entry.waterMl))")
+                            .font(.system(size: size * 0.22, weight: .heavy))
+                            .foregroundStyle(wAccent)
+                            .minimumScaleFactor(0.7)
+                        Text("ml")
+                            .font(.system(size: size * 0.13, weight: .semibold))
+                            .foregroundStyle(.secondary)
+                    }
                 }
-            }
-            .frame(width: 82, height: 82)
+                .frame(width: size, height: size)
 
-            Text("Su Hedefi")
-                .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(.secondary)
+                Text("Su Hedefi")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .overlay(
             ContainerRelativeShape()
