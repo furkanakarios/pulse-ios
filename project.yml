@@ -54,6 +54,11 @@ targets:
         NSUserNotificationsUsageDescription: "Pulse, su içme hatırlatıcıları, alışkanlık bildirimleri ve sabah özeti için bildirim gönderir."
         NSHealthShareUsageDescription: "Pulse, adım sayısı, kalori ve uyku verilerini göstermek için Apple Health'e erişmek istiyor."
         NSHealthUpdateUsageDescription: "Pulse, egzersiz seanslarını Apple Health'e kaydetmek istiyor."
+        CFBundleIcons:
+          CFBundlePrimaryIcon:
+            CFBundleIconFiles:
+              - AppIcon
+            CFBundleIconName: AppIcon
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
