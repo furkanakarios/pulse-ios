@@ -2,7 +2,7 @@
 import SwiftUI
 
 struct PulseHero: View {
-    var size: CGFloat = 180
+    var size: CGFloat = 155
     @State private var beatScale: CGFloat = 1.0
     @State private var ecgProgress: CGFloat = 0
     @State private var ecgOpacity: Double = 0
@@ -27,7 +27,7 @@ struct PulseHero: View {
         }
         .frame(width: size, height: size)
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                 running = true
                 loopHeartbeat()
                 loopECG()

@@ -6,6 +6,19 @@ options:
   defaultConfig: Debug
   createIntermediateGroups: true
 
+schemes:
+  Pulse:
+    build:
+      targets:
+        Pulse: all
+        PulseWidget: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+    archive:
+      config: Release
+
 settings:
   base:
     SWIFT_VERSION: "5.9"
@@ -13,7 +26,7 @@ settings:
     MARKETING_VERSION: "1.0.0"
     CURRENT_PROJECT_VERSION: "1"
     PRODUCT_BUNDLE_IDENTIFIER: com.furkanakarios.pulse
-    DEVELOPMENT_TEAM: ""
+    DEVELOPMENT_TEAM: 86DFRNMKL7
 
 targets:
   Pulse:
@@ -41,9 +54,19 @@ targets:
         NSUserNotificationsUsageDescription: "Pulse, su içme hatırlatıcıları, alışkanlık bildirimleri ve sabah özeti için bildirim gönderir."
         NSHealthShareUsageDescription: "Pulse, adım sayısı, kalori ve uyku verilerini göstermek için Apple Health'e erişmek istiyor."
         NSHealthUpdateUsageDescription: "Pulse, egzersiz seanslarını Apple Health'e kaydetmek istiyor."
+        CFBundleIcons:
+          CFBundlePrimaryIcon:
+            CFBundleIconFiles:
+              - AppIcon
+            CFBundleIconName: AppIcon
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
     dependencies:
@@ -74,10 +97,13 @@ targets:
         SWIFT_VERSION: "5.9"
         CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION: YES
         CODE_SIGN_STYLE: Automatic
-        DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
+        DEVELOPMENT_TEAM: 86DFRNMKL7
     info:
       path: PulseWidget/Info.plist
       properties:
+        CFBundleDisplayName: PulseWidget
+        CFBundleShortVersionString: "1.0.0"
+        CFBundleVersion: "1"
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
     entitlements:

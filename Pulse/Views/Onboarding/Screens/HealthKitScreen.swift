@@ -33,8 +33,8 @@ struct HealthKitScreen: View {
             .padding(.top, 4)
 
             VStack(alignment: .leading, spacing: 20) {
-                PulseChip(icon: "heart.text.square.fill", chipSize: 72)
-                    .padding(.leading, -PulseMetrics.horizontalPadding * 0.3)
+                PulseChip(icon: "heart.fill", chipSize: 72)
+                    .frame(maxWidth: .infinity, alignment: .center)
 
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Sync with Apple Health")
@@ -47,34 +47,29 @@ struct HealthKitScreen: View {
                         .foregroundStyle(Color.pulseTextSecondary)
                 }
 
-                VStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 20) {
                     ForEach(metrics, id: \.1) { icon, label in
-                        HStack(spacing: 14) {
-                            Image(systemName: icon)
-                                .font(.system(size: 15, weight: .medium))
-                                .foregroundStyle(Color.pulseAccent)
-                                .frame(width: 24)
-                            Text(label)
-                                .font(.system(size: 15, weight: .medium))
-                                .foregroundStyle(Color.pulseText)
+                        HStack(alignment: .top, spacing: 16) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                    .fill(Color.pulseAccentSoft)
+                                    .frame(width: 48, height: 48)
+                                Image(systemName: icon)
+                                    .font(.system(size: 20, weight: .semibold))
+                                    .foregroundStyle(Color.pulseAccent)
+                            }
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(label)
+                                    .font(.system(size: 17, weight: .semibold))
+                                    .foregroundStyle(Color.pulseText)
+                            }
                             Spacer()
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundStyle(Color.pulseAccent)
-                                .font(.system(size: 18))
-                        }
-                        .padding(.vertical, 14)
-                        .padding(.horizontal, 16)
-                        .background(Color.pulseSurface)
-                        if label != metrics.last?.1 {
-                            Divider().padding(.leading, 54)
+                                .font(.system(size: 22))
                         }
                     }
                 }
-                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .stroke(Color.black.opacity(0.06), lineWidth: 1)
-                )
 
                 HStack(spacing: 6) {
                     Image(systemName: "lock.fill")

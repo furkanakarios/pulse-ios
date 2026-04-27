@@ -3,6 +3,8 @@ import SwiftData
 
 struct ContentView: View {
     @AppStorage("dailyWaterGoal") private var dailyWaterGoal: Double = 2500
+    @AppStorage("waterReminderEnabled") private var waterReminderEnabled: Bool = false
+    @AppStorage("waterReminderInterval") private var waterReminderInterval: Int = 60
 
     @Query(filter: #Predicate<WaterEntry> { _ in true })
     private var allWaterEntries: [WaterEntry]
@@ -30,7 +32,7 @@ struct ContentView: View {
     var body: some View {
         TabView {
             DashboardView()
-                .tabItem { Label("Dashboard", systemImage: "house.fill") }
+                .tabItem { Label("Ana Sayfa", systemImage: "house.fill") }
 
             WaterView()
                 .tabItem { Label("Su", systemImage: "drop.fill") }
@@ -41,15 +43,21 @@ struct ContentView: View {
             ExerciseView()
                 .tabItem { Label("Egzersiz", systemImage: "figure.run") }
 
-            HabitsView()
-                .tabItem { Label("Alışkanlıklar", systemImage: "checkmark.circle.fill") }
-
-            SettingsView()
-                .tabItem { Label("Ayarlar", systemImage: "gearshape.fill") }
+            MoreView()
+                .tabItem { Label("Daha Fazla", systemImage: "ellipsis.circle.fill") }
         }
-        .onChange(of: allWaterEntries) { _, _ in syncWidget() }
+        .onChange(of: allWaterEntries) { _, _ in syncWidget(); syncWaterReminders() }
         .onChange(of: habitLogs) { _, _ in syncWidget() }
-        .onAppear { syncWidget() }
+        .onAppear { syncWidget(); syncWaterReminders() }
+    }
+
+    private func syncWaterReminders() {
+        guard waterReminderEnabled else { return }
+        if todayWaterMl >= dailyWaterGoal {
+            NotificationService.shared.cancelWaterReminder()
+        } else {
+            NotificationService.shared.scheduleWaterReminder(intervalMinutes: waterReminderInterval)
+        }
     }
 
     private func syncWidget() {
