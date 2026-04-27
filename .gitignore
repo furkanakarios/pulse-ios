@@ -47,6 +47,10 @@ Secrets.swift
 Config.xcconfig
 APIKeys.swift
 
+# Design source / scratch files
+Pulse-Redesign-V2/
+*.swift.bak
+
 # macOS
 .DS_Store
 .AppleDouble
