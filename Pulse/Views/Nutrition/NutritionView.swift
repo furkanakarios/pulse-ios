@@ -29,6 +29,9 @@ struct NutritionView: View {
             .navigationTitle("Beslenme")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    PulseNavBrand()
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
                         Button {

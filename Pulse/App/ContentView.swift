@@ -29,22 +29,38 @@ struct ContentView: View {
         }.count
     }
 
-    var body: some View {
-        TabView {
-            DashboardView()
-                .tabItem { Label("Ana Sayfa", systemImage: "house.fill") }
+    @State private var selectedTab = 0
 
-            WaterView()
-                .tabItem { Label("Su", systemImage: "drop.fill") }
+    var body: some View {
+        TabView(selection: $selectedTab) {
+            NavigationStack {
+                DashboardView(
+                    onOpenWater:      { selectedTab = 1 },
+                    onOpenNutrition:  { selectedTab = 2 },
+                    onOpenExercise:   { selectedTab = 3 },
+                    onOpenHabits:     { selectedTab = 4 }
+                )
+            }
+            .tabItem { Label("Ana Sayfa", systemImage: "house.fill") }
+            .tag(0)
+
+            NavigationStack {
+                WaterView()
+            }
+            .tabItem { Label("Su", systemImage: "drop.fill") }
+            .tag(1)
 
             NutritionView()
                 .tabItem { Label("Beslenme", systemImage: "fork.knife") }
+                .tag(2)
 
             ExerciseView()
                 .tabItem { Label("Egzersiz", systemImage: "figure.run") }
+                .tag(3)
 
             MoreView()
                 .tabItem { Label("Daha Fazla", systemImage: "ellipsis.circle.fill") }
+                .tag(4)
         }
         .onChange(of: allWaterEntries) { _, _ in syncWidget(); syncWaterReminders() }
         .onChange(of: habitLogs) { _, _ in syncWidget() }

@@ -56,6 +56,9 @@ struct ExerciseView: View {
             .navigationTitle("Egzersiz")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    PulseNavBrand()
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         showAddEntry = true
