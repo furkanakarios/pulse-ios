@@ -126,6 +126,7 @@ struct AddHabitView: View {
             colorHex: selectedColor
         )
         modelContext.insert(habit)
+        AchievementService.shared.evaluate(context: modelContext)
         dismiss()
     }
 }

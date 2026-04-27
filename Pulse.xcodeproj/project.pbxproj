@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		017019B7F63B1002A39CBC0E /* NutritionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A2F4729A1638CB205A1BCA /* NutritionView.swift */; };
 		01C30FBF18288A301FA322DD /* WeeklyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A6D368A347D095DD66CD2D /* WeeklyView.swift */; };
+		025B84CD8498E08345CD63FB /* AchievementService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 440661FAD8494F153E622DB0 /* AchievementService.swift */; };
 		0643B2399D6BEDE588177BE2 /* DashboardComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1628E2B9799AEBEF5FD477 /* DashboardComponents.swift */; };
 		091412717EE663C410F439D1 /* WaterView.swift.bak in Resources */ = {isa = PBXBuildFile; fileRef = 2F5B7F566F197BF97372B5BD /* WaterView.swift.bak */; };
 		095ABAD5B6C256C8D25B4150 /* PlanItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C5A42F4440F17E16F9B087 /* PlanItem.swift */; };
@@ -20,6 +21,7 @@
 		1C9D8C54BF1E9359784BED5B /* AddNoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A098E1E668F3D580A3721E /* AddNoteView.swift */; };
 		22224ABB575EE1A7CFB906B5 /* PulseNavBrand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C932BB41BF0726E323EF541 /* PulseNavBrand.swift */; };
 		268938479520BB31C84FC8C6 /* CreateMealPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE460E0CD5DF90EDC901CE4 /* CreateMealPlanView.swift */; };
+		275879059DF2562500E1C11D /* AchievementDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986FD91EEA63FF97035D556D /* AchievementDefinition.swift */; };
 		2CF95F01A278467CD646C621 /* PulseTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8757654C5A19E5353E168F36 /* PulseTheme.swift */; };
 		2FC8AA11973C199EB1CBC6F7 /* ReadyScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2280555B60AEDB2A2894F212 /* ReadyScreen.swift */; };
 		34638D9BBB093424C294317A /* NoteDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF79E618A37525E9DF374CE4 /* NoteDetailView.swift */; };
@@ -46,6 +48,7 @@
 		8D1BF3F24255D07376EE9101 /* Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA7CE643BA4B8F7E0481BB1 /* Plan.swift */; };
 		9042F0D400CE8434B84DBD12 /* MonthlyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6D5DA17FE55E56A7489BB4 /* MonthlyView.swift */; };
 		92584E99C7D803C8E467C7C2 /* FeaturesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D455931A8DF45307E05B7B96 /* FeaturesScreen.swift */; };
+		95622880975965D02359EBEB /* Achievement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2044DCF0FA69AD8FD72D3B /* Achievement.swift */; };
 		9C364F5A29AB260D4CF5533A /* NotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343772CBD3872C3BC23DB718 /* NotificationPermissionView.swift */; };
 		9D9AA040C073DF7270AF422D /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E9FD46CDCCFC26A4E60FB7 /* OnboardingFlow.swift */; };
 		9DEBFDC7EE0C88CACB217D77 /* MealItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04273000DCFC25413F104BB /* MealItem.swift */; };
@@ -56,6 +59,7 @@
 		B4AE53A3F35BAE0047393DAA /* PulseProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9F108B0D839BD930BFB766 /* PulseProgress.swift */; };
 		B98374FBA45EC3EF9889145F /* PulseRows.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B60866824C3705215C8ADD /* PulseRows.swift */; };
 		BC7168FA2155CA216D70BCF4 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEEEBE0FC8483B8759AC517 /* NotificationService.swift */; };
+		C574D840D6338D1C7E95BA96 /* AchievementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A251EC51649A910E319AA03 /* AchievementsView.swift */; };
 		C6291F88D20624F962058F3C /* HabitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B393F9255F9FE2C64C23235D /* HabitsView.swift */; };
 		CBA0B215C9CD9844AED07978 /* WelcomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E4E17242765F961091DB7C /* WelcomeScreen.swift */; };
 		CFE5AE62879752E1F53DF71B /* HabitLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF603E1D4CD713C31F8E257 /* HabitLog.swift */; };
@@ -106,6 +110,7 @@
 		0FD7BF650190475FD7D47634 /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habit.swift; sourceTree = "<group>"; };
 		13FEF2D2118D74C3572DF349 /* Pulse.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Pulse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17A98DE298898B902752A68C /* PlansView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlansView.swift; sourceTree = "<group>"; };
+		1E2044DCF0FA69AD8FD72D3B /* Achievement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Achievement.swift; sourceTree = "<group>"; };
 		220A8FD92A6572048B580BD8 /* PulseHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseHero.swift; sourceTree = "<group>"; };
 		2280555B60AEDB2A2894F212 /* ReadyScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadyScreen.swift; sourceTree = "<group>"; };
 		2931305A85E88E7D7D51F9D6 /* AddPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlanView.swift; sourceTree = "<group>"; };
@@ -113,8 +118,10 @@
 		31D43414BC6AA436EFEEFCB7 /* WidgetDataWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetDataWriter.swift; sourceTree = "<group>"; };
 		343772CBD3872C3BC23DB718 /* NotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionView.swift; sourceTree = "<group>"; };
 		39989932745593A114F9C774 /* MealGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealGroup.swift; sourceTree = "<group>"; };
+		3A251EC51649A910E319AA03 /* AchievementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsView.swift; sourceTree = "<group>"; };
 		3F704423043C92B1229D27E4 /* NotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesView.swift; sourceTree = "<group>"; };
 		43E4E17242765F961091DB7C /* WelcomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScreen.swift; sourceTree = "<group>"; };
+		440661FAD8494F153E622DB0 /* AchievementService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementService.swift; sourceTree = "<group>"; };
 		44B60866824C3705215C8ADD /* PulseRows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseRows.swift; sourceTree = "<group>"; };
 		495F8FF00C779CF251893D07 /* NotificationsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsScreen.swift; sourceTree = "<group>"; };
 		4B6D5DA17FE55E56A7489BB4 /* MonthlyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyView.swift; sourceTree = "<group>"; };
@@ -139,6 +146,7 @@
 		8EE460E0CD5DF90EDC901CE4 /* CreateMealPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMealPlanView.swift; sourceTree = "<group>"; };
 		92A098E1E668F3D580A3721E /* AddNoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteView.swift; sourceTree = "<group>"; };
 		9795E3A03EC14E2DAF73E4E0 /* WaterEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterEntry.swift; sourceTree = "<group>"; };
+		986FD91EEA63FF97035D556D /* AchievementDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementDefinition.swift; sourceTree = "<group>"; };
 		9BA1C2E189323E164548D266 /* SleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
 		9D25AD64D524EC1345722847 /* HealthNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthNote.swift; sourceTree = "<group>"; };
 		A0C5A42F4440F17E16F9B087 /* PlanItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanItem.swift; sourceTree = "<group>"; };
@@ -285,6 +293,14 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
+		61E0585059ACADC0B0B5760D /* Achievements */ = {
+			isa = PBXGroup;
+			children = (
+				3A251EC51649A910E319AA03 /* AchievementsView.swift */,
+			);
+			path = Achievements;
+			sourceTree = "<group>";
+		};
 		68F35518E0F7A113D28B7BB7 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
@@ -298,6 +314,8 @@
 		6EB33EDEBFF6F2EBBD69ADA7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				1E2044DCF0FA69AD8FD72D3B /* Achievement.swift */,
+				986FD91EEA63FF97035D556D /* AchievementDefinition.swift */,
 				6F7FCAABABE275B8FC7E389F /* ExerciseEntry.swift */,
 				0FD7BF650190475FD7D47634 /* Habit.swift */,
 				7AF603E1D4CD713C31F8E257 /* HabitLog.swift */,
@@ -360,6 +378,7 @@
 		A8425254B8A66A20B4EBAA8A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				61E0585059ACADC0B0B5760D /* Achievements */,
 				68F35518E0F7A113D28B7BB7 /* Dashboard */,
 				6FED8CFEBC02D95A360BDAE7 /* Exercise */,
 				16D189A38D800715650614CA /* Habits */,
@@ -410,6 +429,7 @@
 		DD8A68E94B2A5686C1410535 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				440661FAD8494F153E622DB0 /* AchievementService.swift */,
 				0DEC6AB7EB48CA0FC358DE75 /* HealthKitService.swift */,
 				EFEEEBE0FC8483B8759AC517 /* NotificationService.swift */,
 				6FE6E6C4F3EBC2B830380F18 /* NutritionService.swift */,
@@ -554,6 +574,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95622880975965D02359EBEB /* Achievement.swift in Sources */,
+				275879059DF2562500E1C11D /* AchievementDefinition.swift in Sources */,
+				025B84CD8498E08345CD63FB /* AchievementService.swift in Sources */,
+				C574D840D6338D1C7E95BA96 /* AchievementsView.swift in Sources */,
 				ABDF6FCD8E4D6DB01AFE95FB /* AddExerciseView.swift in Sources */,
 				52B6C06F8B468E2A3A0ACCCC /* AddHabitView.swift in Sources */,
 				1C9D8C54BF1E9359784BED5B /* AddNoteView.swift in Sources */,

@@ -144,6 +144,7 @@ struct HabitsView: View {
             log.habit = habit
             modelContext.insert(log)
         }
+        AchievementService.shared.evaluate(context: modelContext)
     }
 
     private func deleteHabits(at offsets: IndexSet) {

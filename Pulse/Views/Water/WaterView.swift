@@ -71,6 +71,7 @@ struct WaterView: View {
             Button("Sil", role: .destructive) {
                 if let e = entryToDelete { modelContext.delete(e) }
                 entryToDelete = nil
+                AchievementService.shared.evaluate(context: modelContext)
             }
             Button("İptal", role: .cancel) { entryToDelete = nil }
         } message: {
@@ -334,6 +335,7 @@ struct WaterView: View {
         let entry = WaterEntry(amount: Double(ml), date: Date())
         modelContext.insert(entry)
         try? modelContext.save()
+        AchievementService.shared.evaluate(context: modelContext)
     }
 }
 
