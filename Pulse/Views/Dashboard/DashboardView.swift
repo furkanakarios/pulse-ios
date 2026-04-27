@@ -11,6 +11,8 @@ import SwiftUI
 import SwiftData
 
 struct DashboardView: View {
+    @Environment(\.modelContext) private var modelContext
+
     // MARK: - Data Sources (BIND: wired to real SwiftData queries)
     @Query private var waterEntries: [WaterEntry]
     @Query private var mealPlans: [MealPlan]
@@ -18,6 +20,7 @@ struct DashboardView: View {
     @Query private var exerciseEntries: [ExerciseEntry]
     @Query private var habits: [Habit]
     @Query private var habitLogs: [HabitLog]
+    @Query private var achievements: [Achievement]
 
     @AppStorage("dailyWaterGoal") private var dailyWaterGoal: Double = 2500
     @AppStorage("dailyExerciseGoal") private var dailyExerciseGoalD: Double = 30
@@ -29,6 +32,7 @@ struct DashboardView: View {
     @State private var showHabits = false
     @State private var showWeekly = false
     @State private var showMonthly = false
+    @State private var showAchievements = false
 
     // MARK: - Computed properties (real data)
     private var waterIntakeML: Int {
@@ -152,6 +156,10 @@ struct DashboardView: View {
                 editorialHeader
                     .padding(.horizontal, 22)
                     .padding(.top, 14)
+                    .padding(.bottom, 12)
+
+                achievementsStrip
+                    .padding(.horizontal, 22)
                     .padding(.bottom, 18)
 
                 // 01 — Water
@@ -230,7 +238,10 @@ struct DashboardView: View {
                 }
             }
         }
-        .task { await loadHealthKitData() }
+        .task {
+            await loadHealthKitData()
+            AchievementService.shared.evaluate(context: modelContext)
+        }
         .sheet(isPresented: $showSettings) {
             NavigationStack { SettingsView() }
         }
@@ -242,6 +253,9 @@ struct DashboardView: View {
         }
         .sheet(isPresented: $showMonthly) {
             NavigationStack { MonthlyView() }
+        }
+        .sheet(isPresented: $showAchievements) {
+            NavigationStack { AchievementsView() }
         }
     }
 
@@ -282,6 +296,71 @@ struct DashboardView: View {
                 DashboardMiniMetric(icon: "moon.fill",   value: sleepToday, sub: "uyku", color: .pulseExercise)
             }
         }
+    }
+
+    private var achievementsStrip: some View {
+        let unlocked = achievements.filter { $0.isUnlocked }
+            .sorted { ($0.unlockedAt ?? .distantPast) > ($1.unlockedAt ?? .distantPast) }
+        let recentDefs = unlocked.prefix(5).compactMap { a in
+            AchievementDefinition.all.first { $0.key == a.key }
+        }
+        let total = AchievementDefinition.all.count
+
+        return Button { showAchievements = true } label: {
+            HStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(Color.yellow.opacity(0.15))
+                        .frame(width: 36, height: 36)
+                    Image(systemName: "trophy.fill")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(Color.yellow)
+                }
+
+                VStack(alignment: .leading, spacing: 1) {
+                    Text("\(unlocked.count) / \(total) başarım")
+                        .font(.system(size: 14, weight: .heavy))
+                        .foregroundStyle(Color.pulseText)
+                    Text("Kazanılanları gör")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(Color.pulseTextMuted)
+                }
+
+                Spacer()
+
+                if recentDefs.isEmpty {
+                    Text("Henüz yok")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(Color.pulseTextMuted)
+                } else {
+                    HStack(spacing: -6) {
+                        ForEach(recentDefs, id: \.key) { def in
+                            ZStack {
+                                Circle()
+                                    .fill(def.category.color.opacity(0.18))
+                                    .frame(width: 28, height: 28)
+                                    .overlay(Circle().strokeBorder(Color.pulseSurface, lineWidth: 1.5))
+                                Image(systemName: def.icon)
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundStyle(def.category.color)
+                            }
+                        }
+                    }
+                }
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(Color.pulseTextMuted)
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .background(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(Color.pulseSurface)
+            )
+            .pulseSoftShadow()
+        }
+        .buttonStyle(.plain)
     }
 
     private var historyStrip: some View {

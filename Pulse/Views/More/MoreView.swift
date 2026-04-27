@@ -15,6 +15,8 @@ struct MoreView: View {
                  destination: AnyView(PlansView())),
         MoreItem(title: "Sağlık Notları", icon: "note.text", color: .teal,
                  destination: AnyView(NotesView())),
+        MoreItem(title: "Başarımlar", icon: "trophy.fill", color: Color(red: 1.0, green: 0.75, blue: 0.0),
+                 destination: AnyView(AchievementsView())),
     ]
 
     private let columns = [GridItem(.flexible()), GridItem(.flexible())]

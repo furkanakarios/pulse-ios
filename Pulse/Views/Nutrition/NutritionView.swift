@@ -194,6 +194,7 @@ struct NutritionView: View {
             log.group = group
             modelContext.insert(log)
         }
+        AchievementService.shared.evaluate(context: modelContext)
     }
 
     private func activateLatestIfNeeded() {

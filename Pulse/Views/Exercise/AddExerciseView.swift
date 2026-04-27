@@ -122,6 +122,7 @@ struct AddExerciseView: View {
             date: date
         )
         modelContext.insert(entry)
+        AchievementService.shared.evaluate(context: modelContext)
 
         if saveToHealthKit {
             await HealthKitService.shared.requestAuthorization()

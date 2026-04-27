@@ -18,7 +18,8 @@ struct PulseApp: App {
             HabitLog.self,
             Plan.self,
             PlanItem.self,
-            HealthNote.self
+            HealthNote.self,
+            Achievement.self
         ])
         let config = ModelConfiguration(
             schema: schema,

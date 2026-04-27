@@ -131,6 +131,27 @@ final class NotificationService {
             .removePendingNotificationRequests(withIdentifiers: [Identifier.morningSummary])
     }
 
+    // MARK: - Achievement Progress
+    /// Yarın sabah 10:00'da tek seferlik "hedefe yaklaşıyorsun" bildirimi gönderir.
+    func scheduleAchievementProgressNotification(title: String, body: String, identifier: String) {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [identifier])
+
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        content.sound = .default
+
+        var components = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+        components.day = (components.day ?? 0) + 1
+        components.hour = 10
+        components.minute = 0
+
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        center.add(request)
+    }
+
     // MARK: - Cancel All
     func cancelAll() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()

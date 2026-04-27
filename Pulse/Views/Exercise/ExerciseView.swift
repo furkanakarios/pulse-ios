@@ -140,6 +140,7 @@ struct ExerciseView: View {
         for index in offsets {
             modelContext.delete(todayEntries[index])
         }
+        AchievementService.shared.evaluate(context: modelContext)
     }
 
     private func activityIcon(for type: String) -> String {
