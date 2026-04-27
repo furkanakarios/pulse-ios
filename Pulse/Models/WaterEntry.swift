@@ -12,3 +12,8 @@ final class WaterEntry {
         self.date = date
     }
 }
+
+extension WaterEntry {
+    var amountML: Int { Int(amount) }
+    var hour: Int { Calendar.current.component(.hour, from: date) }
+}
