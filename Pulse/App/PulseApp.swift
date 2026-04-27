@@ -3,25 +3,11 @@ import SwiftData
 
 @main
 struct PulseApp: App {
-    @AppStorage("hasSeenNotificationPermission") private var hasSeenNotificationPermission = false
-    @State private var showNotificationPermission = false
+    @AppStorage("hasOnboarded") private var hasOnboarded = false
+    @State private var showLaunch = true
 
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .sheet(isPresented: $showNotificationPermission) {
-                    NotificationPermissionView(isPresented: $showNotificationPermission)
-                }
-                .task {
-                    guard !hasSeenNotificationPermission else { return }
-                    let status = await NotificationService.shared.authorizationStatus()
-                    if status == .notDetermined {
-                        showNotificationPermission = true
-                    }
-                    hasSeenNotificationPermission = true
-                }
-        }
-        .modelContainer(for: [
+    let container: ModelContainer = {
+        let schema = Schema([
             WaterEntry.self,
             MealPlan.self,
             MealGroup.self,
@@ -34,5 +20,41 @@ struct PulseApp: App {
             PlanItem.self,
             HealthNote.self
         ])
+        let config = ModelConfiguration(
+            schema: schema,
+            cloudKitDatabase: .private("iCloud.com.furkanakarios.pulse")
+        )
+        do {
+            return try ModelContainer(for: schema, configurations: [config])
+        } catch {
+            let localConfig = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
+            return try! ModelContainer(for: schema, configurations: [localConfig])
+        }
+    }()
+
+    var body: some Scene {
+        WindowGroup {
+            ZStack {
+                if hasOnboarded {
+                    ContentView()
+                } else {
+                    OnboardingFlow(onFinish: { hasOnboarded = true })
+                }
+
+                if showLaunch {
+                    LaunchScreen()
+                        .transition(.opacity)
+                        .zIndex(1)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                                withAnimation(.easeOut(duration: 0.35)) {
+                                    showLaunch = false
+                                }
+                            }
+                        }
+                }
+            }
+        }
+        .modelContainer(container)
     }
 }

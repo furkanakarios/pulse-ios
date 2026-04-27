@@ -1,9 +1,19 @@
 import SwiftUI
 
 struct SettingsView: View {
+    // Goals
     @AppStorage("dailyWaterGoal") private var dailyWaterGoal: Double = 2500
     @AppStorage("dailyCalorieGoal") private var dailyCalorieGoal: Double = 2000
     @AppStorage("dailyExerciseGoal") private var dailyExerciseGoal: Double = 30
+
+    // Profile (for BMR)
+    @AppStorage("profileGender") private var profileGender: String = "male"
+    @AppStorage("profileHeight") private var profileHeight: Double = 0
+    @AppStorage("profileWeight") private var profileWeight: Double = 0
+    @AppStorage("profileAge") private var profileAge: Int = 0
+    @AppStorage("profileActivityLevel") private var profileActivityLevel: String = "moderate"
+
+    // Notifications
     @AppStorage("waterReminderEnabled") private var waterReminderEnabled: Bool = false
     @AppStorage("waterReminderInterval") private var waterReminderInterval: Int = 60
     @AppStorage("habitReminderEnabled") private var habitReminderEnabled: Bool = false
@@ -11,29 +21,61 @@ struct SettingsView: View {
     @AppStorage("morningSummaryHour") private var morningSummaryHour: Int = 8
     @AppStorage("morningSummaryMinute") private var morningSummaryMinute: Int = 0
 
+    // Local state
     @State private var waterGoalInput: String = ""
     @State private var calorieGoalInput: String = ""
     @State private var exerciseGoalInput: String = ""
+    @State private var heightInput: String = ""
+    @State private var weightInput: String = ""
+    @State private var ageInput: String = ""
     @State private var morningSummaryTime: Date = Calendar.current.date(bySettingHour: 8, minute: 0, second: 0, of: .now) ?? .now
     @State private var showNotificationDeniedAlert = false
     @State private var showMorningSummaryDeniedAlert = false
+    @State private var showBMRInfo = false
+
+    @FocusState private var focusedField: Field?
+
+    enum Field { case water, calorie, exercise, height, weight, age }
 
     let waterIntervalOptions: [(label: String, minutes: Int)] = [
         ("30 dakikada bir", 30),
         ("1 saatte bir", 60),
-        ("2 saatte bir", 120)
+        ("2 saatte bir", 120),
+        ("4 saatte bir", 240)
+    ]
+
+    let activityOptions: [(label: String, sublabel: String, key: String, multiplier: Double)] = [
+        ("Hareketsiz", "Masa başı, az hareket", "sedentary", 1.2),
+        ("Az Hareketli", "Haftada 1-3 gün egzersiz", "light", 1.375),
+        ("Orta Hareketli", "Haftada 3-5 gün egzersiz", "moderate", 1.55),
+        ("Çok Hareketli", "Haftada 6-7 gün egzersiz", "active", 1.725),
+        ("Ekstra Aktif", "Ağır antrenman veya fiziksel iş", "veryActive", 1.9)
     ]
 
     var body: some View {
         NavigationStack {
             Form {
+                profileSection
                 dailyGoalsSection
                 notificationsSection
                 appInfoSection
             }
             .navigationTitle("Ayarlar")
             .navigationBarTitleDisplayMode(.large)
+            .scrollDismissesKeyboard(.interactively)
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Bitti") { focusedField = nil }
+                        .fontWeight(.semibold)
+                }
+            }
             .onAppear { loadInputs() }
+            .alert("BMR Hesaplama", isPresented: $showBMRInfo) {
+                Button("Tamam", role: .cancel) {}
+            } message: {
+                Text("Mifflin-St Jeor formülü kullanılarak bazal metabolizma hızınız (BMR) ve aktivite seviyenize göre günlük toplam enerji harcamanız (TDEE) hesaplanmıştır.")
+            }
             .alert("Bildirim İzni Gerekli", isPresented: $showMorningSummaryDeniedAlert) {
                 Button("Ayarlara Git") {
                     if let url = URL(string: UIApplication.openSettingsURLString) {
@@ -50,12 +92,103 @@ struct SettingsView: View {
                         UIApplication.shared.open(url)
                     }
                 }
-                Button("İptal", role: .cancel) {
-                    waterReminderEnabled = false
-                }
+                Button("İptal", role: .cancel) { waterReminderEnabled = false }
             } message: {
                 Text("Bildirimlere izin vermek için Ayarlar > Pulse > Bildirimler bölümüne gidin.")
             }
+        }
+    }
+
+    // MARK: - Profile Section
+    private var profileSection: some View {
+        Section {
+            Picker("Cinsiyet", selection: $profileGender) {
+                Text("Erkek").tag("male")
+                Text("Kadın").tag("female")
+            }
+            .onChange(of: profileGender) { autoUpdateCalorie() }
+
+            HStack {
+                Label("Boy", systemImage: "ruler")
+                Spacer()
+                TextField("170", text: $heightInput)
+                    .keyboardType(.numberPad)
+                    .multilineTextAlignment(.trailing)
+                    .frame(width: 70)
+                    .focused($focusedField, equals: .height)
+                    .onChange(of: heightInput) {
+                        if let val = Double(heightInput), val > 0 {
+                            profileHeight = val
+                            autoUpdateCalorie()
+                        }
+                    }
+                Text("cm").foregroundStyle(.secondary)
+            }
+
+            HStack {
+                Label("Kilo", systemImage: "scalemass")
+                Spacer()
+                TextField("70", text: $weightInput)
+                    .keyboardType(.numberPad)
+                    .multilineTextAlignment(.trailing)
+                    .frame(width: 70)
+                    .focused($focusedField, equals: .weight)
+                    .onChange(of: weightInput) {
+                        if let val = Double(weightInput), val > 0 {
+                            profileWeight = val
+                            autoUpdateCalorie()
+                        }
+                    }
+                Text("kg").foregroundStyle(.secondary)
+            }
+
+            HStack {
+                Label("Yaş", systemImage: "person")
+                Spacer()
+                TextField("25", text: $ageInput)
+                    .keyboardType(.numberPad)
+                    .multilineTextAlignment(.trailing)
+                    .frame(width: 70)
+                    .focused($focusedField, equals: .age)
+                    .onChange(of: ageInput) {
+                        if let val = Int(ageInput), val > 0 {
+                            profileAge = val
+                            autoUpdateCalorie()
+                        }
+                    }
+                Text("yaş").foregroundStyle(.secondary)
+            }
+
+            Picker("Aktivite Seviyesi", selection: $profileActivityLevel) {
+                ForEach(activityOptions, id: \.key) { option in
+                    Text(option.label).tag(option.key)
+                }
+            }
+            .onChange(of: profileActivityLevel) { autoUpdateCalorie() }
+
+            if let tdee = calculatedTDEE {
+                HStack {
+                    Label("Hesaplanan Hedef", systemImage: "sparkles")
+                        .foregroundStyle(.orange)
+                    Spacer()
+                    Text("\(Int(tdee)) kcal")
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.orange)
+                    Button {
+                        showBMRInfo = true
+                    } label: {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                            .font(.caption)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+
+        } header: {
+            Text("Profil")
+        } footer: {
+            Text("Boy, kilo ve yaşınıza göre günlük kalori hedefiniz otomatik hesaplanır.")
         }
     }
 
@@ -70,6 +203,7 @@ struct SettingsView: View {
                     .keyboardType(.numberPad)
                     .multilineTextAlignment(.trailing)
                     .frame(width: 70)
+                    .focused($focusedField, equals: .water)
                     .onChange(of: waterGoalInput) {
                         if let val = Double(waterGoalInput), val > 0 {
                             dailyWaterGoal = val
@@ -86,6 +220,7 @@ struct SettingsView: View {
                     .keyboardType(.numberPad)
                     .multilineTextAlignment(.trailing)
                     .frame(width: 70)
+                    .focused($focusedField, equals: .calorie)
                     .onChange(of: calorieGoalInput) {
                         if let val = Double(calorieGoalInput), val > 0 {
                             dailyCalorieGoal = val
@@ -102,6 +237,7 @@ struct SettingsView: View {
                     .keyboardType(.numberPad)
                     .multilineTextAlignment(.trailing)
                     .frame(width: 70)
+                    .focused($focusedField, equals: .exercise)
                     .onChange(of: exerciseGoalInput) {
                         if let val = Double(exerciseGoalInput), val > 0 {
                             dailyExerciseGoal = val
@@ -112,17 +248,16 @@ struct SettingsView: View {
         } header: {
             Text("Günlük Hedefler")
         } footer: {
-            Text("Hedefler Dashboard ve ilgili ekranlarda kullanılır.")
+            Text("Kalori hedefini Profil bilgilerinizden otomatik doldurabilir veya kendiniz girebilirsiniz.")
         }
     }
 
     // MARK: - Notifications
     private var notificationsSection: some View {
         Section {
-            // Su Hatırlatıcısı
             Toggle(isOn: Binding(
                 get: { waterReminderEnabled },
-                set: { newValue in toggleWaterReminder(newValue) }
+                set: { toggleWaterReminder($0) }
             )) {
                 Label("Su Hatırlatıcısı", systemImage: "drop.fill")
                     .foregroundStyle(.blue)
@@ -140,7 +275,6 @@ struct SettingsView: View {
                 }
             }
 
-            // Alışkanlık Hatırlatıcısı
             Toggle(isOn: $habitReminderEnabled) {
                 VStack(alignment: .leading, spacing: 2) {
                     Label("Alışkanlık Hatırlatıcısı", systemImage: "checkmark.circle.fill")
@@ -152,7 +286,6 @@ struct SettingsView: View {
             }
             .tint(.purple)
 
-            // Sabah Özeti
             Toggle(isOn: Binding(
                 get: { morningSummaryEnabled },
                 set: { toggleMorningSummary($0) }
@@ -195,6 +328,26 @@ struct SettingsView: View {
         }
     }
 
+    // MARK: - BMR / TDEE
+    private var calculatedTDEE: Double? {
+        guard profileHeight > 0, profileWeight > 0, profileAge > 0 else { return nil }
+        // Mifflin-St Jeor
+        let bmr: Double
+        if profileGender == "male" {
+            bmr = 10 * profileWeight + 6.25 * profileHeight - 5 * Double(profileAge) + 5
+        } else {
+            bmr = 10 * profileWeight + 6.25 * profileHeight - 5 * Double(profileAge) - 161
+        }
+        let multiplier = activityOptions.first { $0.key == profileActivityLevel }?.multiplier ?? 1.55
+        return bmr * multiplier
+    }
+
+    private func autoUpdateCalorie() {
+        guard let tdee = calculatedTDEE else { return }
+        dailyCalorieGoal = tdee.rounded()
+        calorieGoalInput = String(Int(tdee.rounded()))
+    }
+
     // MARK: - Helpers
     private func toggleWaterReminder(_ enabled: Bool) {
         if enabled {
@@ -228,6 +381,9 @@ struct SettingsView: View {
         waterGoalInput = String(Int(dailyWaterGoal))
         calorieGoalInput = String(Int(dailyCalorieGoal))
         exerciseGoalInput = String(Int(dailyExerciseGoal))
+        heightInput = profileHeight > 0 ? String(Int(profileHeight)) : ""
+        weightInput = profileWeight > 0 ? String(Int(profileWeight)) : ""
+        ageInput = profileAge > 0 ? String(profileAge) : ""
         morningSummaryTime = Calendar.current.date(
             bySettingHour: morningSummaryHour,
             minute: morningSummaryMinute,

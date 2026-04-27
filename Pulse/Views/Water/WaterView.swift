@@ -1,6 +1,9 @@
 import SwiftUI
 import SwiftData
 
+private let waterAccent = Color(red: 0.07, green: 0.62, blue: 0.70)
+private let waterSoft   = Color(red: 0.88, green: 0.97, blue: 0.98)
+
 struct WaterView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(filter: #Predicate<WaterEntry> { _ in true }, sort: \WaterEntry.date, order: .reverse)
@@ -23,32 +26,22 @@ struct WaterView: View {
         min(todayTotal / dailyGoal, 1.0)
     }
 
+    private var isGoalReached: Bool { progress >= 1.0 }
+
     var body: some View {
         NavigationStack {
-            List {
-                Section {
+            ScrollView {
+                VStack(spacing: 24) {
                     progressSection
-                        .frame(maxWidth: .infinity)
-                        .listRowBackground(Color.clear)
-                        .listRowInsets(EdgeInsets())
-                }
-
-                Section {
                     quickAddSection
-                        .listRowBackground(Color.clear)
-                        .listRowInsets(EdgeInsets())
-                }
-
-                if !todayEntries.isEmpty {
-                    Section("Bugünkü Kayıtlar") {
-                        ForEach(todayEntries) { entry in
-                            waterEntryRow(entry)
-                        }
-                        .onDelete(perform: deleteEntries)
+                    if !todayEntries.isEmpty {
+                        logSection
                     }
                 }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 32)
             }
-            .listStyle(.plain)
+            .background(Color(.systemGroupedBackground))
             .navigationTitle("Su")
             .navigationBarTitleDisplayMode(.large)
             .sheet(isPresented: $showCustomEntry) {
@@ -59,44 +52,72 @@ struct WaterView: View {
 
     // MARK: - Progress Section
     private var progressSection: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
             ZStack {
                 Circle()
-                    .stroke((progress >= 1.0 ? Color.green : Color.blue).opacity(0.15), lineWidth: 16)
+                    .stroke(
+                        isGoalReached ? Color.green.opacity(0.15) : waterSoft,
+                        lineWidth: 18
+                    )
                 Circle()
                     .trim(from: 0, to: progress)
-                    .stroke(progress >= 1.0 ? Color.green : Color.blue, style: StrokeStyle(lineWidth: 16, lineCap: .round))
+                    .stroke(
+                        isGoalReached ? Color.green : waterAccent,
+                        style: StrokeStyle(lineWidth: 18, lineCap: .round)
+                    )
                     .rotationEffect(.degrees(-90))
-                    .animation(.easeOut(duration: 0.5), value: progress)
+                    .animation(.spring(response: 0.5, dampingFraction: 0.75), value: progress)
+
                 VStack(spacing: 4) {
                     Text(String(format: "%.0f", todayTotal))
-                        .font(.system(size: 40, weight: .bold, design: .rounded))
-                        .foregroundStyle(progress >= 1.0 ? .green : .blue)
-                        .animation(.easeOut(duration: 0.3), value: progress >= 1.0)
+                        .font(.system(size: 44, weight: .heavy, design: .rounded))
+                        .foregroundStyle(isGoalReached ? .green : waterAccent)
+                        .contentTransition(.numericText())
+                        .animation(.easeOut(duration: 0.3), value: todayTotal)
                     Text("ml")
-                        .font(.subheadline)
+                        .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(.secondary)
                 }
             }
-            .frame(width: 180, height: 180)
+            .frame(width: 190, height: 190)
+            .shadow(color: (isGoalReached ? Color.green : waterAccent).opacity(0.18), radius: 20, x: 0, y: 8)
+            .padding(.top, 8)
 
-            VStack(spacing: 4) {
-                Text(String(format: "Hedef: %.0f ml", dailyGoal))
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                Text(String(format: "Kalan: %.0f ml", max(dailyGoal - todayTotal, 0)))
-                    .font(.caption)
-                    .foregroundStyle(progress >= 1.0 ? .green : .secondary)
+            HStack(spacing: 24) {
+                statPill(label: "Hedef", value: String(format: "%.0f ml", dailyGoal))
+                statPill(label: "Kalan", value: String(format: "%.0f ml", max(dailyGoal - todayTotal, 0)),
+                         highlight: isGoalReached)
             }
         }
-        .padding(.top, 8)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 24)
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .shadow(color: Color.black.opacity(0.05), radius: 12, x: 0, y: 4)
+    }
+
+    private func statPill(label: String, value: String, highlight: Bool = false) -> some View {
+        VStack(spacing: 3) {
+            Text(value)
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .foregroundStyle(highlight ? .green : waterAccent)
+            Text(label)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .frame(minWidth: 90)
+        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .background(Color(.secondarySystemBackground))
+        .clipShape(Capsule())
     }
 
     // MARK: - Quick Add Section
     private var quickAddSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 14) {
             Text("Hızlı Ekle")
-                .font(.headline)
+                .font(.system(size: 17, weight: .bold))
+                .foregroundStyle(.primary)
 
             LazyVGrid(columns: [
                 GridItem(.flexible()),
@@ -104,61 +125,99 @@ struct WaterView: View {
                 GridItem(.flexible())
             ], spacing: 12) {
                 ForEach([150.0, 200.0, 250.0, 300.0, 400.0, 500.0], id: \.self) { amount in
-                    Button {
-                        addWater(amount: amount)
-                    } label: {
-                        VStack(spacing: 4) {
-                            Image(systemName: "drop.fill")
-                                .font(.title3)
-                                .foregroundStyle(.blue)
-                            Text("\(Int(amount)) ml")
-                                .font(.subheadline)
-                                .fontWeight(.medium)
+                    Button { addWater(amount: amount) } label: {
+                        VStack(spacing: 6) {
+                            ZStack {
+                                Circle()
+                                    .fill(waterSoft)
+                                    .frame(width: 40, height: 40)
+                                Image(systemName: "drop.fill")
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundStyle(waterAccent)
+                            }
+                            Text("\(Int(amount))")
+                                .font(.system(size: 15, weight: .bold, design: .rounded))
+                                .foregroundStyle(.primary)
+                            Text("ml")
+                                .font(.system(size: 11, weight: .medium))
+                                .foregroundStyle(.secondary)
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
-                        .background(Color.blue.opacity(0.1))
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .background(Color(.systemBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                        .shadow(color: Color.black.opacity(0.05), radius: 6, x: 0, y: 2)
                     }
                     .buttonStyle(.plain)
                 }
             }
 
-            Button {
-                showCustomEntry = true
-            } label: {
-                Label("Özel Miktar Gir", systemImage: "pencil")
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
+            Button { showCustomEntry = true } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "pencil")
+                        .font(.system(size: 14, weight: .semibold))
+                    Text("Özel Miktar Gir")
+                        .font(.system(size: 15, weight: .semibold))
+                }
+                .foregroundStyle(waterAccent)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .background(waterSoft)
+                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
             }
             .buttonStyle(.plain)
         }
+        .padding(20)
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .shadow(color: Color.black.opacity(0.05), radius: 12, x: 0, y: 4)
     }
 
-    // MARK: - Entry Row
-    private func waterEntryRow(_ entry: WaterEntry) -> some View {
-        HStack {
-            Image(systemName: "drop.fill")
-                .foregroundStyle(.blue)
-                .frame(width: 28)
-            Text(String(format: "%.0f ml", entry.amount))
-                .font(.subheadline)
-            Spacer()
-            Text(entry.date, format: .dateTime.hour().minute())
-                .font(.caption)
-                .foregroundStyle(.secondary)
-        }
-    }
+    // MARK: - Log Section
+    private var logSection: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("Bugünkü Kayıtlar")
+                .font(.system(size: 17, weight: .bold))
+                .foregroundStyle(.primary)
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
 
-    // MARK: - Actions
-    private func deleteEntries(at offsets: IndexSet) {
-        for index in offsets {
-            modelContext.delete(todayEntries[index])
+            List {
+                ForEach(todayEntries) { entry in
+                    HStack(spacing: 12) {
+                        ZStack {
+                            Circle()
+                                .fill(waterSoft)
+                                .frame(width: 36, height: 36)
+                            Image(systemName: "drop.fill")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundStyle(waterAccent)
+                        }
+                        Text(String(format: "%.0f ml", entry.amount))
+                            .font(.system(size: 15, weight: .semibold))
+                        Spacer()
+                        Text(entry.date, format: .dateTime.hour().minute())
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.vertical, 4)
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            modelContext.delete(entry)
+                        } label: {
+                            Label("Sil", systemImage: "trash")
+                        }
+                    }
+                }
+            }
+            .listStyle(.plain)
+            .scrollDisabled(true)
+            .frame(height: CGFloat(todayEntries.count) * 62)
+            .padding(.bottom, 8)
         }
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .shadow(color: Color.black.opacity(0.05), radius: 12, x: 0, y: 4)
     }
 
     // MARK: - Custom Entry Sheet
@@ -166,16 +225,16 @@ struct WaterView: View {
         NavigationStack {
             VStack(spacing: 24) {
                 VStack(spacing: 8) {
-                    TextField("Miktar (ml)", text: $customAmount)
+                    TextField("0", text: $customAmount)
                         .keyboardType(.numberPad)
-                        .font(.system(size: 48, weight: .bold, design: .rounded))
+                        .font(.system(size: 56, weight: .heavy, design: .rounded))
                         .multilineTextAlignment(.center)
+                        .foregroundStyle(waterAccent)
                     Text("ml")
                         .font(.title2)
                         .foregroundStyle(.secondary)
                 }
                 .padding(.top, 40)
-
                 Spacer()
             }
             .navigationTitle("Özel Miktar")

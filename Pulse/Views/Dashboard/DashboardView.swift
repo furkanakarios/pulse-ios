@@ -8,9 +8,6 @@ struct DashboardView: View {
     @Query private var exerciseEntries: [ExerciseEntry]
     @Query private var habits: [Habit]
     @Query private var habitLogs: [HabitLog]
-    @Query(sort: \HealthNote.date, order: .reverse) private var notes: [HealthNote]
-    @Query(sort: \Plan.startDate, order: .reverse) private var plans: [Plan]
-
     @AppStorage("dailyWaterGoal") private var dailyWaterGoal: Double = 2500
     @AppStorage("dailyCalorieGoal") private var dailyCalorieGoal: Double = 2000
     @AppStorage("dailyExerciseGoal") private var dailyExerciseGoal: Double = 30
@@ -69,23 +66,47 @@ struct DashboardView: View {
                     }
                     weeklyShortcutView
                     monthlyShortcutView
-                    plansShortcutView
-                    notesShortcutView
                 }
                 .padding(.horizontal)
                 .padding(.bottom)
             }
-            .navigationTitle("Pulse")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    HStack(spacing: 8) {
+                        Image("PulseIcon")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30, height: 30)
+                            .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+                        Text("Pulse")
+                            .font(.title3)
+                            .fontWeight(.bold)
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: SettingsView()) {
+                        Image(systemName: "gearshape.fill")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
             .task { await loadHealthKitData() }
         }
     }
+
+    private static let turkishDateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "tr_TR")
+        f.dateFormat = "EEEE, d MMMM"
+        return f
+    }()
 
     // MARK: - Today Header
     private var todayHeaderView: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(Date.now, format: .dateTime.weekday(.wide).day().month(.wide))
+                Text(Self.turkishDateFormatter.string(from: Date.now))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 Text("Günlük Özet")
@@ -182,116 +203,6 @@ struct DashboardView: View {
             .padding()
             .background(Color(.secondarySystemBackground))
             .clipShape(RoundedRectangle(cornerRadius: 16))
-        }
-    }
-
-    // MARK: - Plans Shortcut
-    private var plansShortcutView: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            NavigationLink(destination: PlansView()) {
-                HStack {
-                    Text("Planlar")
-                        .font(.headline)
-                        .foregroundStyle(.primary)
-                    Spacer()
-                    let activePlans = plans.filter { !$0.isCompleted }.count
-                    Text("\(activePlans) aktif")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-            }
-
-            if plans.filter({ !$0.isCompleted }).isEmpty {
-                Text("Aktif plan yok.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .padding(12)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-            } else {
-                ForEach(plans.filter({ !$0.isCompleted }).prefix(2)) { plan in
-                    NavigationLink(destination: PlanDetailView(plan: plan)) {
-                        HStack(spacing: 10) {
-                            Image(systemName: plan.planType == "Haftalık" ? "calendar.badge.clock" : "calendar")
-                                .foregroundStyle(plan.planType == "Haftalık" ? .blue : .purple)
-                                .frame(width: 28)
-                            Text(plan.title)
-                                .font(.subheadline)
-                                .fontWeight(.medium)
-                                .foregroundStyle(.primary)
-                                .lineLimit(1)
-                            Spacer()
-                            Text("\(max(0, Calendar.current.dateComponents([.day], from: .now, to: plan.endDate).day ?? 0)) gün")
-                                .font(.caption2)
-                                .foregroundStyle(.tertiary)
-                        }
-                        .padding(12)
-                        .background(Color(.secondarySystemBackground))
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                    }
-                }
-            }
-        }
-    }
-
-    // MARK: - Notes Shortcut
-    private var notesShortcutView: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            NavigationLink(destination: NotesView()) {
-                HStack {
-                    Text("Sağlık Notları")
-                        .font(.headline)
-                        .foregroundStyle(.primary)
-                    Spacer()
-                    Text("\(notes.count) not")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-            }
-
-            if notes.isEmpty {
-                Text("Henüz not eklenmedi.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .padding(12)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-            } else {
-                ForEach(notes.prefix(2)) { note in
-                    NavigationLink(destination: NotesView()) {
-                        HStack(spacing: 10) {
-                            Image(systemName: "note.text")
-                                .foregroundStyle(.teal)
-                                .frame(width: 28)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(note.title)
-                                    .font(.subheadline)
-                                    .fontWeight(.medium)
-                                    .foregroundStyle(.primary)
-                                    .lineLimit(1)
-                                Text(note.source)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                            Spacer()
-                            Text(note.date.formatted(date: .abbreviated, time: .omitted))
-                                .font(.caption2)
-                                .foregroundStyle(.tertiary)
-                        }
-                        .padding(12)
-                        .background(Color(.secondarySystemBackground))
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                    }
-                }
-            }
         }
     }
 

@@ -158,6 +158,7 @@ struct GroupRowView: View {
     @State private var newItemName = ""
     @State private var newItemQty = ""
     @State private var newItemCal = ""
+    @State private var isLookingUp = false
 
     var body: some View {
         DisclosureGroup(isExpanded: $isExpanded) {
@@ -187,26 +188,42 @@ struct GroupRowView: View {
                 TextField("Miktar", text: $newItemQty)
                     .font(.subheadline)
                     .frame(width: 70)
-                TextField("kcal", text: $newItemCal)
-                    .font(.subheadline)
-                    .keyboardType(.numberPad)
-                    .frame(width: 50)
+                HStack(spacing: 2) {
+                    TextField("kcal", text: $newItemCal)
+                        .font(.subheadline)
+                        .keyboardType(.numberPad)
+                        .frame(width: 44)
+                    if isLookingUp {
+                        ProgressView()
+                            .scaleEffect(0.7)
+                            .frame(width: 16)
+                    } else if newItemCal.isEmpty && !newItemName.isEmpty {
+                        Button {
+                            lookupCalories()
+                        } label: {
+                            Image(systemName: "sparkles")
+                                .font(.caption)
+                                .foregroundStyle(.orange)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
                 Button {
-                    guard !newItemName.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-                    group.items.append(CreateMealPlanView.DraftItem(
-                        name: newItemName,
-                        quantity: newItemQty,
-                        calories: newItemCal
-                    ))
-                    newItemName = ""
-                    newItemQty = ""
-                    newItemCal = ""
+                    addItem()
                 } label: {
                     Image(systemName: "plus.circle.fill")
                         .foregroundStyle(.blue)
                 }
+                .disabled(newItemName.trimmingCharacters(in: .whitespaces).isEmpty || isLookingUp)
             }
             .padding(.top, 4)
+
+            if !newItemName.isEmpty && newItemCal.isEmpty && !isLookingUp {
+                Text("✦ Kalori alanı boşsa ✦ tuşuna basarak otomatik hesaplanır")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 2)
+            }
         } label: {
             HStack {
                 Text(group.name).fontWeight(.medium)
@@ -216,10 +233,71 @@ struct GroupRowView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
-                Text("\(group.items.count) yiyecek")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                let total = group.items.compactMap { Double($0.calories) }.reduce(0, +)
+                if total > 0 {
+                    Text("\(Int(total)) kcal")
+                        .font(.caption)
+                        .foregroundStyle(.orange)
+                } else {
+                    Text("\(group.items.count) yiyecek")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
+        }
+    }
+
+    private func lookupCalories() {
+        guard !newItemName.isEmpty else { return }
+        isLookingUp = true
+        Task {
+            let result = await NutritionService.shared.estimateCalories(
+                name: newItemName,
+                quantity: newItemQty
+            )
+            await MainActor.run {
+                if let kcal = result {
+                    newItemCal = String(Int(kcal))
+                }
+                isLookingUp = false
+            }
+        }
+    }
+
+    private func addItem() {
+        let name = newItemName.trimmingCharacters(in: .whitespaces)
+        guard !name.isEmpty else { return }
+
+        if newItemCal.isEmpty {
+            // Kalori boşsa önce lookup yap, sonra ekle
+            isLookingUp = true
+            Task {
+                let result = await NutritionService.shared.estimateCalories(
+                    name: name,
+                    quantity: newItemQty
+                )
+                await MainActor.run {
+                    let cal = result.map { String(Int($0)) } ?? ""
+                    group.items.append(CreateMealPlanView.DraftItem(
+                        name: name,
+                        quantity: newItemQty,
+                        calories: cal
+                    ))
+                    newItemName = ""
+                    newItemQty = ""
+                    newItemCal = ""
+                    isLookingUp = false
+                }
+            }
+        } else {
+            group.items.append(CreateMealPlanView.DraftItem(
+                name: name,
+                quantity: newItemQty,
+                calories: newItemCal
+            ))
+            newItemName = ""
+            newItemQty = ""
+            newItemCal = ""
         }
     }
 }
