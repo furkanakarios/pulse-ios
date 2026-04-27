@@ -31,32 +31,31 @@ final class NotificationService {
     }
 
     // MARK: - Water Reminder
-    func scheduleWaterReminder(intervalMinutes: Int, startHour: Int = 8, endHour: Int = 22) {
+    func scheduleWaterReminder(intervalMinutes: Int, startHour: Int = 8, endHour: Int = 24) {
         let center = UNUserNotificationCenter.current()
-        center.getPendingNotificationRequests { requests in
-            let waterIDs = requests.map { $0.identifier }.filter { $0.hasPrefix(Identifier.waterReminder) }
-            center.removePendingNotificationRequests(withIdentifiers: waterIDs)
-        }
 
         let content = UNMutableNotificationContent()
         content.title = "Su içme vakti! 💧"
         content.body = "Günlük su hedefine ulaşmak için bir bardak su içmeyi unutma."
         content.sound = .default
 
-        // startHour:00'dan intervalMinutes adımlarla endHour:00'a kadar tüm saatleri oluştur
-        // Örn: 30dk → 08:00, 08:30, 09:00, ... | 60dk → 08:00, 09:00, ... | 120dk → 08:00, 10:00, ...
-        var currentMinutes = startHour * 60
-        let endMinutes = endHour * 60
-        while currentMinutes < endMinutes {
-            let hour = currentMinutes / 60
-            let minute = currentMinutes % 60
-            var components = DateComponents()
-            components.hour = hour
-            components.minute = minute
-            let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
-            let id = "\(Identifier.waterReminder).\(hour).\(minute)"
-            center.add(UNNotificationRequest(identifier: id, content: content, trigger: trigger))
-            currentMinutes += intervalMinutes
+        center.getPendingNotificationRequests { requests in
+            let waterIDs = requests.map { $0.identifier }.filter { $0.hasPrefix(Identifier.waterReminder) }
+            center.removePendingNotificationRequests(withIdentifiers: waterIDs)
+
+            var currentMinutes = startHour * 60
+            let endMinutes = endHour * 60
+            while currentMinutes < endMinutes {
+                let hour = currentMinutes / 60
+                let minute = currentMinutes % 60
+                var components = DateComponents()
+                components.hour = hour
+                components.minute = minute
+                let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+                let id = "\(Identifier.waterReminder).\(hour).\(minute)"
+                center.add(UNNotificationRequest(identifier: id, content: content, trigger: trigger))
+                currentMinutes += intervalMinutes
+            }
         }
     }
 
