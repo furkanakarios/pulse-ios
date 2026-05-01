@@ -39,6 +39,8 @@ struct DashboardStackCard<Visual: View>: View {
                             Text(big)
                                 .font(PulseType.bigNumber(44))
                                 .tracking(-1.5)
+                                .minimumScaleFactor(0.75)
+                                .lineLimit(1)
                                 .foregroundStyle(Color.pulseText)
                             if let unit {
                                 Text(unit)
@@ -50,10 +52,11 @@ struct DashboardStackCard<Visual: View>: View {
                             .font(PulseType.bodyMuted)
                             .foregroundStyle(Color.pulseTextMuted)
                             .lineLimit(2)
+                            .minimumScaleFactor(0.85)
                             .multilineTextAlignment(.leading)
                     }
-                    Spacer(minLength: 8)
-                    visual.frame(width: 100, height: 70)
+                    Spacer(minLength: 4)
+                    visual.frame(maxWidth: 90, maxHeight: 70)
                 }
                 Divider().background(Color.pulseDivider).padding(.top, 14)
                 HStack {
@@ -231,7 +234,8 @@ struct DashboardHistoryCard<Visual: View>: View {
                     Text(subtitle)
                         .font(.system(size: 11, weight: .medium))
                         .foregroundStyle(Color.pulseTextMuted)
-                        .lineLimit(1)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.85)
                 }
                 visual
                     .frame(maxWidth: .infinity)
@@ -282,18 +286,20 @@ struct DashboardMiniMetric: View {
     let color: Color
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Image(systemName: icon).font(.system(size: 15, weight: .semibold))
+            Image(systemName: icon).font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(color)
             Text(value)
-                .font(.system(size: 17, weight: .heavy, design: .rounded))
+                .font(.system(size: 15, weight: .heavy, design: .rounded))
                 .tracking(-0.4)
+                .minimumScaleFactor(0.75)
+                .lineLimit(1)
                 .foregroundStyle(Color.pulseText)
             Text(sub)
-                .font(.system(size: 11, weight: .medium))
+                .font(.system(size: 10, weight: .medium))
                 .foregroundStyle(Color.pulseTextMuted)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(12)
+        .padding(10)
         .background(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .fill(Color.pulseSurface)

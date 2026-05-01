@@ -46,10 +46,14 @@ struct AchievementsView: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 Text("\(unlockedCount) / \(totalCount) Başarım")
-                    .font(.system(size: 20, weight: .heavy))
+                    .font(.system(size: 18, weight: .heavy))
+                    .minimumScaleFactor(0.8)
+                    .lineLimit(1)
                 Text("Tüm kategorilerde hedeflerini tamamla")
-                    .font(.system(size: 13, weight: .medium))
+                    .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(.secondary)
+                    .minimumScaleFactor(0.85)
+                    .lineLimit(2)
             }
             Spacer()
         }

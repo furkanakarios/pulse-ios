@@ -273,6 +273,8 @@ struct DashboardView: View {
                 .font(PulseType.display(34))
                 .tracking(-1.2)
                 .lineSpacing(-2)
+                .minimumScaleFactor(0.8)
+                .lineLimit(2)
             HStack(spacing: 4) {
                 Text("4 hedeften 3'üne yakınsın · ")
                     .foregroundStyle(Color.pulseTextMuted)
@@ -290,7 +292,11 @@ struct DashboardView: View {
             Text("APPLE HEALTH")
                 .font(PulseType.eyebrow).tracking(1.2)
                 .foregroundStyle(Color.pulseTextMuted)
-            HStack(spacing: 10) {
+            LazyVGrid(columns: [
+                GridItem(.flexible(), spacing: 10),
+                GridItem(.flexible(), spacing: 10),
+                GridItem(.flexible(), spacing: 10)
+            ], spacing: 10) {
                 DashboardMiniMetric(icon: "figure.walk", value: stepsToday, sub: "adım", color: .pulseWater)
                 DashboardMiniMetric(icon: "flame.fill",  value: caloriesToday, sub: "kcal", color: .pulseCoral)
                 DashboardMiniMetric(icon: "moon.fill",   value: sleepToday, sub: "uyku", color: .pulseExercise)
@@ -368,7 +374,10 @@ struct DashboardView: View {
             Text("TARİHÇE")
                 .font(PulseType.eyebrow).tracking(1.2)
                 .foregroundStyle(Color.pulseTextMuted)
-            HStack(spacing: 10) {
+            LazyVGrid(columns: [
+                GridItem(.flexible(), spacing: 10),
+                GridItem(.flexible(), spacing: 10)
+            ], spacing: 10) {
                 DashboardHistoryCard(
                     title: "HAFTALIK",
                     subtitle: weekRangeLabel,

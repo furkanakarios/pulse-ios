@@ -83,8 +83,8 @@ struct WaterView: View {
 
     // MARK: - Hero card (bottle + summary)
     private var hero: some View {
-        HStack(alignment: .top, spacing: 18) {
-            BottleProgress(pct: pct)
+        HStack(alignment: .top, spacing: 14) {
+            BottleProgress(pct: pct, width: 72, height: 190)
 
             VStack(alignment: .leading, spacing: 0) {
                 Text("BUGÜN")
@@ -94,6 +94,8 @@ struct WaterView: View {
                     Text(String(format: "%.1f", Double(amount)/1000.0))
                         .font(.system(size: 40, weight: .heavy, design: .rounded))
                         .tracking(-1.4)
+                        .minimumScaleFactor(0.75)
+                        .lineLimit(1)
                         .foregroundStyle(Color.pulseWaterDeep)
                     Text("L")
                         .font(.system(size: 18, weight: .bold))
@@ -159,32 +161,34 @@ struct WaterView: View {
                     Button {
                         addWater(ml: item.ml)
                     } label: {
-                        HStack(spacing: 12) {
+                        HStack(spacing: 8) {
                             ContainerGlyph(kind: item.kind)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(item.label)
                                     .font(.system(size: 13, weight: .bold))
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.8)
                                     .foregroundStyle(Color.pulseText)
-                                HStack(alignment: .firstTextBaseline, spacing: 3) {
+                                HStack(alignment: .firstTextBaseline, spacing: 2) {
                                     Text("\(item.ml)")
-                                        .font(.system(size: 17, weight: .heavy, design: .rounded))
-                                        .tracking(-0.4)
+                                        .font(.system(size: 16, weight: .heavy, design: .rounded))
+                                        .lineLimit(1)
                                         .foregroundStyle(Color.pulseWaterDeep)
                                     Text("ml")
-                                        .font(.system(size: 11, weight: .medium))
+                                        .font(.system(size: 10, weight: .medium))
                                         .foregroundStyle(Color.pulseTextMuted)
                                 }
                             }
-                            Spacer()
+                            Spacer(minLength: 0)
                             ZStack {
                                 Circle().fill(Color.pulseWater)
                                 Image(systemName: "plus")
-                                    .font(.system(size: 12, weight: .heavy))
+                                    .font(.system(size: 11, weight: .heavy))
                                     .foregroundStyle(.white)
                             }
-                            .frame(width: 28, height: 28)
+                            .frame(width: 24, height: 24)
                         }
-                        .padding(14)
+                        .padding(10)
                         .background(
                             RoundedRectangle(cornerRadius: 18, style: .continuous)
                                 .fill(Color.pulseSurface)
@@ -290,13 +294,14 @@ struct WaterView: View {
                     TextField("0", text: $customAmount)
                         .keyboardType(.numberPad)
                         .font(.system(size: 56, weight: .heavy, design: .rounded))
+                        .minimumScaleFactor(0.7)
                         .multilineTextAlignment(.center)
                         .foregroundStyle(Color.pulseWater)
                     Text("ml")
                         .font(.title2)
                         .foregroundStyle(Color.pulseTextMuted)
                 }
-                .padding(.top, 40)
+                .padding(.top, 24)
                 Spacer()
             }
             .navigationTitle("Özel Miktar")
